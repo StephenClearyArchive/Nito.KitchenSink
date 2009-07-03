@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nito.MVVM", "Nito.MVVM\Nito.MVVM.csproj", "{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
