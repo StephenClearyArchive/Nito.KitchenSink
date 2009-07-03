@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/Nito.MVVM/bin/Release/Nito.MVVM.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="Nito.MVVM">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-07-03 00:29:12Z">
+      <Issue>
+       <Item>Nito.MVVM</Item>
+      </Issue>
+      <Notes>
+       <User Name="stephen">
+        <Note Id="1" />
+       </User>
+      </Notes>
+     </Message>
+     <Message Id="MVVM" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-07-03 00:29:12Z">
+      <Issue Name="Namespace">
+       <Item>MVVM</Item>
+       <Item>Nito.MVVM</Item>
+       <Item>Mvvm</Item>
+      </Issue>
+      <Notes>
+       <User Name="stephen">
+        <Note Id="7" />
+       </User>
+      </Notes>
+     </Message>
+     <Message Id="Nito" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-03 00:29:12Z">
+      <Issue Name="Namespace">
+       <Item>Nito</Item>
+       <Item>Nito.MVVM</Item>
+      </Issue>
+      <Notes>
+       <User Name="stephen">
+        <Note Id="2" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Nito.Utility">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2009-07-03 00:37:53Z">
+      <Issue>
+       <Item>Nito.Utility</Item>
+      </Issue>
+      <Notes>
+       <User Name="stephen">
+        <Note Id="4" />
+       </User>
+      </Notes>
+     </Message>
+     <Message Id="Nito" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-03 00:37:53Z">
+      <Issue Name="Namespace">
+       <Item>Nito</Item>
+       <Item>Nito.Utility</Item>
+      </Issue>
+      <Notes>
+       <User Name="stephen">
+        <Note Id="5" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/Nito.MVVM/bin/Release/Nito.MVVM.dll">
+    <Modules>
+     <Module Name="nito.mvvm.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-07-03 00:29:12Z">
+        <Issue Name="NoStrongName">
+         <Item>'Nito.MVVM.dll'</Item>
+        </Issue>
+       </Message>
+       <Message Id="MVVM" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Excluded" Created="2009-07-03 00:29:12Z">
+        <Issue Name="Assembly">
+         <Item>MVVM</Item>
+         <Item>'Nito.MVVM.dll'</Item>
+         <Item>Mvvm</Item>
+        </Issue>
+        <Notes>
+         <User Name="stephen">
+          <Note Id="7" />
+         </User>
+        </Notes>
+       </Message>
+       <Message Id="Nito" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-03 00:29:12Z">
+        <Issue Name="Assembly">
+         <Item>Nito</Item>
+         <Item>'Nito.MVVM.dll'</Item>
+        </Issue>
+        <Notes>
+         <User Name="stephen">
+          <Note Id="2" />
+         </User>
+        </Notes>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Nito.Utility">
+        <Types>
+         <Type Name="SafeGCHandle">
+          <Members>
+           <Member Name="#.ctor(System.Object,System.Runtime.InteropServices.GCHandleType)">
+            <Messages>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Excluded" Created="2009-07-03 00:37:53Z">
+              <Issue>
+               <Item>'SafeGCHandle.SafeGCHandle(object, GCHandleType)'</Item>
+               <Item>'GCHandle.Alloc(object, GCHandleType)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.WeakReference(T)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SafeGCHandle.SafeGCHandle(object, GCHandleType)'</Item>
+               <Item>'RuntimeHelpers.PrepareConstrainedRegions()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.WeakReference(T)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SafeGCHandle.SafeGCHandle(object, GCHandleType)'</Item>
+               <Item>'SafeHandle.SafeHandle(IntPtr, bool)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.WeakReference(T)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SafeGCHandle.SafeGCHandle(object, GCHandleType)'</Item>
+               <Item>'SafeHandle.SetHandle(IntPtr)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'SafeGCHandle.SafeGCHandle(object, GCHandleType)'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.WeakReference(T)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="stephen">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Handle">
+            <Accessors>
+             <Accessor Name="#get_Handle()">
+              <Messages>
+               <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Excluded" Created="2009-07-03 00:37:53Z">
+                <Issue>
+                 <Item>'SafeGCHandle.Handle.get()'</Item>
+                 <Item>'GCHandle.FromIntPtr(IntPtr)'</Item>
+                 <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.Handle.get()'&#xD;&#xA;   -&gt;'SafeGCHandle.Handle.get()'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.IsAlive.get()'</Item>
+                </Issue>
+                <Issue>
+                 <Item>'SafeGCHandle.Handle.get()'</Item>
+                 <Item>'GCHandle.FromIntPtr(IntPtr)'</Item>
+                 <Item>&#xD;&#xA;   -&gt;'SafeGCHandle.Handle.get()'&#xD;&#xA;   -&gt;'SafeGCHandle.Handle.get()'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.Target.get()'</Item>
+                </Issue>
+                <Notes>
+                 <User Name="stephen">
+                  <Note Id="6" />
+                 </User>
+                </Notes>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="WeakReference`1">
+          <Members>
+           <Member Name="#Dispose()">
+            <Messages>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Excluded" Created="2009-07-03 00:37:53Z">
+              <Issue>
+               <Item>'WeakReference&lt;T&gt;.Dispose()'</Item>
+               <Item>'SafeHandle.Dispose()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.Dispose()'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.Dispose()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="stephen">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsAlive">
+            <Accessors>
+             <Accessor Name="#get_IsAlive()">
+              <Messages>
+               <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Excluded" Created="2009-07-03 00:37:53Z">
+                <Issue>
+                 <Item>'WeakReference&lt;T&gt;.IsAlive.get()'</Item>
+                 <Item>'GCHandle.Target.get()'</Item>
+                 <Item>&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.IsAlive.get()'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.IsAlive.get()'</Item>
+                </Issue>
+                <Notes>
+                 <User Name="stephen">
+                  <Note Id="6" />
+                 </User>
+                </Notes>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Target">
+            <Accessors>
+             <Accessor Name="#get_Target()">
+              <Messages>
+               <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Excluded" Created="2009-07-03 00:37:53Z">
+                <Issue>
+                 <Item>'WeakReference&lt;T&gt;.Target.get()'</Item>
+                 <Item>'GCHandle.Target.get()'</Item>
+                 <Item>&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.Target.get()'&#xD;&#xA;   -&gt;'WeakReference&lt;T&gt;.Target.get()'</Item>
+                </Issue>
+                <Notes>
+                 <User Name="stephen">
+                  <Note Id="6" />
+                 </User>
+                </Notes>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="stephen">
+    <Note Id="1" Modified="2009-07-03 00:31:46Z">More types will be added later.</Note>
+    <Note Id="2" Modified="2009-07-03 00:32:10Z">"Nito" is spelled correctly.</Note>
+    <Note Id="4" Modified="2009-07-03 00:38:20Z">More types will be added later.</Note>
+    <Note Id="5" Modified="2009-07-03 00:38:42Z">"Nito" is spelled correctly.</Note>
+    <Note Id="6" Modified="2009-07-03 00:39:31Z">WeakReference&lt;T&gt; exposes GCHandle operations in a fully safe way (enforced cleanup, and allowing earlier cleanup than System.WeakReference provides).</Note>
+    <Note Id="7" Modified="2009-07-03 00:40:05Z">"MVVM" is the chosen namespace, to match the project name and common usage, in spite of the MS guidelines.</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122">
+    <Resolution Name="Default">{0} calls into {1} which has a LinkDemand. By making this call, {1} is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: {2}</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Assembly">Correct the casing of '{0}' in assembly name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
+    <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
