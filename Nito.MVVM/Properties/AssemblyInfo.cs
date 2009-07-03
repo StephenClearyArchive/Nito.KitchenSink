@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="AssemblyInfo.cs" company="Nito Programs">
+//     Copyright (c) 2009 Nito Programs.
+// </copyright>
+
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
