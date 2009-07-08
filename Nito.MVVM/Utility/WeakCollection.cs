@@ -56,7 +56,7 @@ namespace Nito.Utility
     }
 
     /// <summary>
-    /// A collection of weak references to objects. By default, weak references are purged by iteration/count operations, not by add/remove operations.
+    /// A collection of weak references to objects. Weak references are purged by iteration/count operations, not by add/remove operations.
     /// </summary>
     /// <typeparam name="T">The type of object to hold weak references to.</typeparam>
     /// <remarks>
