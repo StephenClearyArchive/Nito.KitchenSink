@@ -36,8 +36,12 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetPropertyNameUnitTests.cs" />
+    <Compile Include="NotifyPropertyChangedUnitTests.cs" />
     <Compile Include="SimplePropertyPathUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
