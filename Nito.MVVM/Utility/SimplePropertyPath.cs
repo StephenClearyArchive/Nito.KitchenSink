@@ -14,7 +14,7 @@ namespace Nito.Utility
     /// <summary>
     /// Provides a way to monitor changes along a property path.
     /// </summary>
-    public sealed class SimplePropertyPath : INotifyPropertyChanged, IDisposable
+    public sealed class SimplePropertyPath : NotifyPropertyChangedBase<SimplePropertyPath>, IDisposable
     {
         /// <summary>
         /// The actual root object for this property path.
@@ -37,20 +37,6 @@ namespace Nito.Utility
         private SubscriptionStep[] subscriptions;
 
         /// <summary>
-        /// Backing field for <see cref="PropertyChanged"/>.
-        /// </summary>
-        private PropertyChangedEventHandler propertyChanged;
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged
-        {
-            add { this.propertyChanged += value; }
-            remove { this.propertyChanged -= value; }
-        }
-
-        /// <summary>
         /// Gets or sets the root object for this property path.
         /// </summary>
         public object Root
@@ -69,7 +55,7 @@ namespace Nito.Utility
                     this.root = value;
                     this.Construct();
 
-                    this.OnPropertyChanged("Root");
+                    this.OnPropertyChanged(x => x.Root);
                 }
             }
         }
@@ -92,7 +78,7 @@ namespace Nito.Utility
                     this.path = value;
                     this.Construct();
 
-                    this.OnPropertyChanged("Path");
+                    this.OnPropertyChanged(x => x.Path);
                 }
             }
         }
@@ -112,7 +98,7 @@ namespace Nito.Utility
                 if (!object.Equals(this.value, value))
                 {
                     this.value = value;
-                    this.OnPropertyChanged("Value");
+                    this.OnPropertyChanged(x => x.Value);
                 }
             }
         }
@@ -274,18 +260,6 @@ namespace Nito.Utility
                         }
                     });
                 }
-            }
-        }
-
-        /// <summary>
-        /// Invokes <see cref="PropertyChanged"/> for the given property name.
-        /// </summary>
-        /// <param name="propertyName">The name of the property that changed.</param>
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (this.propertyChanged != null)
-            {
-                this.propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
