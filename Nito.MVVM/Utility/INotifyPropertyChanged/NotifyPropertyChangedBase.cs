@@ -33,6 +33,14 @@ namespace Nito.Utility
         }
 
         /// <summary>
+        /// Raises <see cref="PropertyChanged"/> for the Items[] property.
+        /// </summary>
+        protected void OnItemsPropertyChanged()
+        {
+            this.propertyChanged.RaiseItems(this);
+        }
+
+        /// <summary>
         /// Raises <see cref="PropertyChanged"/> for the given property.
         /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
