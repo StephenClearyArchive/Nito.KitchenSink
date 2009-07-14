@@ -175,7 +175,7 @@ namespace Nito.Utility
         private void Dismantle()
         {
             // If no subscriptions are possible yet, we just skip it
-            if (this.root == null || this.path == null)
+            if (this.root == null || this.path == null || this.subscriptions == null)
             {
                 return;
             }
