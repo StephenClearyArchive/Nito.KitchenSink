@@ -31,5 +31,18 @@ namespace Nito.Utility
                 handler(sender, new PropertyChangedEventArgs(sender.GetPropertyName(expression)));
             }
         }
+
+        /// <summary>
+        /// Raises the delegate for the items property (with the name "Items[]").
+        /// </summary>
+        /// <param name="handler">The delegate to raise. If this parameter is null, then no action is taken.</param>
+        /// <param name="sender">The object raising this event.</param>
+        public static void RaiseItems(this PropertyChangedEventHandler handler, object sender)
+        {
+            if (handler != null)
+            {
+                handler(sender, new PropertyChangedEventArgs("Items[]"));
+            }
+        }
     }
 }
