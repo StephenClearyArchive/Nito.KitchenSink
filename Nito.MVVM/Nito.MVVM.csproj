@@ -51,8 +51,10 @@
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\ManualCommand%28of T%29.cs" />
     <Compile Include="Commands\ManualCommand.cs" />
+    <Compile Include="Commands\ManualCompositeCommand.cs" />
     <Compile Include="Commands\StaticCommand%28of T%29.cs" />
     <Compile Include="Commands\StaticCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utility\ObjectExtensions.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
+    <Compile Include="Utility\ProjectedCollection.cs" />
     <Compile Include="Utility\SafeGCHandle.cs" />
     <Compile Include="Utility\SimplePropertyPath.cs" />
     <Compile Include="Utility\WeakCollection.cs" />

@@ -38,10 +38,14 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetPropertyNameUnitTests.cs" />
     <Compile Include="NotifyPropertyChangedUnitTests.cs" />
+    <Compile Include="ProjectedCollectionUnitTests.cs" />
     <Compile Include="SimplePropertyPathUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
