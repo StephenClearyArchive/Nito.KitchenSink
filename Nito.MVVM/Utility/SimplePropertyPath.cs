@@ -296,7 +296,7 @@ namespace Nito.Utility
             }
 
             /// <summary>
-            /// Gets or sets the name of the property to subscribe to.
+            /// Gets the name of the property subscribed to.
             /// </summary>
             public string Name { get; private set; }
 
