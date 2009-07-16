@@ -51,10 +51,8 @@
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
-    <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\ManualCommand%28of T%29.cs" />
     <Compile Include="Commands\ManualCommand.cs" />
-    <Compile Include="Commands\ManualCompositeCommand.cs" />
     <Compile Include="Commands\StaticCommand%28of T%29.cs" />
     <Compile Include="Commands\StaticCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
