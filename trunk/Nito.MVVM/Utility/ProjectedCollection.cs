@@ -617,11 +617,20 @@ namespace Nito.Utility
         /// <param name="args">Identifies which objects changed and how.</param>
         private void ProcessSourceCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
+            // There are situations where NewStartingIndex or OldStartingIndex is unexpectedly -1.
+            NotifyCollectionChangedAction action = args.Action;
+            if ((action == NotifyCollectionChangedAction.Add && args.NewStartingIndex == -1) ||
+                (action == NotifyCollectionChangedAction.Remove && args.OldStartingIndex == -1) ||
+                (action == NotifyCollectionChangedAction.Replace && args.OldStartingIndex == -1))
+            {
+                action = NotifyCollectionChangedAction.Reset;
+            }
+
             // The MSDN documentation for NotifyCollectionChangedEventArgs is incomplete.
             // For the ultimate reference, use Reflector to look at:
             //   [WindowsBase.dll, 3.0.0.0] System.Collections.ObjectModel.ObservableCollection<T> - SetItem, RemoveItem, MoveItem, etc.
             //   [PresentationFramework.dll, 3.0.0.0] System.Windows.Data.CollectionView - ProcessCollectionChanged, AdjustCurrencyFor*
-            switch (args.Action)
+            switch (action)
             {
                 case NotifyCollectionChangedAction.Add:
                     // args.NewItems - contains the added items (not the complete list)
