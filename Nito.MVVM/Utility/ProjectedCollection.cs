@@ -143,23 +143,23 @@ namespace Nito.Utility
         }
 
         /// <summary>
-        /// Gets a value indicating whether the collection is read only. Always returns true.
+        /// Gets a value indicating whether the collection is read only. Always returns false.
         /// </summary>
         bool IList.IsReadOnly
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the collection is read only. Always returns true.
+        /// Gets a value indicating whether the collection is read only. Always returns false.
         /// </summary>
         bool ICollection<T>.IsReadOnly
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
-        /// Gets or sets the item at the specified index. Setting an item always raises <see cref="NotSupportedException"/>.
+        /// Gets or sets the item at the specified index.
         /// </summary>
         /// <param name="index">The index of the item to get.</param>
         /// <returns>The item at the specified index.</returns>
@@ -172,7 +172,7 @@ namespace Nito.Utility
 
             set
             {
-                throw new NotSupportedException();
+                this.subscriptions[index].SimplePropertyPath.Value = value;
             }
         }
 
@@ -200,7 +200,7 @@ namespace Nito.Utility
 
             set
             {
-                throw new NotSupportedException();
+                this.subscriptions[index].SimplePropertyPath.Value = value;
             }
         }
 
