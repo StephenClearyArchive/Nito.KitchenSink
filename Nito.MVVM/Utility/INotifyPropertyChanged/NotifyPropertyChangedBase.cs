@@ -12,7 +12,7 @@ namespace Nito.Utility
     /// A base class for classes that need to implement <see cref="INotifyPropertyChanged"/>.
     /// </summary>
     /// <remarks>
-    /// <para>If deriving from this class is not possible, use <see cref="NotifyPropertyChangedImpl"/> instead.</para>
+    /// <para>If deriving from this class is not possible, use <see cref="NotifyPropertyChangedCore"/> instead.</para>
     /// </remarks>
     /// <typeparam name="TObject">The type of the derived class.</typeparam>
     public abstract class NotifyPropertyChangedBase<TObject> : INotifyPropertyChanged
