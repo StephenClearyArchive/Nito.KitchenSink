@@ -152,13 +152,13 @@ namespace UnitTests
         /// </summary>
         private sealed class TestIncludedObject : INotifyPropertyChanged
         {
-            private NotifyPropertyChangedImpl<TestIncludedObject> propertyChanged;
+            private NotifyPropertyChangedCore<TestIncludedObject> propertyChanged;
             private int valueProperty;
             private object objectProperty;
 
             public TestIncludedObject()
             {
-                this.propertyChanged = new NotifyPropertyChangedImpl<TestIncludedObject>(this);
+                this.propertyChanged = new NotifyPropertyChangedCore<TestIncludedObject>(this);
             }
 
             public int ValueProperty
