@@ -58,7 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
-    <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedCore.cs" />
     <Compile Include="Utility\ObjectExtensions.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="Utility\ProjectedCollection.cs" />

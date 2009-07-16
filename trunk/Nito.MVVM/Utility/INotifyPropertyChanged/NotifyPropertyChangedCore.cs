@@ -1,4 +1,4 @@
-﻿// <copyright file="NotifyPropertyChangedImpl.cs" company="Nito Programs">
+﻿// <copyright file="NotifyPropertyChangedCore.cs" company="Nito Programs">
 //     Copyright (c) 2009 Nito Programs.
 // </copyright>
 
@@ -15,7 +15,7 @@ namespace Nito.Utility
     /// <para>Use <see cref="NotifyPropertyChangedBase"/> instead of this class if possible.</para>
     /// </remarks>
     /// <typeparam name="T">The type of the containing class.</typeparam>
-    public sealed class NotifyPropertyChangedImpl<T>
+    public sealed class NotifyPropertyChangedCore<T>
     {
         /// <summary>
         /// The backing delegate for <see cref="PropertyChanged"/>.
@@ -28,10 +28,10 @@ namespace Nito.Utility
         private T obj;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotifyPropertyChangedImpl{T}"/> class that is contained by <paramref name="obj"/>.
+        /// Initializes a new instance of the <see cref="NotifyPropertyChangedCore{T}"/> class that is contained by <paramref name="obj"/>.
         /// </summary>
         /// <param name="obj">The object that contains this instance.</param>
-        public NotifyPropertyChangedImpl(T obj)
+        public NotifyPropertyChangedCore(T obj)
         {
             this.obj = obj;
         }
