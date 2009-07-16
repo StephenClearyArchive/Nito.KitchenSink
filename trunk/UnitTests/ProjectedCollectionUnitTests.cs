@@ -22,12 +22,34 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestSimpleProjectionWrite()
+        {
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 } });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Value" };
+
+            collection[0] = 7;
+
+            Assert.IsTrue(collection.SequenceEqual(new[] { 7 }));
+        }
+
+        [TestMethod]
         public void TestNestedSimpleProjection()
         {
             ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Child = new TestObject { Value = 17 } } });
             ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Child.Value" };
 
             Assert.IsTrue(collection.SequenceEqual(new[] { 17 }));
+        }
+
+        [TestMethod]
+        public void TestNestedSimpleProjectionWrite()
+        {
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Child = new TestObject { Value = 17 } } });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Child.Value" };
+
+            collection[0] = 7;
+
+            Assert.IsTrue(collection.SequenceEqual(new[] { 7 }));
         }
 
         [TestMethod]
@@ -40,10 +62,32 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestBadPathWrite()
+        {
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 } });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Child.Value" };
+
+            collection[0] = 7;
+
+            Assert.IsTrue(collection.SequenceEqual(new[] { 0 }));
+        }
+
+        [TestMethod]
         public void TestSourceContainingNull()
         {
             ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 }, null });
             ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Value" };
+
+            Assert.IsTrue(collection.SequenceEqual(new[] { 17, 0 }));
+        }
+
+        [TestMethod]
+        public void TestSourceContainingNullWrite()
+        {
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 }, null });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Value" };
+
+            collection[1] = 7;
 
             Assert.IsTrue(collection.SequenceEqual(new[] { 17, 0 }));
         }
@@ -192,6 +236,36 @@ namespace UnitTests
                 };
 
             test.Value = 19;
+
+            Assert.IsTrue(sawItemsPropertyChanged);
+            Assert.IsTrue(sawCollectionChanged);
+        }
+
+        [TestMethod]
+        public void TestWritePropertyChangeNotifications()
+        {
+            bool sawItemsPropertyChanged = false;
+            bool sawCollectionChanged = false;
+            TestObject test = new TestObject { Value = 17 };
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { null, test });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Value" };
+
+            collection.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "Items[]")
+                    sawItemsPropertyChanged = true;
+            };
+
+            collection.CollectionChanged += (sender, args) =>
+            {
+                if (args.Action == NotifyCollectionChangedAction.Replace &&
+                    args.OldStartingIndex == 1 &&
+                    args.OldItems.Cast<object>().SequenceEqual(new object[] { 17 }) &&
+                    args.NewItems.Cast<object>().SequenceEqual(new object[] { 19 }))
+                    sawCollectionChanged = true;
+            };
+
+            collection[1] = 19;
 
             Assert.IsTrue(sawItemsPropertyChanged);
             Assert.IsTrue(sawCollectionChanged);
