@@ -84,7 +84,7 @@ namespace Nito.Utility
         }
 
         /// <summary>
-        /// Gets the result of <see cref="Path"/> evaluated on <see cref="Root"/>.
+        /// Gets or sets the result of <see cref="Path"/> evaluated on <see cref="Root"/>.
         /// </summary>
         public object Value
         {
@@ -93,13 +93,21 @@ namespace Nito.Utility
                 return this.value;
             }
 
-            private set
+            set
             {
-                if (!object.Equals(this.value, value))
+                if (this.subscriptions == null)
                 {
-                    this.value = value;
-                    this.OnPropertyChanged(x => x.Value);
+                    PresentationTraceSources.DataBindingSource.TraceEvent(TraceEventType.Error, 0, "Property path not active; ignoring request to set Value.");
+                    return;
                 }
+
+                if (!this.subscriptions[this.subscriptions.Length - 1].IsSubscribed)
+                {
+                    PresentationTraceSources.DataBindingSource.TraceEvent(TraceEventType.Error, 0, "Property path not fully subscribed; ignoring request to set Value.");
+                    return;
+                }
+
+                this.subscriptions[this.subscriptions.Length - 1].Overwrite(value);
             }
         }
 
@@ -130,7 +138,7 @@ namespace Nito.Utility
                     if (i == this.subscriptions.Length - 1)
                     {
                         // At the end of the subscription, set Value.
-                        this.Value = this.subscriptions[i].Evaluate();
+                        this.UpdateValue(this.subscriptions[i].Evaluate());
                     }
                     else
                     {
@@ -153,6 +161,19 @@ namespace Nito.Utility
         public void Dispose()
         {
             this.Path = null;
+        }
+
+        /// <summary>
+        /// Updates the evaluated value and raises <see cref="PropertyChanged"/> if necessary.
+        /// </summary>
+        /// <param name="newValue">The newly-evaluated value.</param>
+        private void UpdateValue(object newValue)
+        {
+            if (!object.Equals(this.value, newValue))
+            {
+                this.value = newValue;
+                this.OnPropertyChanged(x => x.Value);
+            }
         }
 
         /// <summary>
@@ -222,7 +243,7 @@ namespace Nito.Utility
                 if (root == null)
                 {
                     // At this point, there are more subscription steps, but we've encountered a null result.
-                    this.Value = null;
+                    this.UpdateValue(null);
                     return;
                 }
 
@@ -237,11 +258,11 @@ namespace Nito.Utility
                     // The last subscription updates Value
                     this.subscriptions[i].Subscribe(() =>
                     {
-                        this.Value = this.subscriptions[id].Evaluate();
+                        this.UpdateValue(this.subscriptions[id].Evaluate());
                     });
                     
                     // Update Value directly; this is the last thing done by this function
-                    this.Value = root;
+                    this.UpdateValue(root);
                 }
                 else
                 {
@@ -286,6 +307,14 @@ namespace Nito.Utility
             /// Gets or sets the actual object at this subscription step. This may be null.
             /// </summary>
             public object Object { get; set; }
+
+            /// <summary>
+            /// Gets a value indicating whether this subscription step is subscribed.
+            /// </summary>
+            public bool IsSubscribed
+            {
+                get { return this.eventHandler != null; }
+            }
 
             /// <summary>
             /// Gets the object used for subscriptions. This is null if <see cref="Object"/> does not support <see cref="INotifyPropertyChanged"/>.
@@ -351,6 +380,22 @@ namespace Nito.Utility
                 }
 
                 return ret;
+            }
+
+            /// <summary>
+            /// Writes the value of the property named <see cref="Name"/> for <see cref="Object"/>. This cannot be called if <see cref="Object"/> is null.
+            /// </summary>
+            /// <param name="value">The new value of the property.</param>
+            public void Overwrite(object value)
+            {
+                PropertyInfo info = this.Object.GetType().GetProperty(this.Name);
+                if (info == null)
+                {
+                    PresentationTraceSources.DataBindingSource.TraceEvent(TraceEventType.Error, 0, "Property '" + this.Name + "' not found for type '" + this.Object.GetType().Name + "', object '" + this.Object.ToString() + "'");
+                    return;
+                }
+
+                info.SetValue(this.Object, value, null);
             }
         }
     }

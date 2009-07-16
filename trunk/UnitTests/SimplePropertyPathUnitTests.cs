@@ -24,6 +24,16 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestSimpleWrite()
+        {
+            FakeVM obj = new FakeVM { Value = 13 };
+            SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Value" };
+            path.Value = 17;
+
+            Assert.AreEqual(17, obj.Value);
+        }
+
+        [TestMethod]
         public void TestChildRead()
         {
             FakeVM obj = new FakeVM { Child = new FakeVM { Value = 10 } };
@@ -33,11 +43,32 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestChildWrite()
+        {
+            FakeVM obj = new FakeVM { Child = new FakeVM { Value = 10 } };
+            SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Child.Value" };
+            path.Value = 17;
+
+            Assert.AreEqual(17, obj.Child.Value);
+        }
+
+        [TestMethod]
         public void TestInvalidRead()
         {
             FakeVM obj = new FakeVM { Value = 13 };
             SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "value" };
 
+            Assert.IsNull(path.Value);
+        }
+
+        [TestMethod]
+        public void TestInvalidWrite()
+        {
+            FakeVM obj = new FakeVM { Value = 13 };
+            SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "value" };
+            path.Value = 17;
+
+            Assert.AreEqual(13, obj.Value);
             Assert.IsNull(path.Value);
         }
 
@@ -51,12 +82,23 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestInvalidChildWrite()
+        {
+            FakeVM obj = new FakeVM { Child = new FakeVM { Value = 10 } };
+            SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Child.value" };
+            path.Value = 17;
+
+            Assert.AreEqual(10, obj.Child.Value);
+            Assert.IsNull(path.Value);
+        }
+
+        [TestMethod]
         public void TestSimpleChange()
         {
             bool sawChange = false;
             FakeVM obj = new FakeVM { Value = 11 };
             SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Value" };
-            path.PropertyChanged += (sender, args) => sawChange = true;
+            path.PropertyChanged += (sender, args) => { if (args.PropertyName == "Value") sawChange = true; };
 
             Assert.AreEqual(11, path.Value);
             Assert.AreEqual(false, sawChange);
@@ -73,7 +115,7 @@ namespace UnitTests
             bool sawChange = false;
             FakeVM obj = new FakeVM { Child = new FakeVM { Value = 8 } };
             SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Child.Value" };
-            path.PropertyChanged += (sender, args) => sawChange = true;
+            path.PropertyChanged += (sender, args) => { if (args.PropertyName == "Value") sawChange = true; };
 
             Assert.AreEqual(8, path.Value);
             Assert.AreEqual(false, sawChange);
@@ -90,7 +132,7 @@ namespace UnitTests
             bool sawChange = false;
             FakeVM obj = new FakeVM { Child = new FakeVM { Value = 100 } };
             SimplePropertyPath path = new SimplePropertyPath { Root = obj, Path = "Child.Value" };
-            path.PropertyChanged += (sender, args) => sawChange = true;
+            path.PropertyChanged += (sender, args) => { if (args.PropertyName == "Value") sawChange = true; };
 
             Assert.AreEqual(100, path.Value);
             Assert.AreEqual(false, sawChange);
