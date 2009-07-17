@@ -17,18 +17,17 @@ namespace Nito.MVVM
     /// <para>A multiproperty is defined by a <see cref="SourceCollection"/> and a <see cref="Path"/>. Applying the property path to the source collection results in a collection of individual values.</para>
     /// <para>The <see cref="Value"/> of a multiproperty is equal to its individual values, if all of its individual values are equivalent.</para>
     /// </remarks>
-    /// <typeparam name="T">The type of property value.</typeparam>
-    public sealed class MultiProperty<T> : NotifyPropertyChangedBase<MultiProperty<T>>, IDisposable
+    public sealed class MultiProperty : NotifyPropertyChangedBase<MultiProperty>, IDisposable
     {
         /// <summary>
         /// The combined value. Acts as a backing store for <see cref="Value"/>.
         /// </summary>
-        private T value;
+        private object value;
 
         /// <summary>
         /// The source collection, projected along a property path.
         /// </summary>
-        private ProjectedCollection<T> collection;
+        private ProjectedCollection collection;
 
         /// <summary>
         /// Whether to ignore collection change notifications.
@@ -36,11 +35,11 @@ namespace Nito.MVVM
         private bool ignoreCollectionChanges;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultiProperty{T}"/> class.
+        /// Initializes a new instance of the <see cref="MultiProperty"/> class.
         /// </summary>
         public MultiProperty()
         {
-            this.collection = new ProjectedCollection<T>();
+            this.collection = new ProjectedCollection();
             this.collection.CollectionChanged += (sender, e) => this.ProcessSourceCollectionChanged(e);
         }
 
@@ -82,10 +81,10 @@ namespace Nito.MVVM
         /// Gets or sets the multiproperty value.
         /// </summary>
         /// <remarks>
-        /// <para>A multiproperty value is calculated from individual values in <see cref="SourceCollection"/>. The property path <see cref="Path"/> is applied to each element in <see cref="SourceCollection"/>, and if the resulting values are all equivalent, then that is the multiproperty value. If one value is not equivalent (or if there is a path evaluation error), then the multiproperty value is the default value of <typeparamref name="T"/>.</para>
+        /// <para>A multiproperty value is calculated from individual values in <see cref="SourceCollection"/>. The property path <see cref="Path"/> is applied to each element in <see cref="SourceCollection"/>, and if the resulting values are all equivalent, then that is the multiproperty value. If one value is not equivalent (or if there is a path evaluation error), then the multiproperty value is null.</para>
         /// <para>Setting the multiproperty value sets all the individual values in <see cref="SourceCollection"/> identified by <see cref="Path"/>.</para>
         /// </remarks>
-        public T Value
+        public object Value
         {
             get
             {
@@ -124,9 +123,9 @@ namespace Nito.MVVM
         /// Updates the value of <see cref="Value"/>, raising <see cref="PropertyChanged"/> if necessary.
         /// </summary>
         /// <param name="newValue">The new value of <see cref="Value"/>.</param>
-        private void UpdateValue(T newValue)
+        private void UpdateValue(object newValue)
         {
-            if (!EqualityComparer<T>.Default.Equals(this.value, newValue))
+            if (!object.Equals(this.value, newValue))
             {
                 this.value = newValue;
                 this.OnPropertyChanged(x => x.Value);
@@ -140,16 +139,16 @@ namespace Nito.MVVM
         {
             if (this.collection.Count == 0)
             {
-                this.UpdateValue(default(T));
+                this.UpdateValue(null);
             }
             else
             {
-                T newValue = this.collection[0];
+                object newValue = this.collection[0];
                 for (int i = 1; i != this.collection.Count; ++i)
                 {
-                    if (!EqualityComparer<T>.Default.Equals(newValue, this.collection[i]))
+                    if (!object.Equals(newValue, this.collection[i]))
                     {
-                        this.UpdateValue(default(T));
+                        this.UpdateValue(null);
                         return;
                     }
                 }
@@ -173,7 +172,7 @@ namespace Nito.MVVM
             {
                 case NotifyCollectionChangedAction.Add:
                     // If new elements are added but there is already a conflict, just ignore the change
-                    if (!EqualityComparer<T>.Default.Equals(this.value, default(T)))
+                    if (this.value != null)
                     {
                         this.RefreshValue();
                     }
@@ -184,7 +183,7 @@ namespace Nito.MVVM
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     // If elements are removed but there wasn't already a conflict, just ignore the change
-                    if (EqualityComparer<T>.Default.Equals(this.value, default(T)))
+                    if (this.value == null)
                     {
                         this.RefreshValue();
                     }
