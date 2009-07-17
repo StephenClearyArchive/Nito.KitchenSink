@@ -13,13 +13,12 @@ namespace Nito.Utility
     /// <summary>
     /// An observable collection of results of applying a property path to a source observable collection.
     /// </summary>
-    /// <typeparam name="T">The expected result type of the property path values.</typeparam>
     /// <remarks>
-    /// <para>When enumerating this collection, default values of <typeparamref name="T"/> will be enumerated if there are binding errors.</para>
+    /// <para>When enumerating this collection, null values will be enumerated if there are binding errors.</para>
     /// <para>The two important properties of this class are <see cref="SourceCollection"/> and <see cref="Path"/>. <see cref="SourceCollection"/> specifies the source collection; for best results, it should implement <see cref="INotifyCollectionChanged"/>. <see cref="Path"/> specifies a simple property path to apply on each element of <see cref="SourceCollection"/>; see <see cref="SimplePropertyPath"/> for details.</para>
     /// </remarks>
-    public sealed class ProjectedCollection<T> : NotifyPropertyChangedBase<ProjectedCollection<T>>,
-        INotifyCollectionChanged, IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable, IDisposable
+    public sealed class ProjectedCollection : NotifyPropertyChangedBase<ProjectedCollection>,
+        INotifyCollectionChanged, IList, ICollection, IEnumerable, IDisposable
     {
         /// <summary>
         /// The <see cref="SimplePropertyPath"/> subscription and last known value for each object in the source collection. This is kept in sync with <see cref="sourceCollection"/>.
@@ -150,52 +149,18 @@ namespace Nito.Utility
             get { return false; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the collection is read only. Always returns false.
-        /// </summary>
-        bool ICollection<T>.IsReadOnly
-        {
-            get { return false; }
-        }
+        #endregion
 
         /// <summary>
         /// Gets or sets the item at the specified index.
         /// </summary>
-        /// <param name="index">The index of the item to get.</param>
-        /// <returns>The item at the specified index.</returns>
-        object IList.this[int index]
+        /// <param name="index">The index of the item to retrieve.</param>
+        /// <returns>The item at that index, or null if there was a binding error.</returns>
+        public object this[int index]
         {
             get
             {
                 return this.subscriptions[index].SimplePropertyPath.Value;
-            }
-
-            set
-            {
-                this.subscriptions[index].SimplePropertyPath.Value = value;
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Gets or sets the item at the specified index. Setting an item always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        /// <param name="index">The index of the item to retrieve.</param>
-        /// <returns>The item at that index, or the default value of <paramref name="T"/> if the item is not of type <paramref name="T"/>.</returns>
-        public T this[int index]
-        {
-            get
-            {
-                object value = this.subscriptions[index].SimplePropertyPath.Value;
-                if (value is T)
-                {
-                    return (T)value;
-                }
-                else
-                {
-                    return default(T);
-                }
             }
 
             set
@@ -227,30 +192,10 @@ namespace Nito.Utility
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the collection. If any of the values are null or of types other than <typeparamref name="T"/>, the default value of <typeparamref name="T"/> is substituted.
-        /// </summary>
-        /// <returns>An enumerator that iterates through the collection.</returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (Subscription subscription in this.subscriptions)
-            {
-                object value = subscription.SimplePropertyPath.Value;
-                if (value is T)
-                {
-                    yield return (T)value;
-                }
-                else
-                {
-                    yield return default(T);
-                }
-            }
-        }
-
-        /// <summary>
         /// Returns an enumerator that iterates through the collection. This enumerator may enumerate null values and/or values of differing types.
         /// </summary>
         /// <returns>An enumerator that iterates through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             foreach (Subscription subscription in this.subscriptions)
             {
@@ -271,16 +216,6 @@ namespace Nito.Utility
         }
 
         /// <summary>
-        /// Copies the elements of the collection to an array, starting at a specified index.
-        /// </summary>
-        /// <param name="array">The destination array.</param>
-        /// <param name="arrayIndex">The index in <paramref name="array"/> at which copying begins.</param>
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            this.ToList().CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
         /// Determines whether the collection contains a specified value.
         /// </summary>
         /// <param name="value">The value to search for.</param>
@@ -288,16 +223,6 @@ namespace Nito.Utility
         bool IList.Contains(object value)
         {
             return (this as ICollection).Cast<object>().Contains(value);
-        }
-
-        /// <summary>
-        /// Determines whether the collection contains a specified value.
-        /// </summary>
-        /// <param name="item">The value to search for.</param>
-        /// <returns>Whether the value exists in the collection.</returns>
-        bool ICollection<T>.Contains(T item)
-        {
-            return (this as IList).Contains(item);
         }
 
         /// <summary>
@@ -316,16 +241,6 @@ namespace Nito.Utility
             }
 
             return -1;
-        }
-
-        /// <summary>
-        /// Returns the index of a specified item.
-        /// </summary>
-        /// <param name="item">The item to find.</param>
-        /// <returns>The index of the item, or -1 if the item was not found.</returns>
-        int IList<T>.IndexOf(T item)
-        {
-            return (this as IList).IndexOf(item);
         }
 
         #endregion
@@ -374,52 +289,6 @@ namespace Nito.Utility
         /// </summary>
         /// <param name="index">The index of the item to not remove from the collection.</param>
         void IList.RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Does not add an item to the collection. Always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        /// <param name="item">The object that is not added to the collection.</param>
-        void ICollection<T>.Add(T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Does not clear all items from the collection. Always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        void ICollection<T>.Clear()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Does not remove an item from the collection. Always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        /// <param name="item">The item to not remove from the collection.</param>
-        /// <returns>An undefined value, since this method always raises an exception.</returns>
-        bool ICollection<T>.Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Does not insert an item into the collection. Always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        /// <param name="index">The index at which the item is not inserted.</param>
-        /// <param name="item">The item which is not inserted into the collection.</param>
-        void IList<T>.Insert(int index, T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Does not remove an item from the collection. Always raises <see cref="NotSupportedException"/>.
-        /// </summary>
-        /// <param name="index">The index of the item to not remove from the collection.</param>
-        void IList<T>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }

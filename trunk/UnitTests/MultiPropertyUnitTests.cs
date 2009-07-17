@@ -16,7 +16,7 @@ namespace UnitTests
         public void TestSimpleRead()
         {
             ObservableCollection<FakeVM> source = new ObservableCollection<FakeVM>(new[] { new FakeVM { Value = 13 }, new FakeVM { Value = 13 }, new FakeVM { Value = 13 } });
-            MultiProperty<int> prop = new MultiProperty<int> { SourceCollection = source, Path = "Value" };
+            MultiProperty prop = new MultiProperty { SourceCollection = source, Path = "Value" };
 
             Assert.AreEqual(13, prop.Value);
         }
@@ -25,16 +25,16 @@ namespace UnitTests
         public void TestUnequalRead()
         {
             ObservableCollection<FakeVM> source = new ObservableCollection<FakeVM>(new[] { new FakeVM { Value = 13 }, new FakeVM { Value = 15 }, new FakeVM { Value = 13 } });
-            MultiProperty<int> prop = new MultiProperty<int> { SourceCollection = source, Path = "Value" };
+            MultiProperty prop = new MultiProperty { SourceCollection = source, Path = "Value" };
 
-            Assert.AreEqual(0, prop.Value);
+            Assert.IsNull(prop.Value);
         }
 
         [TestMethod]
         public void TestSimpleWrite()
         {
             ObservableCollection<FakeVM> source = new ObservableCollection<FakeVM>(new[] { new FakeVM { Value = 13 }, new FakeVM { Value = 13 }, new FakeVM { Value = 13 } });
-            MultiProperty<int> prop = new MultiProperty<int> { SourceCollection = source, Path = "Value" };
+            MultiProperty prop = new MultiProperty { SourceCollection = source, Path = "Value" };
 
             prop.Value = 17;
 
@@ -45,7 +45,7 @@ namespace UnitTests
         public void TestUnequalWrite()
         {
             ObservableCollection<FakeVM> source = new ObservableCollection<FakeVM>(new[] { new FakeVM { Value = 13 }, new FakeVM { Value = 15 }, new FakeVM { Value = 13 } });
-            MultiProperty<int> prop = new MultiProperty<int> { SourceCollection = source, Path = "Value" };
+            MultiProperty prop = new MultiProperty { SourceCollection = source, Path = "Value" };
 
             prop.Value = 17;
 
