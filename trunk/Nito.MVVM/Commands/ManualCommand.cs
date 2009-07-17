@@ -9,20 +9,21 @@ namespace Nito.MVVM
     using Nito.Utility;
 
     /// <summary>
-    /// Delegate-based parameterless command with its own backing member for <see cref="CanExecuteChanged"/>.
+    /// Delegate-based parameterless command, implementing <see cref="CanExecuteChanged"/> as a weak event.
     /// </summary>
     public sealed class ManualCommand : ICommand, IDisposable
     {
         /// <summary>
-        /// The weak collection of delegates for <see cref="CanExecuteChanged"/>.
+        /// Implementation of <see cref="CanExecuteChanged"/>.
         /// </summary>
-        private IWeakCollection<EventHandler> canExecuteChanged = new WeakCollection<EventHandler>();
+        private CanExecuteChangedCore canExecuteChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManualCommand"/> class with null delegates.
         /// </summary>
         public ManualCommand()
         {
+            this.canExecuteChanged = new CanExecuteChangedCore();
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace Nito.MVVM
         /// <param name="execute">The delegate invoked to execute this command.</param>
         /// <param name="canExecute">The delegate invoked to determine if this command may execute. This may be invoked when <see cref="RaiseCanExecuteChanged"/> is invoked.</param>
         public ManualCommand(Action execute, Func<bool> canExecute)
+            : this()
         {
             this.Execute = execute;
             this.CanExecute = canExecute;
@@ -39,10 +41,10 @@ namespace Nito.MVVM
         /// <summary>
         /// This is a weak event. Provides notification that the result of <see cref="ICommand.CanExecute"/> may be different.
         /// </summary>
-        public event EventHandler CanExecuteChanged
+        event EventHandler ICommand.CanExecuteChanged
         {
-            add { this.canExecuteChanged.Add(value); }
-            remove { this.canExecuteChanged.Remove(value); }
+            add { this.canExecuteChanged.CanExecuteChanged += value; }
+            remove { this.canExecuteChanged.CanExecuteChanged -= value; }
         }
 
         /// <summary>
@@ -54,17 +56,6 @@ namespace Nito.MVVM
         /// Gets or sets the delegate invoked to determine if this command may execute. Setting this does not raise <see cref="CanExecuteChanged"/>.
         /// </summary>
         public Func<bool> CanExecute { get; set; }
-
-        /// <summary>
-        /// Raises the <see cref="CanExecuteChanged"/> event for any listeners still alive, and removes any references to garbage collected listeners.
-        /// </summary>
-        public void NotifyCanExecuteChanged()
-        {
-            foreach (EventHandler cb in this.canExecuteChanged.LiveList)
-            {
-                cb(this, EventArgs.Empty);
-            }
-        }
 
         /// <summary>
         /// Determines if this command can execute.
@@ -83,6 +74,14 @@ namespace Nito.MVVM
         void ICommand.Execute(object parameter)
         {
             this.Execute();
+        }
+
+        /// <summary>
+        /// Raises the <see cref="CanExecuteChanged"/> event for any listeners still alive, and removes any references to garbage collected listeners.
+        /// </summary>
+        public void NotifyCanExecuteChanged()
+        {
+            this.canExecuteChanged.OnCanExecuteChanged();
         }
 
         /// <summary>
