@@ -6,16 +6,18 @@ namespace Nito.MVVM
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Globalization;
+    using System.Linq;
+    using System.Windows.Data;
     using Nito.Utility;
 
     /// <summary>
     /// Represents a multiproperty.
     /// </summary>
     /// <remarks>
-    /// <para>A multiproperty is defined by a <see cref="SourceCollection"/> and a <see cref="Path"/>. Applying the property path to the source collection results in a collection of individual values.</para>
-    /// <para>The <see cref="Value"/> of a multiproperty is equal to its individual values, if all of its individual values are equivalent.</para>
+    /// <para>A multiproperty is defined by a <see cref="SourceCollection"/>, a <see cref="Path"/>, and a multi-value <see cref="Converter"/>. Applying the property path to the source collection results in a collection of individual values, which are converted by the converter into a single "multiproperty value".</para>
+    /// <para>If the default <see cref="IdentityMultiValueConverter"/> is used, then the <see cref="Value"/> of a multiproperty is equal to one of its individual values, if all of its individual values are equivalent.</para>
     /// </remarks>
     public sealed class MultiProperty : NotifyPropertyChangedBase<MultiProperty>, IDisposable
     {
@@ -35,12 +37,29 @@ namespace Nito.MVVM
         private bool ignoreCollectionChanges;
 
         /// <summary>
+        /// Backing field for <see cref="Converter"/>.
+        /// </summary>
+        private IMultiValueConverter converter;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MultiProperty"/> class.
         /// </summary>
         public MultiProperty()
         {
             this.collection = new ProjectedCollection();
             this.collection.CollectionChanged += (sender, e) => this.ProcessSourceCollectionChanged(e);
+            this.converter = new IdentityMultiValueConverter();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiProperty"/> class using the specified converter.
+        /// </summary>
+        /// <param name="converter">The multi-value converter to use.</param>
+        public MultiProperty(IMultiValueConverter converter)
+        {
+            this.collection = new ProjectedCollection();
+            this.collection.CollectionChanged += (sender, e) => this.ProcessSourceCollectionChanged(e);
+            this.converter = converter;
         }
 
         /// <summary>
@@ -81,8 +100,8 @@ namespace Nito.MVVM
         /// Gets or sets the multiproperty value.
         /// </summary>
         /// <remarks>
-        /// <para>A multiproperty value is calculated from individual values in <see cref="SourceCollection"/>. The property path <see cref="Path"/> is applied to each element in <see cref="SourceCollection"/>, and if the resulting values are all equivalent, then that is the multiproperty value. If one value is not equivalent (or if there is a path evaluation error), then the multiproperty value is null.</para>
-        /// <para>Setting the multiproperty value sets all the individual values in <see cref="SourceCollection"/> identified by <see cref="Path"/>.</para>
+        /// <para>A multiproperty value is calculated from individual values in <see cref="SourceCollection"/>. The property path <see cref="Path"/> is applied to each element in <see cref="SourceCollection"/>, and the resulting values are run through <see cref="Converter"/> to get the multiproperty value. When using the default converter, if one value is not equivalent (or if there is a path evaluation error), then the multiproperty value is null.</para>
+        /// <para>Setting the multiproperty value will invoke <see cref="IMultiValueConverter.ConvertBack"/> on <see cref="Converter"/>, and use the resulting group of values to set the individual values in <see cref="SourceCollection"/> identified by <see cref="Path"/>. If using the default (identity) converter, this sets all the individual values to the new value.</para>
         /// </remarks>
         public object Value
         {
@@ -96,9 +115,17 @@ namespace Nito.MVVM
                 this.ignoreCollectionChanges = true;
                 try
                 {
+                    Type[] types = new Type[this.collection.Count];
+                    for (int i = 0; i != types.Length; ++i)
+                    {
+                        types[i] = typeof(object);
+                    }
+
+                    object[] values = this.Converter.ConvertBack(value, types, null, CultureInfo.CurrentCulture);
+
                     for (int i = 0; i != this.collection.Count; ++i)
                     {
-                        this.collection[i] = value;
+                        this.collection[i] = values[i];
                     }
                 }
                 finally
@@ -108,6 +135,23 @@ namespace Nito.MVVM
 
                 this.value = value;
                 this.OnPropertyChanged(x => x.Value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the multi-value converter used when setting or getting <see cref="Value"/>. This property may not be set to null.
+        /// </summary>
+        public IMultiValueConverter Converter
+        {
+            get
+            {
+                return this.converter;
+            }
+
+            set
+            {
+                this.converter = value;
+                this.RefreshValue();
             }
         }
 
@@ -137,24 +181,7 @@ namespace Nito.MVVM
         /// </summary>
         private void RefreshValue()
         {
-            if (this.collection.Count == 0)
-            {
-                this.UpdateValue(null);
-            }
-            else
-            {
-                object newValue = this.collection[0];
-                for (int i = 1; i != this.collection.Count; ++i)
-                {
-                    if (!object.Equals(newValue, this.collection[i]))
-                    {
-                        this.UpdateValue(null);
-                        return;
-                    }
-                }
-
-                this.UpdateValue(newValue);
-            }
+            this.UpdateValue(this.Converter.Convert(this.collection.Cast<object>().ToArray(), typeof(object), null, CultureInfo.CurrentCulture));
         }
 
         /// <summary>
