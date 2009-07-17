@@ -46,7 +46,7 @@ namespace Nito.Utility
         private string path;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectedCollection{T}"/> class.
+        /// Initializes a new instance of the <see cref="ProjectedCollection"/> class.
         /// </summary>
         public ProjectedCollection()
         {
