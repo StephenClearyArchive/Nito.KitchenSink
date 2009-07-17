@@ -22,6 +22,15 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestSimpleRead()
+        {
+            ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 } });
+            ProjectedCollection<int> collection = new ProjectedCollection<int> { SourceCollection = source, Path = "Value" };
+
+            Assert.AreEqual(17, collection[0]);
+        }
+
+        [TestMethod]
         public void TestSimpleProjectionWrite()
         {
             ObservableCollection<TestObject> source = new ObservableCollection<TestObject>(new[] { new TestObject { Value = 17 } });

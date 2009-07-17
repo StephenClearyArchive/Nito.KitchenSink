@@ -67,6 +67,7 @@
     <Compile Include="Utility\WeakCollection.cs" />
     <Compile Include="Utility\WeakReference.cs" />
     <Compile Include="ViewModel\AutomaticDelegateProperty.cs" />
+    <Compile Include="ViewModel\MultiProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />

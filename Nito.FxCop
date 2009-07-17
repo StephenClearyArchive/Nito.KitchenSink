@@ -138,6 +138,25 @@
        </Message>
       </Messages>
       <Namespaces>
+       <Namespace Name="Nito.MVVM">
+        <Types>
+         <Type Name="MultiProperty`1">
+          <Messages>
+           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 15:19:27Z">
+            <Issue Name="Type">
+             <Item>Multi</Item>
+             <Item>'MultiProperty&lt;T&gt;'</Item>
+            </Issue>
+            <Notes>
+             <User Name="scleary">
+              <Note Id="0" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
        <Namespace Name="Nito.Utility">
         <Types>
          <Type Name="INotifyPropertyChangedExtensions">
@@ -411,6 +430,9 @@
    </Target>
   </Targets>
   <Notes>
+   <User Name="scleary">
+    <Note Id="0" Modified="2009-07-17 15:23:28Z">MultiProperty is the chosen term.</Note>
+   </User>
    <User Name="stephen">
     <Note Id="0" Modified="2009-07-16 11:53:02Z">This method provides advanced lambda expression functionality:</Note>
     <Note Id="1" Modified="2009-07-03 00:31:46Z">More types will be added later.</Note>
