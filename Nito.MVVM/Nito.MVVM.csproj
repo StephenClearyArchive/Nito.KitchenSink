@@ -55,7 +55,9 @@
     <Compile Include="Commands\ManualCommand.cs" />
     <Compile Include="Commands\StaticCommand%28of T%29.cs" />
     <Compile Include="Commands\StaticCommand.cs" />
+    <Compile Include="Converters\IdentityMultiValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\EqualityComparer.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="Utility\INotifyPropertyChanged\NotifyPropertyChangedCore.cs" />
@@ -70,7 +72,6 @@
     <Compile Include="ViewModel\MultiProperty.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters\" />
     <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

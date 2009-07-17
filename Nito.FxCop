@@ -140,16 +140,31 @@
       <Namespaces>
        <Namespace Name="Nito.MVVM">
         <Types>
-         <Type Name="MultiProperty`1">
+         <Type Name="IdentityMultiValueConverter">
           <Messages>
-           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 15:19:27Z">
+           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 17:48:52Z">
             <Issue Name="Type">
              <Item>Multi</Item>
-             <Item>'MultiProperty&lt;T&gt;'</Item>
+             <Item>'IdentityMultiValueConverter'</Item>
             </Issue>
             <Notes>
              <User Name="scleary">
-              <Note Id="0" />
+              <Note Id="3" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="MultiProperty">
+          <Messages>
+           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 17:48:52Z">
+            <Issue Name="Type">
+             <Item>Multi</Item>
+             <Item>'MultiProperty'</Item>
+            </Issue>
+            <Notes>
+             <User Name="scleary">
+              <Note Id="1" />
              </User>
             </Notes>
            </Message>
@@ -258,6 +273,51 @@
             </Messages>
            </Member>
           </Members>
+         </Type>
+         <Type Name="ProjectedCollection">
+          <Messages>
+           <Message TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035" Status="Excluded" Created="2009-07-17 17:48:52Z">
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+            </Issue>
+            <Notes>
+             <User Name="scleary">
+              <Note Id="2" />
+             </User>
+            </Notes>
+           </Message>
+           <Message TypeName="ListsAreStronglyTyped" Category="Microsoft.Design" CheckId="CA1039" Status="Excluded" Created="2009-07-17 17:48:52Z">
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>Add</Item>
+            </Issue>
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>Contains</Item>
+            </Issue>
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>IndexOf</Item>
+            </Issue>
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>Insert</Item>
+            </Issue>
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>Item</Item>
+            </Issue>
+            <Issue>
+             <Item>'ProjectedCollection'</Item>
+             <Item>Remove</Item>
+            </Issue>
+            <Notes>
+             <User Name="scleary">
+              <Note Id="2" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
          </Type>
          <Type Name="PropertyChangedEventHandlerExtensions">
           <Members>
@@ -431,7 +491,9 @@
   </Targets>
   <Notes>
    <User Name="scleary">
-    <Note Id="0" Modified="2009-07-17 15:23:28Z">MultiProperty is the chosen term.</Note>
+    <Note Id="1" Modified="2009-07-17 17:49:16Z">"MultiProperty" is the correct spelling.</Note>
+    <Note Id="2" Modified="2009-07-17 17:54:14Z">ProjectedCollection is not generic and logically acts as a "core implementation class" for other classes.</Note>
+    <Note Id="3" Modified="2009-07-17 17:54:39Z">"Multi" is just fine. Patterned after IMultiValueConverter.</Note>
    </User>
    <User Name="stephen">
     <Note Id="0" Modified="2009-07-16 11:53:02Z">This method provides advanced lambda expression functionality:</Note>
@@ -460,6 +522,9 @@
    <Rule TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006">
     <Resolution Name="Default">Consider a design where {0} doesn't nest generic type {1}.</Resolution>
    </Rule>
+   <Rule TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035">
+    <Resolution Name="Default">{0} should provide a strongly typed implementation of ICollection.CopyTo.</Resolution>
+   </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="Assembly">Correct the casing of '{0}' in assembly name {1} by changing it to '{2}'.</Resolution>
     <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
@@ -468,6 +533,9 @@
     <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="ListsAreStronglyTyped" Category="Microsoft.Design" CheckId="CA1039">
+    <Resolution Name="Default">{0} should provide a strongly typed implementation of IList.{1}.</Resolution>
    </Rule>
    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
