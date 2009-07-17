@@ -115,17 +115,29 @@ namespace Nito.MVVM
                 this.ignoreCollectionChanges = true;
                 try
                 {
-                    Type[] types = new Type[this.collection.Count];
-                    for (int i = 0; i != types.Length; ++i)
+                    if (this.Converter is IdentityMultiValueConverter)
                     {
-                        types[i] = typeof(object);
+                        // Optimize the common case
+                        for (int i = 0; i != this.collection.Count; ++i)
+                        {
+                            this.collection[i] = value;
+                        }
                     }
-
-                    object[] values = this.Converter.ConvertBack(value, types, null, CultureInfo.CurrentCulture);
-
-                    for (int i = 0; i != this.collection.Count; ++i)
+                    else
                     {
-                        this.collection[i] = values[i];
+                        // Longer, more correct code for custom converters
+                        Type[] types = new Type[this.collection.Count];
+                        for (int i = 0; i != types.Length; ++i)
+                        {
+                            types[i] = typeof(object);
+                        }
+
+                        object[] values = this.Converter.ConvertBack(value, types, null, CultureInfo.CurrentCulture);
+
+                        for (int i = 0; i != this.collection.Count; ++i)
+                        {
+                            this.collection[i] = values[i];
+                        }
                     }
                 }
                 finally
