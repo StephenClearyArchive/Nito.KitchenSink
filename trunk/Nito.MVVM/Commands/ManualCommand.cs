@@ -16,14 +16,13 @@ namespace Nito.MVVM
         /// <summary>
         /// Implementation of <see cref="CanExecuteChanged"/>.
         /// </summary>
-        private CanExecuteChangedCore canExecuteChanged;
+        private CanExecuteChangedCore canExecuteChanged = new CanExecuteChangedCore();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManualCommand"/> class with null delegates.
         /// </summary>
         public ManualCommand()
         {
-            this.canExecuteChanged = new CanExecuteChangedCore();
         }
 
         /// <summary>
@@ -32,7 +31,6 @@ namespace Nito.MVVM
         /// <param name="execute">The delegate invoked to execute this command.</param>
         /// <param name="canExecute">The delegate invoked to determine if this command may execute. This may be invoked when <see cref="RaiseCanExecuteChanged"/> is invoked.</param>
         public ManualCommand(Action execute, Func<bool> canExecute)
-            : this()
         {
             this.Execute = execute;
             this.CanExecute = canExecute;
