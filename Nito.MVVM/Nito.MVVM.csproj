@@ -54,6 +54,9 @@
     <Compile Include="Commands\CanExecuteChangedCore.cs" />
     <Compile Include="Commands\ManualCommand%28of T%29.cs" />
     <Compile Include="Commands\ManualCommand.cs" />
+    <Compile Include="Commands\MultiCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\StaticCommand%28of T%29.cs" />
     <Compile Include="Commands\StaticCommand.cs" />
     <Compile Include="Converters\IdentityMultiValueConverter.cs" />

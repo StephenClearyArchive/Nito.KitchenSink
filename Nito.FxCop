@@ -155,6 +155,21 @@
            </Message>
           </Messages>
          </Type>
+         <Type Name="MultiCommand">
+          <Messages>
+           <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 21:21:47Z">
+            <Issue Name="Type">
+             <Item>Multi</Item>
+             <Item>'MultiCommand'</Item>
+            </Issue>
+            <Notes>
+             <User Name="scleary">
+              <Note Id="1" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
          <Type Name="MultiProperty">
           <Messages>
            <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 17:48:52Z">
@@ -164,7 +179,7 @@
             </Issue>
             <Notes>
              <User Name="scleary">
-              <Note Id="1" />
+              <Note Id="0" />
              </User>
             </Notes>
            </Message>
@@ -491,7 +506,8 @@
   </Targets>
   <Notes>
    <User Name="scleary">
-    <Note Id="1" Modified="2009-07-17 17:49:16Z">"MultiProperty" is the correct spelling.</Note>
+    <Note Id="0" Modified="2009-07-17 21:44:12Z">"Multi" is the correct spelling. Patterned after IMultiValueConverter.</Note>
+    <Note Id="1" Modified="2009-07-17 21:44:22Z">"Multi" is the correct spelling. Patterned after IMultiValueConverter.</Note>
     <Note Id="2" Modified="2009-07-17 17:54:14Z">ProjectedCollection is not generic and logically acts as a "core implementation class" for other classes.</Note>
     <Note Id="3" Modified="2009-07-17 17:54:39Z">"Multi" is just fine. Patterned after IMultiValueConverter.</Note>
    </User>
