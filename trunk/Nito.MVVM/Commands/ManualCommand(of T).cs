@@ -24,6 +24,7 @@ namespace Nito.MVVM
         /// </summary>
         public ManualCommand()
         {
+            this.CanExecuteChangedSubscription = (sender, e) => this.NotifyCanExecuteChanged();
         }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace Nito.MVVM
         /// <param name="execute">The delegate invoked to execute this command.</param>
         /// <param name="canExecute">The delegate invoked to determine if this command may execute. This may be invoked when <see cref="RaiseCanExecuteChanged"/> is invoked.</param>
         public ManualCommand(Action<T> execute, Func<T, bool> canExecute)
+            : this()
         {
             this.Execute = execute;
             this.CanExecute = canExecute;
@@ -55,6 +57,11 @@ namespace Nito.MVVM
         /// Gets or sets the delegate invoked to determine if this command may execute. Setting this does not raise <see cref="CanExecuteChanged"/>.
         /// </summary>
         public Func<T, bool> CanExecute { get; set; }
+
+        /// <summary>
+        /// Gets a delegate that invokes <see cref="NotifyCanExecuteChanged"/>. This delegate exists for the lifetime of this command.
+        /// </summary>
+        public EventHandler CanExecuteChangedSubscription { get; private set; }
 
         /// <summary>
         /// Raises the <see cref="CanExecuteChanged"/> event for any listeners still alive, and removes any references to garbage collected listeners.
