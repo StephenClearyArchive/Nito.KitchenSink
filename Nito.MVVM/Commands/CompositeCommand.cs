@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿// <copyright file="CompositeCommand.cs" company="Nito Programs">
+//     Copyright (c) 2009 Nito Programs.
+// </copyright>
 
 namespace Nito.MVVM
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Input;
+
     /// <summary>
     /// Represents a composite command.
     /// </summary>
@@ -36,7 +38,50 @@ namespace Nito.MVVM
         {
             this.childSubscription = (sender, e) => this.canExecuteChanged.OnCanExecuteChanged();
         }
-        
+
+        /// <summary>
+        /// This is a weak event. Provides notification that the result of <see cref="CanExecute"/> may be different.
+        /// </summary>
+        event EventHandler ICommand.CanExecuteChanged
+        {
+            add { this.canExecuteChanged.CanExecuteChanged += value; }
+            remove { this.canExecuteChanged.CanExecuteChanged -= value; }
+        }
+
+        /// <summary>
+        /// Gets the number of child commands in the child command list.
+        /// </summary>
+        public int Count
+        {
+            get { return this.list.Count; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the child command list is read-only. Always returns false.
+        /// </summary>
+        bool ICollection<ICommand>.IsReadOnly
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Gets or sets the child command at a given index.
+        /// </summary>
+        /// <param name="index">The index of the child command.</param>
+        /// <returns>The child command at that index.</returns>
+        public ICommand this[int index]
+        {
+            get
+            {
+                return this.list[index];
+            }
+
+            set
+            {
+                this.list[index] = value;
+            }
+        }
+
         /// <summary>
         /// Determines the index of a child command.
         /// </summary>
@@ -74,24 +119,6 @@ namespace Nito.MVVM
             this.list.RemoveAt(index);
             item.CanExecuteChanged -= this.childSubscription;
             this.canExecuteChanged.OnCanExecuteChanged();
-        }
-
-        /// <summary>
-        /// Gets or sets the child command at a given index.
-        /// </summary>
-        /// <param name="index">The index of the child command.</param>
-        /// <returns>The child command at that index.</returns>
-        public ICommand this[int index]
-        {
-            get
-            {
-                return this.list[index];
-            }
-
-            set
-            {
-                this.list[index] = value;
-            }
         }
 
         /// <summary>
@@ -137,22 +164,6 @@ namespace Nito.MVVM
         void ICollection<ICommand>.CopyTo(ICommand[] array, int arrayIndex)
         {
             this.list.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// Gets the number of child commands in the child command list.
-        /// </summary>
-        public int Count
-        {
-            get { return this.list.Count; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the child command list is read-only. Always returns false.
-        /// </summary>
-        bool ICollection<ICommand>.IsReadOnly
-        {
-            get { return false; }
         }
 
         /// <summary>
@@ -208,15 +219,6 @@ namespace Nito.MVVM
             }
 
             return this.list.Count != 0;
-        }
-
-        /// <summary>
-        /// This is a weak event. Provides notification that the result of <see cref="CanExecute"/> may be different.
-        /// </summary>
-        event EventHandler ICommand.CanExecuteChanged
-        {
-            add { this.canExecuteChanged.CanExecuteChanged += value; }
-            remove { this.canExecuteChanged.CanExecuteChanged -= value; }
         }
 
         /// <summary>
