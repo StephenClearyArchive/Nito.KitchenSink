@@ -6,6 +6,9 @@ namespace Nito.MVVM
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
     using System.Windows.Input;
     using Nito.Utility;
 
@@ -26,6 +29,25 @@ namespace Nito.MVVM
         /// The source collection, projected along a property path.
         /// </summary>
         private ProjectedCollection collection = new ProjectedCollection();
+
+        /// <summary>
+        /// The subscription to child <see cref="ICommand.CanExecuteChanged"/> events.
+        /// </summary>
+        private EventHandler commandSubscription;
+
+        /// <summary>
+        /// All the child commands we've subscribed to. Null entries represent children that do not implement <see cref="ICommand"/>.
+        /// </summary>
+        private List<ICommand> subscribedCommands = new List<ICommand>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiCommand"/> class.
+        /// </summary>
+        public MultiCommand()
+        {
+            this.collection.CollectionChanged += (sender, e) => this.ProcessSourceCollectionChanged(e);
+            this.commandSubscription = (sender, e) => this.canExecuteChanged.OnCanExecuteChanged();
+        }
 
         /// <summary>
         /// This is a weak event. Provides notification that the result of <see cref="ICommand.CanExecute"/> may be different.
@@ -108,12 +130,100 @@ namespace Nito.MVVM
         }
 
         /// <summary>
-        /// Frees all weak references to delegates held by <see cref="CanExecuteChanged"/>.
+        /// Frees all weak references to delegates held by <see cref="CanExecuteChanged"/> and unsubscribes from all collection and property notifications.
         /// </summary>
         public void Dispose()
         {
+            foreach (ICommand command in this.subscribedCommands.Where(x => x != null))
+            {
+                command.CanExecuteChanged -= this.commandSubscription;
+            }
+
             this.canExecuteChanged.Dispose();
             this.collection.Dispose();
+        }
+
+        /// <summary>
+        /// Adds a list of children to the subscribed list, and subscribes to them if possible.
+        /// </summary>
+        /// <param name="index">The index at which to add the new children.</param>
+        /// <param name="children">The new children to add.</param>
+        private void AddChildren(int index, IList children)
+        {
+            this.subscribedCommands.Capacity = this.subscribedCommands.Count + children.Count;
+            this.subscribedCommands.InsertRange(index, children.Cast<object>().Select(x => x as ICommand));
+            foreach (ICommand command in children.OfType<ICommand>())
+            {
+                command.CanExecuteChanged += this.commandSubscription;
+            }
+        }
+
+        /// <summary>
+        /// Removes a list of children from the subscribed list, and unsubscribes from them if possible.
+        /// </summary>
+        /// <param name="index">The index from which to remove the children.</param>
+        /// <param name="children">The children to remove.</param>
+        private void RemoveChildren(int index, IList children)
+        {
+            this.subscribedCommands.RemoveRange(index, children.Count);
+            foreach (ICommand command in children.OfType<ICommand>())
+            {
+                command.CanExecuteChanged -= this.commandSubscription;
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribes from all children in the subscribed list, and rebuilds it from the soruce collection.
+        /// </summary>
+        private void ResetChildren()
+        {
+            foreach (ICommand command in this.subscribedCommands.Where(x => x != null))
+            {
+                command.CanExecuteChanged -= this.commandSubscription;
+            }
+
+            this.subscribedCommands.Clear();
+            this.subscribedCommands.Capacity = this.collection.Count;
+
+            foreach (ICommand command in this.collection.Cast<object>().Select(x => x as ICommand))
+            {
+                this.subscribedCommands.Add(command);
+                if (command != null)
+                {
+                    command.CanExecuteChanged += this.commandSubscription;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Process source collection changes.
+        /// </summary>
+        /// <param name="e">What changed and how.</param>
+        private void ProcessSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            // Note: ProjectedCollection always provides proper index values.
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    this.AddChildren(e.NewStartingIndex, e.NewItems);
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    this.subscribedCommands.RemoveRange(e.OldStartingIndex, e.OldItems.Count);
+                    this.subscribedCommands.InsertRange(e.NewStartingIndex, e.NewItems.Cast<object>().Select(x => x as ICommand));
+                    return;
+                case NotifyCollectionChangedAction.Remove:
+                    this.RemoveChildren(e.OldStartingIndex, e.OldItems);
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    this.RemoveChildren(e.OldStartingIndex, e.OldItems);
+                    this.AddChildren(e.NewStartingIndex, e.NewItems);
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    this.ResetChildren();
+                    break;
+            }
+
+            this.canExecuteChanged.OnCanExecuteChanged();
         }
     }
 }

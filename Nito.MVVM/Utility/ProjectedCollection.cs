@@ -54,7 +54,7 @@ namespace Nito.Utility
         }
 
         /// <summary>
-        /// Provides notification when the collection changes.
+        /// Provides notification when the collection changes. Index property values are always provided except for the Reset action.
         /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged
         {
