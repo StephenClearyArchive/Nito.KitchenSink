@@ -140,6 +140,21 @@
       <Namespaces>
        <Namespace Name="Nito.MVVM">
         <Types>
+         <Type Name="CompositeCommand">
+          <Messages>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Status="Excluded" Created="2009-07-18 23:25:32Z">
+            <Issue>
+             <Item>'CompositeCommand'</Item>
+             <Item>Collection</Item>
+            </Issue>
+            <Notes>
+             <User Name="stephen">
+              <Note Id="8" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
          <Type Name="IdentityMultiValueConverter">
           <Messages>
            <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-07-17 17:48:52Z">
@@ -520,6 +535,7 @@
     <Note Id="5" Modified="2009-07-03 00:38:42Z">"Nito" is spelled correctly.</Note>
     <Note Id="6" Modified="2009-07-03 00:39:31Z">WeakReference&lt;T&gt; exposes GCHandle operations in a fully safe way (enforced cleanup, and allowing earlier cleanup than System.WeakReference provides).</Note>
     <Note Id="7" Modified="2009-07-03 00:40:05Z">"MVVM" is the chosen namespace, to match the project name and common usage, in spite of the MS guidelines.</Note>
+    <Note Id="8" Modified="2009-07-18 23:26:12Z">"Command" is the more important suffix.</Note>
    </User>
   </Notes>
   <Rules>
@@ -549,6 +565,9 @@
     <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
+    <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="ListsAreStronglyTyped" Category="Microsoft.Design" CheckId="CA1039">
     <Resolution Name="Default">{0} should provide a strongly typed implementation of IList.{1}.</Resolution>
