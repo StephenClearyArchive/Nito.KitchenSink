@@ -49,11 +49,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetPropertyNameUnitTests.cs" />
-    <Compile Include="MultiPropertyUnitTests.cs" />
-    <Compile Include="NotifyPropertyChangedUnitTests.cs" />
-    <Compile Include="ProjectedCollectionUnitTests.cs" />
-    <Compile Include="SimplePropertyPathUnitTests.cs" />
+    <Compile Include="Unit Tests\GetPropertyNameUnitTests.cs" />
+    <Compile Include="Unit Tests\MultiPropertyUnitTests.cs" />
+    <Compile Include="Unit Tests\NotifyPropertyChangedUnitTests.cs" />
+    <Compile Include="Unit Tests\ProjectedCollectionUnitTests.cs" />
+    <Compile Include="Unit Tests\SimplePropertyPathUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
