@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nito.Utility;
 
-namespace Tests.Regression_Tests
+namespace RegressionTests
 {
     [TestClass]
     public class ProjectedCollectionRegressionTests
