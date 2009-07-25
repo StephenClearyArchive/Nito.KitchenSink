@@ -346,8 +346,12 @@ namespace Nito.Utility
                 this.subscriptions.Add(this.CreateLiveSubscription(obj));
             }
 
-            this.sourceCollectionChanged = (sender, args) => this.ProcessSourceCollectionChanged(args);
-            (this.sourceCollection as INotifyCollectionChanged).CollectionChanged += this.sourceCollectionChanged;
+            INotifyCollectionChanged sourceCollection = this.sourceCollection as INotifyCollectionChanged;
+            if (sourceCollection != null)
+            {
+                this.sourceCollectionChanged = (sender, args) => this.ProcessSourceCollectionChanged(args);
+                sourceCollection.CollectionChanged += this.sourceCollectionChanged;
+            }
         }
 
         /// <summary>
