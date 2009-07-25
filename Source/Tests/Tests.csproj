@@ -49,6 +49,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Regression Tests\ProjectedCollectionRegressionTests.cs" />
     <Compile Include="Unit Tests\GetPropertyNameUnitTests.cs" />
     <Compile Include="Unit Tests\MultiPropertyUnitTests.cs" />
     <Compile Include="Unit Tests\NotifyPropertyChangedUnitTests.cs" />
