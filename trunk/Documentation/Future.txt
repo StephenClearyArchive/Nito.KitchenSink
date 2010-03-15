@@ -1,0 +1,2 @@
+. Revive ProjectedCollection (and its tests) from the old Nito.MVVM branch once .NET 4 is released (moving INotifyCollectionChanged into System).
+. Possibly also consider NotifyPropertyChangedCore

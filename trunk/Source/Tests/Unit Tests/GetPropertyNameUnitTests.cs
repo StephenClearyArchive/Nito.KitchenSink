@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Nito.Utility;
+using Nito.KitchenSink;
 
 namespace UnitTests
 {
@@ -11,19 +11,19 @@ namespace UnitTests
     public class GetPropertyNameUnitTests
     {
         [TestMethod]
-        public void TestValueProperty()
+        public void GetPropertyName_ForValueProperty_ReturnsPropertyName()
         {
             TestObject test = new TestObject();
-
-            Assert.AreEqual("ValueProperty", test.GetPropertyName(x => x.ValueProperty));
+            string propertyName = test.GetPropertyName(x => x.ValueProperty);
+            Assert.AreEqual("ValueProperty", propertyName, "GetPropertyName should return property name for value properties");
         }
 
         [TestMethod]
-        public void TestObjectProperty()
+        public void GetPropertyName_ForReferenceProperty_ReturnsPropertyName()
         {
             TestObject test = new TestObject();
-
-            Assert.AreEqual("ObjectProperty", test.GetPropertyName(x => x.ObjectProperty));
+            string propertyName = test.GetPropertyName(x => x.ObjectProperty);
+            Assert.AreEqual("ObjectProperty", propertyName, "GetPropertyName should return property name for reference properties");
         }
 
         private sealed class TestObject
@@ -33,3 +33,4 @@ namespace UnitTests
         }
     }
 }
+
