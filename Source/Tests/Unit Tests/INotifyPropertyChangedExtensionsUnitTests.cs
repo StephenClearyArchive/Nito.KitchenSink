@@ -1,56 +1,51 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nito.KitchenSink;
 using System.ComponentModel;
-using System.Linq.Expressions;
 
 namespace UnitTests
 {
     [TestClass]
-    public class NotifyPropertyChangedUnitTests
+    public class INotifyPropertyChangedExtensionsUnitTests
     {
         [TestMethod]
-        public void TestSubscription()
+        public void Subscription_MatchingPropertyChanged_InvokesHandler()
         {
             TestObject test = new TestObject();
             bool called = false;
 
             test.SubscribeToPropertyChanged(x => x.ValueProperty, x => called = true);
-
-            Assert.AreEqual(false, called);
-
-            test.ObjectProperty = new object();
-
-            Assert.AreEqual(false, called);
-
             test.ValueProperty = 13;
 
-            Assert.AreEqual(true, called);
+            Assert.IsTrue(called, "SubscribeToPropertyChanged should invoke handler when property changes");
         }
 
         [TestMethod]
-        public void TestDerivedSubscription()
+        public void Subscription_MismatchingPropertyChanged_DoesNotInvokeHandler()
         {
-            TestDerivedObject test = new TestDerivedObject();
+            TestObject test = new TestObject();
             bool called = false;
 
-            // Ensure the PropertyChangedEventHandler.Raise extension method will not fail when its "this" parameter is null
-            test.ObjectProperty = new object();
-
             test.SubscribeToPropertyChanged(x => x.ValueProperty, x => called = true);
-
-            Assert.AreEqual(false, called);
-
             test.ObjectProperty = new object();
 
-            Assert.AreEqual(false, called);
+            Assert.IsFalse(called, "SubscribeToPropertyChanged should not invoke handler when other properties change");
+        }
 
+        [TestMethod]
+        public void Subscription_ReturnsUnsubscribableDelegate()
+        {
+            TestObject test = new TestObject();
+            bool called = false;
+
+            var unsubscribe = test.SubscribeToPropertyChanged(x => x.ValueProperty, x => called = true);
+            test.PropertyChanged -= unsubscribe;
             test.ValueProperty = 13;
 
-            Assert.AreEqual(true, called);
+            Assert.IsFalse(called, "SubscribeToPropertyChanged should not invoke handler when unsubscribed");
         }
 
         /// <summary>
@@ -95,34 +90,6 @@ namespace UnitTests
 
             #endregion
         }
-
-        /// <summary>
-        /// Test object that uses an inherited implementation of INotifyPropertyChanged.
-        /// </summary>
-        private sealed class TestDerivedObject : NotifyPropertyChangedBase<TestDerivedObject>
-        {
-            private int valueProperty;
-            private object objectProperty;
-
-            public int ValueProperty
-            {
-                get { return this.valueProperty; }
-                set
-                {
-                    this.valueProperty = value;
-                    this.OnPropertyChanged(x => x.ValueProperty);
-                }
-            }
-
-            public object ObjectProperty
-            {
-                get { return this.objectProperty; }
-                set
-                {
-                    this.objectProperty = value;
-                    this.OnPropertyChanged(x => x.ObjectProperty);
-                }
-            }
-        }
     }
 }
+

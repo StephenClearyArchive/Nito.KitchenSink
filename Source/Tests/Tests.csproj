@@ -38,26 +38,35 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nito.MVVM\Nito.MVVM.csproj">
-      <Project>{7DCF0488-CFC1-4BD9-8C0D-F157C19485A5}</Project>
-      <Name>Nito.MVVM</Name>
+    <Compile Include="Unit Tests\BooleanExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\CircularBufferUnitTests.cs" />
+    <Compile Include="Unit Tests\DequeUnitTests.cs" />
+    <Compile Include="Unit Tests\ExceptionExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\GetPropertyNameUnitTests.cs" />
+    <Compile Include="Unit Tests\GuidExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\INotifyPropertyChangedExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\LinkedListExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\MultiByteDelimiterFramerUnitTests.cs" />
+    <Compile Include="Unit Tests\MultiByteMultiDelimiterFramerUnitTests.cs" />
+    <Compile Include="Unit Tests\NotifyPropertyChangedBaseUnitTests.cs" />
+    <Compile Include="Unit Tests\NotifyPropertyChangedUnitTests.cs" />
+    <Compile Include="Unit Tests\RolloverLogTraceListenerUnitTests.cs" />
+    <Compile Include="Unit Tests\SimplePropertyPathUnitTests.cs" />
+    <Compile Include="Unit Tests\SingleByteDelimiterFramerUnitTests.cs" />
+    <Compile Include="Unit Tests\StreamExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\StringExtensionsUnitTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nito.KitchenSink\Nito.KitchenSink.csproj">
+      <Project>{D8EAA615-D5C1-4546-A6B1-D9F3CCAB7B54}</Project>
+      <Name>Nito.KitchenSink</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Regression Tests\ProjectedCollectionRegressionTests.cs" />
-    <Compile Include="Unit Tests\GetPropertyNameUnitTests.cs" />
-    <Compile Include="Unit Tests\MultiPropertyUnitTests.cs" />
-    <Compile Include="Unit Tests\NotifyPropertyChangedUnitTests.cs" />
-    <Compile Include="Unit Tests\ProjectedCollectionUnitTests.cs" />
-    <Compile Include="Unit Tests\SimplePropertyPathUnitTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Regression Tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
