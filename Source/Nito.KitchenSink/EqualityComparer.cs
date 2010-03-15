@@ -20,7 +20,7 @@ namespace Nito.KitchenSink
         /// Gets the default implementation of <see cref="IEqualityComparer"/>.
         /// </summary>
         /// <remarks>
-        /// <para>The default implementation uses <see cref="Object.Equals(Object,Object)"/> and <see cref="Object.GetHashCode"/> to implement <see cref="IEqualityComparer"/>.</para>
+        /// <para>The default implementation uses <see cref="System.Object.Equals(System.Object,System.Object)"/> and <see cref="System.Object.GetHashCode"/> to implement <see cref="IEqualityComparer"/>.</para>
         /// </remarks>
         public static IEqualityComparer Default
         {

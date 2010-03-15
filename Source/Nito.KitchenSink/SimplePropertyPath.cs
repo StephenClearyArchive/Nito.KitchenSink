@@ -117,7 +117,7 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Reevaluates <see cref="Path"/> on <see cref="Root"/>, updating <see cref="Value"/> if necessary. May invoke <see cref="PropertyChanged"/>.
+        /// Reevaluates <see cref="Path"/> on <see cref="Root"/>, updating <see cref="Value"/> if necessary. May invoke <see cref="INotifyPropertyChanged.PropertyChanged"/>.
         /// </summary>
         /// <remarks>
         /// <para>Normally, this function will not be needed. It is only needed if an object evaluated by <see cref="Path"/> does not support <see cref="INotifyPropertyChanged"/>.</para>
@@ -169,7 +169,7 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Updates the evaluated value and raises <see cref="PropertyChanged"/> if necessary.
+        /// Updates the evaluated value and raises <see cref="INotifyPropertyChanged.PropertyChanged"/> if necessary.
         /// </summary>
         /// <param name="newValue">The newly-evaluated value.</param>
         private void UpdateValue(object newValue)
