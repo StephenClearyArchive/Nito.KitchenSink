@@ -1,0 +1,1755 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nito.KitchenSink</name>
+    </assembly>
+    <members>
+        <member name="T:Nito.KitchenSink.IWeakCollection`1">
+            <summary>
+            A collection of weak references to objects of type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of objects to hold weak references to.</typeparam>
+        </member>
+        <member name="M:Nito.KitchenSink.IWeakCollection`1.Purge">
+            <summary>
+            Removes all dead objects from the collection.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveList">
+            <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteList">
+            <summary>
+            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveListWithoutPurge">
+            <summary>
+            Gets a sequence of live objects from the collection without causing a purge.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteCount">
+            <summary>
+            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.DeadCount">
+            <summary>
+            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCount">
+            <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCountWithoutPurge">
+            <summary>
+            Gets the number of live entries in the collection without causing a purge. O(n).
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.WeakCollection`1">
+            <summary>
+            A collection of weak references to objects. Weak references are purged by iteration/count operations, not by add/remove operations.
+            </summary>
+            <typeparam name="T">The type of object to hold weak references to.</typeparam>
+            <remarks>
+            <para>Since the collection holds weak references to the actual objects, the collection is comprised of both living and dead references. Living references refer to objects that have not been garbage collected, and may be used as normal references. Dead references refer to objects that have been garbage collected.</para>
+            <para>Dead references do consume resources; each dead reference is a garbage collection handle.</para>
+            <para>Dead references may be cleaned up by a <see cref="M:Nito.KitchenSink.WeakCollection`1.Purge"/> operation. Some properties and methods cause a purge as a side effect; the member documentation specifies whether a purge takes place.</para>
+            </remarks>
+        </member>
+        <member name="F:Nito.KitchenSink.WeakCollection`1.list">
+            <summary>
+            The actual collection of strongly-typed weak references.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakCollection`1"/> class that is empty.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.Add(`0)">
+            <summary>
+            Adds a weak reference to an object to the collection. Does not cause a purge.
+            </summary>
+            <param name="item">The object to add a weak reference to.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.Remove(`0)">
+            <summary>
+            Removes a weak reference to an object from the collection. Does not cause a purge.
+            </summary>
+            <param name="item">The object to remove a weak reference to.</param>
+            <returns>True if the object was found and removed; false if the object was not found.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.Purge">
+            <summary>
+            Removes all dead objects from the collection.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.Dispose">
+            <summary>
+            Frees all resources held by the collection.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.Clear">
+            <summary>
+            Empties the collection.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Contains(`0)">
+            <summary>
+            Determines whether the collection contains a specific value.
+            </summary>
+            <param name="item">The object to locate.</param>
+            <returns>True if the collection contains a specific value; false if it does not.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies all live objects to an array.
+            </summary>
+            <param name="array">The destination array.</param>
+            <param name="arrayIndex">The index to begin writing into the array.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#IEnumerable{T}#GetEnumerator">
+            <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+            <returns>The sequence of live objects.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+            <returns>The sequence of live objects.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.LiveList">
+            <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteList">
+            <summary>
+            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.LiveListWithoutPurge">
+            <summary>
+            Gets a sequence of live objects from the collection without causing a purge.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteCount">
+            <summary>
+            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.DeadCount">
+            <summary>
+            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCount">
+            <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCountWithoutPurge">
+            <summary>
+            Gets the number of live entries in the collection without causing a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Count">
+            <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#IsReadOnly">
+            <summary>
+            Gets a value indicating whether the collection is read only. Always returns false.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakCollection`1.UnsafeLiveList">
+            <summary>
+            Gets a sequence of live objects from the collection, causing a purge. The entire sequence MUST always be enumerated!
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.RolloverLogTraceListener">
+            <summary>
+            Implements a trace listener that writes messages to an on-disk rolling log.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.RolloverLogTraceListener.files">
+            <summary>
+            The list of archive files currently in the directory, sorted by name (timestamp).
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.RolloverLogTraceListener.currentFile">
+            <summary>
+            The current log file, "current.txt".
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.RolloverLogTraceListener.current">
+            <summary>
+            The text writer for the current log file. This is null if the object has been disposed.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.RolloverLogTraceListener"/> class, with the parameters passed from the application configuration.
+            </summary>
+            <param name="initializeData">The parameters from the application configuration file.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.Write(System.String)">
+            <summary>
+            Writes a message to the log.
+            </summary>
+            <param name="message">A message to write.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.WriteLine(System.String)">
+            <summary>
+            Writes a message to the log.
+            </summary>
+            <param name="message">A message to write.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.Flush">
+            <summary>
+            Flushes the output buffer. Does not cause a rollover.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.Close">
+            <summary>
+            Closes the output stream so it no longer receives tracing or debugging output.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.Dispose(System.Boolean)">
+            <summary>
+            Releases the resources owned by this object.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.TrimArchiveFiles">
+            <summary>
+            Removes archived log files (oldest first) if there are too many.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.Rollover(System.DateTime)">
+            <summary>
+            Trims the archived log files if there are too many, and changes the current log file into an archived log file. The current log file must be closed before invoking this method.
+            </summary>
+            <param name="now">The date/time stamp of when the current log file gets archived.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.OpenCurrent">
+            <summary>
+            Creates a new current log file.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.RolloverLogTraceListener.CloseCurrentAndRollover(System.DateTime)">
+            <summary>
+            Closes the current log file, rolling over if necessary.
+            </summary>
+            <param name="now">The date/time stamp of when the current log file gets archived.</param>
+        </member>
+        <member name="P:Nito.KitchenSink.RolloverLogTraceListener.LogDirectory">
+            <summary>
+            Gets the log directory, containing the current and all archive log files.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.RolloverLogTraceListener.MaxFileSize">
+            <summary>
+            Gets the maximum size of the current log file.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.RolloverLogTraceListener.MaxFiles">
+            <summary>
+            Gets the maximum number of archived log files.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.AsyncOperationExtensions">
+            <summary>
+            Provides methods useful when dealing with <see cref="T:System.ComponentModel.AsyncOperation"/> instances.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.AsyncOperationExtensions.Post(System.ComponentModel.AsyncOperation,System.Action)">
+            <summary>
+            Invokes a parameterless delegate using the captured <see cref="T:System.Threading.SynchronizationContext"/>.
+            </summary>
+            <param name="asyncOperation">The asynchronous operation that holds the captured <see cref="T:System.Threading.SynchronizationContext"/>.</param>
+            <param name="method">The parameterless delegate to invoke.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.AsyncOperationExtensions.PostOperationCompleted(System.ComponentModel.AsyncOperation,System.Action)">
+            <summary>
+            Invokes a parameterless delegate using the captured <see cref="T:System.Threading.SynchronizationContext"/>, and ends the asynchronous operation.
+            </summary>
+            <param name="asyncOperation">The asynchronous operation that holds the captured <see cref="T:System.Threading.SynchronizationContext"/>.</param>
+            <param name="method">The parameterless delegate to invoke.</param>
+        </member>
+        <member name="T:Nito.KitchenSink.SafeGCHandle">
+            <summary>
+            Helper class to help with managing <see cref="T:System.Runtime.InteropServices.GCHandle"/> resources.
+            </summary>
+            <remarks>
+            <para>The only reason this isn't <c>public</c> is to prevent misuse by end users.</para>
+            <para>Note that this class can only be used to represent <see cref="T:System.Runtime.InteropServices.GCHandle"/> objects that should be freed when garbage collected (or disposed). This class cannot be used in several interop situations, such as passing ownership of an object to a callback function.</para>
+            </remarks>
+        </member>
+        <member name="M:Nito.KitchenSink.SafeGCHandle.#ctor(System.Object,System.Runtime.InteropServices.GCHandleType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SafeGCHandle"/> class referring to the target in the given way.
+            </summary>
+            <param name="target">The object to reference.</param>
+            <param name="type">The way to reference the object.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.SafeGCHandle.ReleaseHandle">
+            <summary>
+            Frees the garbage collection handle.
+            </summary>
+            <returns>Whether the handle was released successfully.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.SafeGCHandle.Handle">
+            <summary>
+            Gets the underlying allocated garbage collection handle.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SafeGCHandle.IsInvalid">
+            <summary>
+            Gets a value indicating whether the handle value is invalid.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.WeakReference`1">
+            <summary>
+            Represents a weak reference, which references an object while still allowing that object to be reclaimed by garbage collection.
+            </summary>
+            <remarks>
+            <para>We define our own type, unrelated to <see cref="T:System.WeakReference"/> both to provide type safety and because <see cref="T:System.WeakReference"/> is an incorrect implementation (it does not implement <see cref="T:System.IDisposable"/>).</para>
+            </remarks>
+            <typeparam name="T">The type of object to reference.</typeparam>
+        </member>
+        <member name="F:Nito.KitchenSink.WeakReference`1.safeHandle">
+            <summary>
+            The contained <see cref="T:Nito.KitchenSink.SafeGCHandle"/>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakReference`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakReference`1"/> class, referencing the specified object.
+            </summary>
+            <param name="target">The object to track. May not be null.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.WeakReference`1.Dispose">
+            <summary>
+            Frees the weak reference.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakReference`1.Target">
+            <summary>
+            Gets the referenced object. Will return null if the object has been garbage collected.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.WeakReference`1.IsAlive">
+            <summary>
+            Gets a value indicating whether the object is still alive (has not been garbage collected).
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.FileSystemPathExtensions">
+            <summary>
+            Provides extensions to expose <see cref="T:Nito.KitchenSink.FileSystemPath"/> with other system types.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPathExtensions.AsFileSystemPath(System.String)">
+            <summary>
+            Treats a string as a file system path.
+            </summary>
+            <param name="source">The source path.</param>
+            <returns>The file system path.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPathExtensions.AsFileSystemPath(System.Environment.SpecialFolder)">
+            <summary>
+            Treats a special folder as a file system path. The resulting path is empty if the special folder does not exist or is virtual.
+            </summary>
+            <param name="specialFolder">The special folder.</param>
+            <returns>The file system path of the special folder.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.SimplePropertyPath">
+            <summary>
+            Provides a way to monitor changes along a property path.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.NotifyPropertyChangedBase`1">
+            <summary>
+            A base class for classes that need to implement <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.
+            </summary>
+            <typeparam name="TObject">The type of the derived class.</typeparam>
+        </member>
+        <member name="F:Nito.KitchenSink.NotifyPropertyChangedBase`1.propertyChanged">
+            <summary>
+            The backing delegate for <see cref="E:Nito.KitchenSink.NotifyPropertyChangedBase`1.PropertyChanged"/>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.NotifyPropertyChangedBase`1.OnItemsPropertyChanged">
+            <summary>
+            Raises <see cref="E:Nito.KitchenSink.NotifyPropertyChangedBase`1.PropertyChanged"/> for the Items[] property.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.NotifyPropertyChangedBase`1.OnPropertyChanged``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Raises <see cref="E:Nito.KitchenSink.NotifyPropertyChangedBase`1.PropertyChanged"/> for the given property.
+            </summary>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="expression">The lambda expression identifying the property that changed.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.NotifyPropertyChangedBase`1.OnPropertyChanged">
+            <summary>
+            Raises <see cref="E:Nito.KitchenSink.NotifyPropertyChangedBase`1.PropertyChanged"/> for all properties.
+            </summary>
+        </member>
+        <member name="E:Nito.KitchenSink.NotifyPropertyChangedBase`1.PropertyChanged">
+            <summary>
+            Provides notification of changes to a property value.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.trace">
+            <summary>
+            The trace source for binding errors (this is the same one used by WPF's bindings).
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.root">
+            <summary>
+            The actual root object for this property path.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.path">
+            <summary>
+            The path to evaluate.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.value">
+            <summary>
+            The result of evaluating <see cref="F:Nito.KitchenSink.SimplePropertyPath.path"/> on <see cref="F:Nito.KitchenSink.SimplePropertyPath.root"/>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.subscriptions">
+            <summary>
+            The list of subscription steps (individual <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> subscriptions) used to keep <see cref="P:Nito.KitchenSink.SimplePropertyPath.Value"/> up-to-date.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.RefreshValue">
+            <summary>
+            Reevaluates <see cref="P:Nito.KitchenSink.SimplePropertyPath.Path"/> on <see cref="P:Nito.KitchenSink.SimplePropertyPath.Root"/>, updating <see cref="P:Nito.KitchenSink.SimplePropertyPath.Value"/> if necessary. May invoke <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/>.
+            </summary>
+            <remarks>
+            <para>Normally, this function will not be needed. It is only needed if an object evaluated by <see cref="P:Nito.KitchenSink.SimplePropertyPath.Path"/> does not support <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.</para>
+            </remarks>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.Dispose">
+            <summary>
+            Unsubscribes from all objects in the property path.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.UpdateValue(System.Object)">
+            <summary>
+            Updates the evaluated value and raises <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> if necessary.
+            </summary>
+            <param name="newValue">The newly-evaluated value.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.Dismantle">
+            <summary>
+            Completely tear down all subscription steps.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.Construct">
+            <summary>
+            Builds all subscription steps, if possible.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.Dismantle(System.Int32)">
+            <summary>
+            Unsubscribes from each subscription step starting at <paramref name="index"/>.
+            </summary>
+            <param name="index">The index at which to start dismantling the subscriptions.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.Construct(System.Int32,System.Object)">
+            <summary>
+            Evaluates and subscribes to (if possible) each subscription step starting at <paramref name="index"/>.
+            </summary>
+            <param name="index">The index at which to start evaluating and subscribing.</param>
+            <param name="root">The context object for the subscription step at <paramref name="index"/>.</param>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.Root">
+            <summary>
+            Gets or sets the root object for this property path.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.Path">
+            <summary>
+            Gets or sets the property path to evaluate.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.Value">
+            <summary>
+            Gets or sets the result of <see cref="P:Nito.KitchenSink.SimplePropertyPath.Path"/> evaluated on <see cref="P:Nito.KitchenSink.SimplePropertyPath.Root"/>.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep">
+            <summary>
+            Represents a single step in a property path subscription: a single property on a single object.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.eventHandler">
+            <summary>
+            The actual delegate that is subscribed. This is null if <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> is null or if there is no subscription.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep"/> class with the given property name.
+            </summary>
+            <param name="name">The name of the property used for evaluation.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Subscribe(System.Action)">
+            <summary>
+            Subscribes to <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> if it is not null.
+            </summary>
+            <param name="action">The action to subscribe.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Unsubscribe">
+            <summary>
+            Unsubscribes from <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> if it is not null.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Evaluate">
+            <summary>
+            Returns the value of the property named <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Name"/> for <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/>. This cannot be called if <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> is null.
+            </summary>
+            <returns>The result of evaluating this subscription step.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Overwrite(System.Object)">
+            <summary>
+            Writes the value of the property named <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Name"/> for <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/>. This cannot be called if <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> is null.
+            </summary>
+            <param name="value">The new value of the property.</param>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object">
+            <summary>
+            Gets or sets the actual object at this subscription step. This may be null.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.IsSubscribed">
+            <summary>
+            Gets a value indicating whether this subscription step is subscribed.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.NotifyPropertyChangedObject">
+            <summary>
+            Gets the object used for subscriptions. This is null if <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object"/> does not support <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Name">
+            <summary>
+            Gets the name of the property subscribed to.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.LinkedListExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Collections.Generic.LinkedList`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.LinkedListExtensions.Nodes``1(System.Collections.Generic.LinkedList{``0})">
+            <summary>
+            The nodes in this linked list, as a sequence. The nodes enumerated by this sequence are safe to pass to <see cref="M:System.Collections.Generic.LinkedList`1.Remove(System.Collections.Generic.LinkedListNode{`0})"/> without disturbing the sequence iteration.
+            </summary>
+            <typeparam name="T">The type of elements contained in the linked list.</typeparam>
+            <param name="list">The linked list.</param>
+            <returns>A sequence containing each node in this linked list.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.EqualityComparer">
+            <summary>
+            Provides the <see cref="P:Nito.KitchenSink.EqualityComparer.Default"/> property, which is a default implementation of <see cref="T:System.Collections.IEqualityComparer"/>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.EqualityComparer.valueDefault">
+            <summary>
+            An instance of <see cref="T:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer"/>.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.EqualityComparer.Default">
+            <summary>
+            Gets the default implementation of <see cref="T:System.Collections.IEqualityComparer"/>.
+            </summary>
+            <remarks>
+            <para>The default implementation uses <see cref="M:System.Object.Equals(System.Object,System.Object)"/> and <see cref="M:System.Object.GetHashCode"/> to implement <see cref="T:System.Collections.IEqualityComparer"/>.</para>
+            </remarks>
+        </member>
+        <member name="T:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer">
+            <summary>
+            The default implementation of <see cref="T:System.Collections.IEqualityComparer"/>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer.Equals(System.Object,System.Object)">
+            <summary>
+            Compares two objects for equality.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>Whether the two objects are equal.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer.GetHashCode(System.Object)">
+            <summary>
+            Gets the hash code for an object.
+            </summary>
+            <param name="obj">The object to hash.</param>
+            <returns>The hash code for the object.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.AnonymousComparer`1">
+            <summary>
+            An object that implements <see cref="T:System.Collections.Generic.IComparer`1"/> using a delegate.
+            </summary>
+            <typeparam name="T">The type of items to compare.</typeparam>
+        </member>
+        <member name="M:Nito.KitchenSink.AnonymousComparer`1.System#Collections#Generic#IComparer{T}#Compare(`0,`0)">
+            <summary>
+            Compares two objects and returns a value less than 0 if <paramref name="x"/> is less than <paramref name="y"/>, 0 if <paramref name="x"/> is equal to <paramref name="y"/>, or greater than 0 if <paramref name="x"/> is greater than <paramref name="y"/>.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>A value less than 0 if <paramref name="x"/> is less than <paramref name="y"/>, 0 if <paramref name="x"/> is equal to <paramref name="y"/>, or greater than 0 if <paramref name="x"/> is greater than <paramref name="y"/>.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.AnonymousComparer`1.Compare">
+            <summary>
+            Gets or sets the Compare delegate, which compares two objects and returns a value less than 0 if its first argument is less than its second argument, 0 if its two arguments are equal, or greater than 0 if its first argument is greater than its second argument.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.FileSystemPath">
+            <summary>
+            A string that is a file system path.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.FileSystemPath"/> class with the specified actual path string.
+            </summary>
+            <param name="path">The actual path string. May not be <c>null</c>.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.op_Implicit(Nito.KitchenSink.FileSystemPath)~System.String">
+            <summary>
+            Performs an implicit conversion from <see cref="T:Nito.KitchenSink.FileSystemPath"/> to <see cref="T:System.String"/>.
+            </summary>
+            <param name="source">The source path.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.op_Implicit(System.String)~Nito.KitchenSink.FileSystemPath">
+            <summary>
+            Performs an implicit conversion from <see cref="T:System.String"/> to <see cref="T:Nito.KitchenSink.FileSystemPath"/>.
+            </summary>
+            <param name="source">The source path.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.ChangeExtension(System.String)">
+            <summary>
+            Changes the extension of the file name portion of this path. Returns an empty string if this path does not contain a file name portion.
+            </summary>
+            <param name="extension">The new extension, with or without the ".". May be <c>null</c> to remove an existing extension.</param>
+            <returns>A path with a changed extension.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.Combine(Nito.KitchenSink.FileSystemPath[])">
+            <summary>
+            Combines two or more paths. Absolute paths remove previous path information.
+            </summary>
+            <param name="others">The other paths to combine with this one.</param>
+            <returns>The combined path.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.FileSystemPath.ToAbsolute">
+            <summary>
+            Converts this path into an absolute path, using the current directory if necessary. This path may not be an empty path.
+            </summary>
+            <returns>An absolute path.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.RandomFileName">
+            <summary>
+            Gets random name that can be used as a folder or file name.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.TempFile">
+            <summary>
+            Gets the path of a temporary file that has been created.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.TempPath">
+            <summary>
+            Gets the path of the temporary directory.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.Path">
+            <summary>
+            Gets the actual path string. This is never <c>null</c>, but may be empty.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.Root">
+            <summary>
+            Gets the root portion of this path. Returns an empty path if this path does not contain a root portion.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.Directory">
+            <summary>
+            Gets the directory portion of this path. Returns an empty path if this path does not contain a directory portion.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.FileName">
+            <summary>
+            Gets the file name portion of this path. Returns an empty path if this path does not contain a file name portion.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.FileNameWithoutExtension">
+            <summary>
+            Gets the file name portion of this path, stripping the extension. Returns an empty path if this path does not contain a file name portion.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.Extension">
+            <summary>
+            Gets the extension of the file name portion of this path, including the ".". Returns an empty string if this path does not contain a file name portion or the file name does not have an extension.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.HasExtension">
+            <summary>
+            Gets a value indicating whether this path has an extension.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.FileSystemPath.IsAbsolute">
+            <summary>
+            Gets a value indicating whether this path is absolute.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.ExceptionExtensions">
+            <summary>
+            Provides useful extension methods for the <see cref="T:System.Exception"/> class.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.ExceptionExtensions.Dump(System.Exception,System.Boolean)">
+            <summary>
+            Returns a flattened, printable detailed error message for this exception and all inner exceptions.
+            </summary>
+            <param name="ex">The exception from which to get the error details.</param>
+            <param name="includeStackTrace">Whether to include the stack trace in the error message.</param>
+            <returns>A flattened, printable detailed error message.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.ExceptionExtensions.ErrorMessage(System.Exception,System.Boolean)">
+            <summary>
+            Returns a flattened, printable detailed error message for this exception.
+            </summary>
+            <param name="ex">The exception from which to get the error details.</param>
+            <param name="includeStackTrace">Whether to include the stack trace in the error message.</param>
+            <returns>A flattened, printable detailed error message.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.ExceptionExtensions.InnerExceptionsAndSelf(System.Exception)">
+            <summary>
+            Returns a collection of exceptions that contains this exception and all inner exceptions.
+            </summary>
+            <param name="ex">The exception to enumerate.</param>
+            <returns>A sequence of inner exceptions, beginning at the current exception.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.CircularBuffer`1">
+            <summary>
+            A circular buffer, which provides O(1) indexed access, O(1) insertions to the back, O(1) removals from the front, and O(N) resizing. Inserting items is not supported.
+            </summary>
+            <typeparam name="T">The type of elements contained in the deque.</typeparam>
+        </member>
+        <member name="F:Nito.KitchenSink.CircularBuffer`1.buffer">
+            <summary>
+            The actual buffer that holds the view. When setting this, <see cref="F:Nito.KitchenSink.CircularBuffer`1.view"/> should be set to <c>null</c>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.CircularBuffer`1.offset">
+            <summary>
+            The offset into <see cref="F:Nito.KitchenSink.CircularBuffer`1.buffer"/> where the view begins. When setting this, <see cref="F:Nito.KitchenSink.CircularBuffer`1.view"/> should be set to <c>null</c>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.CircularBuffer`1.count">
+            <summary>
+            The number of valid elements in the view.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.CircularBuffer`1.view">
+            <summary>
+            The view, cached in a member variable. This may be null, and should be accessed via the <see cref="M:Nito.KitchenSink.CircularBuffer`1.View"/> method.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.CircularBuffer`1"/> class with the specified capacity.
+            </summary>
+            <param name="capacity">The initial capacity.</param>
+            <exception cref="T:System.InvalidOperationException">Capacity may not be less than or equal to zero.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.Add(`0)">
+            <summary>
+            Adds a single element at the back of this circular buffer. If necessary, an element will be removed from the front of the buffer to make room.
+            </summary>
+            <param name="value">The element to add.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Adds a collection of elements at the back of this circular buffer. If necessary, element(s) will be be removed from the front of the buffer to make room.
+            </summary>
+            <param name="collection">The collection of elements to add.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.Remove">
+            <summary>
+            Removes and returns the first element of this circular buffer.
+            </summary>
+            <returns>The former first element.</returns>
+            <exception cref="T:System.InvalidOperationException">The circular buffer is empty.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.RemoveRange(System.Int32)">
+            <summary>
+            Removes a range of elements from the front of this circular buffer.
+            </summary>
+            <param name="count">The number of elements to remove.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.Clear">
+            <summary>
+            Removes all items from this deque.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoGetItem(System.Int32)">
+            <summary>
+            Gets an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to get. This index is guaranteed to be valid.</param>
+            <returns>The element at the specified index.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoSetItem(System.Int32,`0)">
+            <summary>
+            Sets an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to get. This index is guaranteed to be valid.</param>
+            <param name="item">The element to store in the list.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoInsert(System.Int32,`0)">
+            <summary>
+            Inserts an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index at which the element should be inserted. This index is guaranteed to be valid.</param>
+            <param name="item">The element to store in the list.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoRemoveAt(System.Int32)">
+            <summary>
+            Removes an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to remove. This index is guaranteed to be valid.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.View">
+            <summary>
+            Retrieves the rotated view for this deque, with a length equal to <see cref="P:Nito.KitchenSink.CircularBuffer`1.Capacity"/>. The last <c><see cref="P:Nito.KitchenSink.CircularBuffer`1.Capacity"/> - <see cref="P:Nito.KitchenSink.CircularBuffer`1.Count"/></c> elements of this view are not valid elements.
+            </summary>
+            <returns>The rotated view of the deque.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.PostIncrement(System.Int32)">
+            <summary>
+            Increments <see cref="F:Nito.KitchenSink.CircularBuffer`1.offset"/> by <paramref name="value"/> using modulo-<see cref="P:Nito.KitchenSink.CircularBuffer`1.Capacity"/> arithmetic.
+            </summary>
+            <param name="value">The value by which to increase <see cref="F:Nito.KitchenSink.CircularBuffer`1.offset"/>. May not be negative.</param>
+            <returns>The value of <see cref="F:Nito.KitchenSink.CircularBuffer`1.offset"/> after it was incremented.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoAdd(`0)">
+            <summary>
+            Inserts a single element to the back of the view. <see cref="P:Nito.KitchenSink.CircularBuffer`1.IsFull"/> must be false when this method is called.
+            </summary>
+            <param name="value">The element to insert.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.CircularBuffer`1.DoRemove">
+            <summary>
+            Removes and returns the last element in the view. <see cref="P:Nito.KitchenSink.CircularBuffer`1.IsEmpty"/> must be false when this method is called.
+            </summary>
+            <returns>The former last element.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.CircularBuffer`1.Capacity">
+            <summary>
+            Gets or sets the capacity for this circular buffer. This value is always greater than zero; setting this property to a negative or zero value will have no effect.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.CircularBuffer`1.Count">
+            <summary>
+            Gets the number of valid elements contained in this circular buffer. This value is always greater than or equal to zero.
+            </summary>
+            <returns>The number of valid elements contained in this circular buffer.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.CircularBuffer`1.IsEmpty">
+            <summary>
+            Gets a value indicating whether this instance is empty.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.CircularBuffer`1.IsFull">
+            <summary>
+            Gets a value indicating whether this instance is at full capacity.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.CircularBuffer`1.IsSplit">
+            <summary>
+            Gets a value indicating whether the buffer is "split" (meaning the beginning of the view is at a later index in <see cref="F:Nito.KitchenSink.CircularBuffer`1.buffer"/> than the end).
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.A">
+            <summary>
+            Provides static creation methods for anonymous types.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.A.Comparer``1(System.Func{``0,``0,System.Int32})">
+            <summary>
+            Creates and returns an <see cref="T:Nito.KitchenSink.AnonymousComparer`1"/> using the specified delegate.
+            </summary>
+            <typeparam name="T">The type of objects to compare.</typeparam>
+            <param name="compare">Compares two objects and returns a value less than 0 if its first argument is less than its second argument, 0 if its two arguments are equal, or greater than 0 if its first argument is greater than its second argument.</param>
+            <returns>An <see cref="T:Nito.KitchenSink.AnonymousComparer`1"/>.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.Interop">
+            <summary>
+            Useful methods for p/Invoke interop.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Interop.GetDelegateForFunctionPointer``1(System.IntPtr)">
+            <summary>
+            Converts an unmanaged function pointer to a delegate.
+            </summary>
+            <typeparam name="T">The type of delegate to convert to.</typeparam>
+            <param name="pointer">The pointer to convert.</param>
+            <returns>The function pointer, as a delegate.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Interop.GetLastWin32Exception">
+            <summary>
+            Returns a <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.
+            </summary>
+            <returns>A <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer">
+            <summary>
+            Provides message framing for multiple-byte-delimiter-based protocols that support multiple delimiters. Does not perform any unescaping of the message data.
+            </summary>
+            <remarks>
+            <para>No begin delimiter may start with another begin delimiter.</para>
+            </remarks>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.maxMessageSize">
+            <summary>
+            The maximum size of messages allowed, or 0 if there is no maximum.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.beginDelimiters">
+            <summary>
+            The beginning delimiters.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.endDelimiters">
+            <summary>
+            The ending delimiters.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.trace">
+            <summary>
+            The trace source used for all communications messages.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.dataBuffer">
+            <summary>
+            The data buffer, which grows dynamically as more data arrives. This is never null. This buffer contains the begin delimiter but not the end delimiter.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.delimiterIndex">
+            <summary>
+            The index of the matching begin delimiter at the front of the data buffer, and also the index of the end delimiter that must match. This is -1 if there are no matching begin delimiters yet.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.endDelimiterIndex">
+            <summary>
+            How much of the end delimiter has been seen (implicitly at the end of the data buffer).
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.#ctor(System.Int32,System.Collections.Generic.IEnumerable{System.Byte[]},System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer"/> class.
+            </summary>
+            <param name="maxMessageSize">Maximum size of messages, or 0 if message size is not restricted.</param>
+            <param name="beginDelimiters">The begin delimiters.</param>
+            <param name="endDelimiters">The end delimiters.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.Reset">
+            <summary>
+            Re-initializes the framer instance to a clean state. After this method returns, the framer instance is identical to a newly-constructed instance.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Notifies the framer instance that incoming data has been received from the stream. This method will invoke <see cref="E:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.MessageArrived"/> as necessary.
+            </summary>
+            <remarks>
+            <para>This method may invoke <see cref="E:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.MessageArrived"/> zero or more times.</para>
+            <para>Zero-length receives are ignored. May streams use a 0-length read to indicate the end of a stream, but the framer takes no action in this case.</para>
+            </remarks>
+            <param name="data">The data received from the stream. Cannot be null. May be a slice of the read buffer for the stream.</param>
+            <exception cref="T:System.Net.ProtocolViolationException">If the data received is not a properly-formed message.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.AppendDataToDataBuffer(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Resizes the data buffer and appends the new range of data to it.
+            </summary>
+            <param name="data">The buffer containing the new data to be appended.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.CheckMaxMessageSize(System.Int32,System.Int32)">
+            <summary>
+            Checks for messages that exceed the maximum message size in an overflow-safe way.
+            </summary>
+            <param name="currentCount">The current size of the message so far.</param>
+            <param name="additionalCount">The additional bytes that have arrived as part of this message.</param>
+        </member>
+        <member name="E:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.MessageArrived">
+            <summary>
+            Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>, and may leave the framer instance in an invalid state.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer.MessageArrivedEventHandler">
+            <summary>
+            Receives notification that a message has arrived.
+            </summary>
+            <param name="delimiterIndex">The index of the matching begin/end delimiters for this message.</param>
+            <param name="message">The message that has arrived. This may contain an alias of the data passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/> in this call stack, but will not contain an alias to any data previously passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>.</param>
+        </member>
+        <member name="T:Nito.KitchenSink.BooleanExtensions">
+            <summary>
+            Provides useful extension methods for the <see cref="T:System.Boolean"/> type.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.BooleanExtensions.ToInt32(System.Boolean)">
+            <summary>
+            Converts a boolean value to an integer value. Returns 0 if the boolean value is false, or 1 if the boolean value is true.
+            </summary>
+            <param name="value">The boolean value to convert.</param>
+            <returns>0 if the boolean value is false, or 1 if the boolean value is true.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.BooleanExtensions.ToInt32(System.Nullable{System.Boolean})">
+            <summary>
+            Converts a nullable boolean value to a nullable integer value. Returns 0 if the boolean value is false, or 1 if the boolean value is true, or null if there is no boolean value.
+            </summary>
+            <param name="value">The boolean value to convert.</param>
+            <returns>0 if the boolean value is false, or 1 if the boolean value is true, or null if there is no boolean value.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.AnonymousDisposable">
+            <summary>
+            An object that implements <see cref="T:System.IDisposable"/> using a delegate.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.AnonymousDisposable.System#IDisposable#Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.AnonymousDisposable.Dispose">
+            <summary>
+            Gets or sets the Dispose delegate, which implements <see cref="M:System.IDisposable.Dispose"/>.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer">
+            <summary>
+            Provides message framing for multiple-byte-delimiter-based protocols. Does not perform any unescaping of the message data.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.IFramer">
+            <summary>
+            A message framer. Converts a stream of bytes into a stream of messages, represented as byte arrays.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Notifies the framer instance that incoming data has been received from the stream. This method will invoke <see cref="E:Nito.KitchenSink.Communication.IFramer.MessageArrived"/> as necessary.
+            </summary>
+            <remarks>
+            <para>This method may invoke <see cref="E:Nito.KitchenSink.Communication.IFramer.MessageArrived"/> zero or more times.</para>
+            <para>Zero-length receives are ignored. May streams use a 0-length read to indicate the end of a stream, but the framer takes no action in this case.</para>
+            </remarks>
+            <param name="data">The data received from the stream. Cannot be null. May be a slice of the read buffer for the stream.</param>
+            <exception cref="T:System.Net.ProtocolViolationException">If the data received is not a properly-formed message.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.IFramer.Reset">
+            <summary>
+            Re-initializes the framer instance to a clean state. After this method returns, the framer instance is identical to a newly-constructed instance.
+            </summary>
+        </member>
+        <member name="E:Nito.KitchenSink.Communication.IFramer.MessageArrived">
+            <summary>
+            Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>, and may leave the framer instance in an invalid state.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.maxMessageSize">
+            <summary>
+            The maximum size of messages allowed, or 0 if there is no maximum.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.beginDelimiter">
+            <summary>
+            The beginning delimiter.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.endDelimiter">
+            <summary>
+            The ending delimiter.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.trace">
+            <summary>
+            The trace source used for all communications messages.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.dataBuffer">
+            <summary>
+            The data buffer, which grows dynamically as more data arrives. This is never null.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.beginDelimiterIndex">
+            <summary>
+            How much of the begin delimiter has been seen (implicitly at the beginning of the data buffer).
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.endDelimiterIndex">
+            <summary>
+            How much of the end delimiter has been seen (implicitly at the end of the data buffer).
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.#ctor(System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer"/> class.
+            </summary>
+            <param name="maxMessageSize">Maximum size of messages, or 0 if message size is not restricted.</param>
+            <param name="beginDelimiter">The begin delimiter.</param>
+            <param name="endDelimiter">The end delimiter.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.Reset">
+            <summary>
+            Re-initializes the framer instance to a clean state. After this method returns, the framer instance is identical to a newly-constructed instance.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Notifies the framer instance that incoming data has been received from the stream. This method will invoke <see cref="E:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.MessageArrived"/> as necessary.
+            </summary>
+            <remarks>
+            <para>This method may invoke <see cref="E:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.MessageArrived"/> zero or more times.</para>
+            <para>Zero-length receives are ignored. May streams use a 0-length read to indicate the end of a stream, but the framer takes no action in this case.</para>
+            </remarks>
+            <param name="data">The data received from the stream. Cannot be null. May be a slice of the read buffer for the stream.</param>
+            <exception cref="T:System.Net.ProtocolViolationException">If the data received is not a properly-formed message.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.AppendDataToDataBuffer(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Resizes the data buffer and appends the new range of data to it.
+            </summary>
+            <param name="data">The buffer containing the new data to be appended.</param>
+            <param name="index">The index into <paramref name="data"/> marking the start of the new data.</param>
+            <param name="count">The number of bytes to append from <paramref name="data"/> into the data buffer.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.CheckMaxMessageSize(System.Int32,System.Int32)">
+            <summary>
+            Checks for messages that exceed the maximum message size in an overflow-safe way.
+            </summary>
+            <param name="currentCount">The current size of the message so far.</param>
+            <param name="additionalCount">The additional bytes that have arrived as part of this message.</param>
+        </member>
+        <member name="E:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.MessageArrived">
+            <summary>
+            Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>, and may leave the framer instance in an invalid state.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.Reflection.ObjectExtensions">
+            <summary>
+            Defines extension methods useful when doing reflection.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Reflection.ObjectExtensions.GetProperty(System.Object,System.String)">
+            <summary>
+            Reads an untyped property from an object.
+            </summary>
+            <param name="this">The object from which to read the property. May not be <c>null</c>.</param>
+            <param name="name">The name of the property to read. This property must exist.</param>
+            <returns>The value of the property for that object.</returns>
+            <exception cref="T:System.ArgumentNullException">Either <paramref name="this"/> or <paramref name="name"/> is <c>null</c>.</exception>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">The object <paramref name="this"/> does not have a property named <paramref name="name"/>.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Reflection.ObjectExtensions.GetProperty``1(System.Object,System.String)">
+            <summary>
+            Reads a property from an object.
+            </summary>
+            <typeparam name="T">The type of the property that is returned.</typeparam>
+            <param name="this">The object from which to read the property. May not be <c>null</c>.</param>
+            <param name="name">The name of the property to read. This property must exist.</param>
+            <returns>The value of the property for that object.</returns>
+            <exception cref="T:System.ArgumentNullException">Either <paramref name="this"/> or <paramref name="name"/> is <c>null</c>.</exception>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">The object <paramref name="this"/> does not have a property named <paramref name="name"/>.</exception>
+            <exception cref="T:System.InvalidCastException">The property was found, but is not of type <typeparamref name="T"/>.</exception>
+        </member>
+        <member name="T:Nito.KitchenSink.ObjectExtensions">
+            <summary>
+            Provides extension methods applicable to all objects.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.ObjectExtensions.GetPropertyName``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Retrieves the name of a property referenced by a lambda expression.
+            </summary>
+            <typeparam name="TObject">The type of object containing the property.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="this">The object containing the property.</param>
+            <param name="expression">A lambda expression selecting the property from the containing object.</param>
+            <returns>The name of the property referenced by <paramref name="expression"/>.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.INotifyPropertyChangedExtensions">
+            <summary>
+            Provides extension methods for objects implementing <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.INotifyPropertyChangedExtensions.SubscribeToPropertyChanged``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Action{``0})">
+            <summary>
+            Subscribes a handler to the <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> event for a specific property.
+            </summary>
+            <typeparam name="TObject">The type implementing <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="source">The object implementing <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.</param>
+            <param name="expression">The lambda expression selecting the property.</param>
+            <param name="handler">The handler that is invoked when the property changes.</param>
+            <returns>The actual delegate subscribed to <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/>.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.GuidVariant">
+            <summary>
+            Known values for the <see cref="T:System.Guid"/> Variant field.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVariant.NCSBackwardCompatibility">
+            <summary>
+            Reserved for NCS backward compatibility.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVariant.RFC4122">
+            <summary>
+            A GUID conforming to RFC 4122.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVariant.MicrosoftBackwardCompatibility">
+            <summary>
+            Reserved for Microsoft backward compatibility.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVariant.ReservedForFutureDefinition">
+            <summary>
+            Reserved for future definition.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.GuidVersion">
+            <summary>
+            Known values for the <see cref="T:System.Guid"/> Version field.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122">
+            <summary>
+            Time-based (sequential) GUID.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVersion.DCESecurityWithEmbeddedPOSIXUIDs">
+            <summary>
+            DCE Security GUID with embedded POSIX UIDs.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVersion.NameBasedRFC4122UsingMD5">
+            <summary>
+            Name-based GUID using the MD5 hashing algorithm.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVersion.RandomRFC4122">
+            <summary>
+            Random GUID.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.GuidVersion.NameBasedRFC4122UsingSHA1">
+            <summary>
+            Name-based GUID using the SHA-1 hashing algorithm.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.GuidExtensions">
+            <summary>
+            Extension methods for the <see cref="T:System.Guid"/> structure.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetVariant(System.Guid)">
+            <summary>
+            Gets the 3-bit Variant field of the GUID.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The Variant field of the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)">
+            <summary>
+            Gets the 4-bit Version field of the GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVariant(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVariant.RFC4122"/>.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The Version field of the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetTimestamp(System.Guid)">
+            <summary>
+            Gets the 60-bit Timestamp field of the GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122"/>.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The Timestamp field of the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetCreateTime(System.Guid)">
+            <summary>
+            Gets the date and time that this GUID was created, in UTC. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122"/>.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The date and time that this GUID was created, in UTC.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetClockSequence(System.Guid)">
+            <summary>
+            Gets the 14-bit Clock Sequence field of the GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122"/>.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The Clock Sequence field of the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetNode(System.Guid)">
+            <summary>
+            Gets the 6-byte (48-bit) Node field of the GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122"/>.
+            </summary>
+            <param name="guid">The GUID from which to extract the field.</param>
+            <returns>The Node field of the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.NodeIsMAC(System.Guid)">
+            <summary>
+            Returns <c>true</c> if the Node field is a MAC address; returns <c>false</c> if the Node field is a random value. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.TimeBasedRFC4122"/>.
+            </summary>
+            <param name="guid">The GUID to inspect.</param>
+            <returns>Returns <c>true</c> if the Node field is a MAC address; returns <c>false</c> if the Node field is a random value.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetHash(System.Guid)">
+            <summary>
+            Gets what remains of the 128-bit MD5 or SHA-1 hash of the name used to create this GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.NameBasedRFC4122UsingMD5"/> or <see cref="F:Nito.KitchenSink.GuidVersion.NameBasedRFC4122UsingSHA1"/>. Note that bits 60-63 and bits 70-71 will always be zero (their original values are permanently lost).
+            </summary>
+            <param name="guid">The GUID from which to extract the hash value.</param>
+            <returns>The hash value from the GUID.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.GuidExtensions.GetRandom(System.Guid)">
+            <summary>
+            Gets the 122-bit random value used to create this GUID. This is only valid if <see cref="M:Nito.KitchenSink.GuidExtensions.GetVersion(System.Guid)"/> returns <see cref="F:Nito.KitchenSink.GuidVersion.RandomRFC4122"/>. The most-significant 6 bits of the first octet in the returned array are always 0.
+            </summary>
+            <param name="guid">The GUID from which to extract the random value.</param>
+            <returns>The random value of the GUID.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.Deque`1">
+            <summary>
+            A double-ended queue (deque), which provides O(1) indexed access, O(1) removals from the front and back, amortized O(1) insertions to the front and back, and O(N) insertions and removals anywhere else (with the operations getting slower as the index approaches the middle).
+            </summary>
+            <typeparam name="T">The type of elements contained in the deque.</typeparam>
+        </member>
+        <member name="F:Nito.KitchenSink.Deque`1.DefaultCapacity">
+            <summary>
+            The default capacity.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Deque`1.buffer">
+            <summary>
+            The circular buffer that holds the view. When setting this, <see cref="F:Nito.KitchenSink.Deque`1.view"/> should be set to <c>null</c>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Deque`1.offset">
+            <summary>
+            The offset into <see cref="F:Nito.KitchenSink.Deque`1.buffer"/> where the view begins. When setting this, <see cref="F:Nito.KitchenSink.Deque`1.view"/> should be set to <c>null</c>.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Deque`1.count">
+            <summary>
+            The number of elements in the view.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Deque`1.view">
+            <summary>
+            The view, cached in a member variable. This may be null, and should be accessed via the <see cref="M:Nito.KitchenSink.Deque`1.View"/> method.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Deque`1"/> class with the specified capacity.
+            </summary>
+            <param name="capacity">The initial capacity.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Deque`1"/> class with the elements from the specified collection.
+            </summary>
+            <param name="collection">The collection.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Deque`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.AddToBack(`0)">
+            <summary>
+            Inserts a single element at the back of this deque.
+            </summary>
+            <param name="value">The element to insert.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.AddToFront(`0)">
+            <summary>
+            Inserts a single element at the front of this deque.
+            </summary>
+            <param name="value">The element to insert.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Inserts a collection of elements into this deque.
+            </summary>
+            <param name="index">The index at which the collection is inserted.</param>
+            <param name="collection">The collection of elements to insert.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index to an insertion point for the source.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.RemoveRange(System.Int32,System.Int32)">
+            <summary>
+            Removes a range of elements from this deque.
+            </summary>
+            <param name="offset">The index into the deque at which the range begins.</param>
+            <param name="count">The number of elements to remove.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Either <paramref name="offset"/> or <paramref name="count"/> is less than 0.</exception>
+            <exception cref="T:System.ArgumentException">The range [<paramref name="offset"/>, <paramref name="offset"/> + <paramref name="count"/>) is not within the range [0, <see cref="P:Nito.KitchenSink.Deque`1.Count"/>).</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.RemoveFromBack">
+            <summary>
+            Removes and returns the last element of this deque.
+            </summary>
+            <returns>The former last element.</returns>
+            <exception cref="T:System.InvalidOperationException">The deque is empty.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.RemoveFromFront">
+            <summary>
+            Removes and returns the first element of this deque.
+            </summary>
+            <returns>The former first element.</returns>
+            <exception cref="T:System.InvalidOperationException">The deque is empty.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.Clear">
+            <summary>
+            Removes all items from this deque.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoGetItem(System.Int32)">
+            <summary>
+            Gets an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to get. This index is guaranteed to be valid.</param>
+            <returns>The element at the specified index.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoSetItem(System.Int32,`0)">
+            <summary>
+            Sets an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to get. This index is guaranteed to be valid.</param>
+            <param name="item">The element to store in the list.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoInsert(System.Int32,`0)">
+            <summary>
+            Inserts an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index at which the element should be inserted. This index is guaranteed to be valid.</param>
+            <param name="item">The element to store in the list.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoRemoveAt(System.Int32)">
+            <summary>
+            Removes an element at the specified view index.
+            </summary>
+            <param name="index">The zero-based view index of the element to remove. This index is guaranteed to be valid.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.View">
+            <summary>
+            Retrieves the rotated view for this deque, with a length equal to <see cref="P:Nito.KitchenSink.Deque`1.Capacity"/>. The last <c><see cref="P:Nito.KitchenSink.Deque`1.Capacity"/> - <see cref="P:Nito.KitchenSink.Deque`1.Count"/></c> elements of this view are not valid elements.
+            </summary>
+            <returns>The rotated view of the deque.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.PostIncrement(System.Int32)">
+            <summary>
+            Increments <see cref="F:Nito.KitchenSink.Deque`1.offset"/> by <paramref name="value"/> using modulo-<see cref="P:Nito.KitchenSink.Deque`1.Capacity"/> arithmetic.
+            </summary>
+            <param name="value">The value by which to increase <see cref="F:Nito.KitchenSink.Deque`1.offset"/>. May not be negative.</param>
+            <returns>The value of <see cref="F:Nito.KitchenSink.Deque`1.offset"/> after it was incremented.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.PreDecrement(System.Int32)">
+            <summary>
+            Decrements <see cref="F:Nito.KitchenSink.Deque`1.offset"/> by <paramref name="value"/> using modulo-<see cref="P:Nito.KitchenSink.Deque`1.Capacity"/> arithmetic.
+            </summary>
+            <param name="value">The value by which to reduce <see cref="F:Nito.KitchenSink.Deque`1.offset"/>. May not be negative or greater than <see cref="P:Nito.KitchenSink.Deque`1.Capacity"/>.</param>
+            <returns>The value of <see cref="F:Nito.KitchenSink.Deque`1.offset"/> before it was decremented.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoAddToBack(`0)">
+            <summary>
+            Inserts a single element to the back of the view. <see cref="P:Nito.KitchenSink.Deque`1.IsFull"/> must be false when this method is called.
+            </summary>
+            <param name="value">The element to insert.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoAddToFront(`0)">
+            <summary>
+            Inserts a single element to the front of the view. <see cref="P:Nito.KitchenSink.Deque`1.IsFull"/> must be false when this method is called.
+            </summary>
+            <param name="value">The element to insert.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoRemoveFromBack">
+            <summary>
+            Removes and returns the last element in the view. <see cref="P:Nito.KitchenSink.Deque`1.IsEmpty"/> must be false when this method is called.
+            </summary>
+            <returns>The former last element.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoRemoveFromFront">
+            <summary>
+            Removes and returns the first element in the view. <see cref="P:Nito.KitchenSink.Deque`1.IsEmpty"/> must be false when this method is called.
+            </summary>
+            <returns>The former first element.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoInsertRange(System.Int32,System.Collections.Generic.IEnumerable{`0},System.Int32)">
+            <summary>
+            Inserts a range of elements into the view.
+            </summary>
+            <param name="index">The index into the view at which the elements are to be inserted.</param>
+            <param name="collection">The elements to insert.</param>
+            <param name="collectionCount">The number of elements in <paramref name="collection"/>. Must be greater than zero, and the sum of <paramref name="collectionCount"/> and <see cref="P:Nito.KitchenSink.Deque`1.Count"/> must be less than or equal to <see cref="P:Nito.KitchenSink.Deque`1.Capacity"/>.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.DoRemoveRange(System.Int32,System.Int32)">
+            <summary>
+            Removes a range of elements from the view.
+            </summary>
+            <param name="index">The index into the view at which the range begins.</param>
+            <param name="collectionCount">The number of elements in the range. This must be greater than 0 and less than or equal to <see cref="P:Nito.KitchenSink.Deque`1.Count"/>.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Deque`1.EnsureCapacityForOneElement">
+            <summary>
+            Doubles the capacity if necessary to make room for one more element. When this method returns, <see cref="P:Nito.KitchenSink.Deque`1.IsFull"/> is false.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.Deque`1.Capacity">
+            <summary>
+            Gets or sets the capacity for this deque. This value is always greater than zero; setting it to a value of zero will set it to the default capacity.
+            </summary>
+            <exception cref="T:System.InvalidOperationException"><c>Capacity</c> cannot be set to a value less than <see cref="P:Nito.KitchenSink.Deque`1.Count"/>.</exception>
+        </member>
+        <member name="P:Nito.KitchenSink.Deque`1.Count">
+            <summary>
+            Gets the number of elements contained in this deque.
+            </summary>
+            <returns>The number of elements contained in this deque.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.Deque`1.IsEmpty">
+            <summary>
+            Gets a value indicating whether this instance is empty.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.Deque`1.IsFull">
+            <summary>
+            Gets a value indicating whether this instance is at full capacity.
+            </summary>
+        </member>
+        <member name="P:Nito.KitchenSink.Deque`1.IsSplit">
+            <summary>
+            Gets a value indicating whether the buffer is "split" (meaning the beginning of the view is at a later index in <see cref="F:Nito.KitchenSink.Deque`1.buffer"/> than the end).
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.StreamExtensions">
+            <summary>
+            Provides methods useful when dealing with streams.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.StreamExtensions.TryGetLength(System.IO.Stream)">
+            <summary>
+            Attempts to get the length of the stream. Returns -1 if the length of the stream could not be determined.
+            </summary>
+            <param name="stream">The stream to query.</param>
+            <returns>The length of the stream, or -1 if the stream has an undefined length.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StreamExtensions.CopyTo(System.IO.Stream,System.IO.Stream,System.Byte[],System.Action{System.Int64})">
+            <summary>
+            Synchronously copies the contents of this stream into another stream.
+            </summary>
+            <param name="source">The stream that is the source of the copy.</param>
+            <param name="destination">The stream that is the destination of the copy.</param>
+            <param name="buffer">The buffer used by the copy. The size of this buffer determines the sizes of reads and writes made to the streams.</param>
+            <param name="progress">A callback method invoked with the number of bytes transferred so far. May be null.</param>
+        </member>
+        <member name="T:Nito.KitchenSink.PropertyChangedEventHandlerExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.ComponentModel.PropertyChangedEventHandler"/> delegates.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PropertyChangedEventHandlerExtensions.Raise``2(System.ComponentModel.PropertyChangedEventHandler,``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Raises the delegate for the property identified by a lambda expression.
+            </summary>
+            <typeparam name="TObject">The type of object containing the property.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="handler">The delegate to raise. If this parameter is null, then no action is taken.</param>
+            <param name="sender">The object raising this event.</param>
+            <param name="expression">The lambda expression identifying the property that changed.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.PropertyChangedEventHandlerExtensions.RaiseItems(System.ComponentModel.PropertyChangedEventHandler,System.Object)">
+            <summary>
+            Raises the delegate for the items property (with the name "Items[]").
+            </summary>
+            <param name="handler">The delegate to raise. If this parameter is null, then no action is taken.</param>
+            <param name="sender">The object raising this event.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.PropertyChangedEventHandlerExtensions.Raise(System.ComponentModel.PropertyChangedEventHandler,System.Object)">
+            <summary>
+            Raises the delegate for all properties.
+            </summary>
+            <param name="handler">The delegate to raise. If this parameter is null, then no action is taken.</param>
+            <param name="sender">The object raising this event.</param>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.SingleByteDelimiterFramer">
+            <summary>
+            Provides message framing for single-byte-delimiter-based protocols. Does not perform any unescaping of the message data.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.maxMessageSize">
+            <summary>
+            The maximum size of messages allowed, or 0 if there is no maximum.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.beginDelimiter">
+            <summary>
+            The beginning delimiter.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.endDelimiter">
+            <summary>
+            The ending delimiter.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.trace">
+            <summary>
+            The trace source used for all communications messages.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.dataBuffer">
+            <summary>
+            The data buffer, which grows dynamically as more data arrives. This is never null.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.sawBeginDelimiter">
+            <summary>
+            Whether the begin delimiter has been seen.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.#ctor(System.Int32,System.Byte,System.Byte)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Communication.SingleByteDelimiterFramer"/> class.
+            </summary>
+            <param name="maxMessageSize">Maximum size of messages, or 0 if message size is not restricted.</param>
+            <param name="beginDelimiter">The begin delimiter.</param>
+            <param name="endDelimiter">The end delimiter.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.Reset">
+            <summary>
+            Re-initializes the framer instance to a clean state. After this method returns, the framer instance is identical to a newly-constructed instance.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Notifies the framer instance that incoming data has been received from the stream. This method will invoke <see cref="E:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.MessageArrived"/> as necessary.
+            </summary>
+            <remarks>
+            <para>This method may invoke <see cref="E:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.MessageArrived"/> zero or more times.</para>
+            <para>Zero-length receives are ignored. May streams use a 0-length read to indicate the end of a stream, but the framer takes no action in this case.</para>
+            </remarks>
+            <param name="data">The data received from the stream. Cannot be null. May be a slice of the read buffer for the stream.</param>
+            <exception cref="T:System.Net.ProtocolViolationException">If the data received is not a properly-formed message.</exception>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.AppendDataToDataBuffer(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Resizes the data buffer and appends the new range of data to it.
+            </summary>
+            <param name="data">The buffer containing the new data to be appended.</param>
+        </member>
+        <member name="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.CheckMaxMessageSize(System.Int32,System.Int32)">
+            <summary>
+            Checks for messages that exceed the maximum message size in an overflow-safe way.
+            </summary>
+            <param name="currentCount">The current size of the message so far.</param>
+            <param name="additionalCount">The additional bytes that have arrived as part of this message.</param>
+        </member>
+        <member name="E:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.MessageArrived">
+            <summary>
+            Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>, and may leave the framer instance in an invalid state.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.StringExtensions">
+            <summary>
+            Provides useful extension methods for string operations.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.StringExtensions.csharpEscapeSequences">
+            <summary>
+            The standard escape sequences defined by the C# language.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.StringExtensions.prettyEscapeSequences">
+            <summary>
+            The escape sequences used by "pretty printing".
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.PrintableEscape(System.String)">
+            <summary>
+            Returns a flattened, printable C#-escaped equivalent of the input string.
+            </summary>
+            <param name="source">The source string.</param>
+            <returns>A backslash-escaped copy of the source string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.Printable(System.String)">
+            <summary>
+            Returns the string itself if it is printable and flattened, otherwise a <see cref="M:Nito.KitchenSink.StringExtensions.PrintableEscape(System.String)"/> copy of the string.
+            </summary>
+            <param name="source">The source string.</param>
+            <returns>The source string or a backslash-escaped copy of the source string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.PrettyDump(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            Returns a printable string of the byte sequence, interpreting it as ASCII if possible. If the sequence is interpreted as a string, the flattened, escaped string is returned enclosed in double-quotes; otherwise, each byte of the sequence is converted to hex, separated by spaces, and enclosed in square brackets.
+            </summary>
+            <param name="data">The data to dump.</param>
+            <returns>A printable string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.Flatten(System.String)">
+            <summary>
+            Replaces any '\r' or '\n' characters in the string with spaces.
+            </summary>
+            <param name="source">The source string.</param>
+            <returns>The flattened string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.TextElements(System.String)">
+            <summary>
+            Gets all text elements (Unicode glyphs) for a given string.
+            </summary>
+            <param name="source">The source string.</param>
+            <returns>All the text elements in the source string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Concatenates a separator between each element of a string enumeration.
+            </summary>
+            <param name="source">The string enumeration.</param>
+            <param name="separator">The separator string. This may not be null.</param>
+            <returns>The concatenated string.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.StringExtensions.Join(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Concatenates a sequence of strings.
+            </summary>
+            <param name="source">The sequence of strings.</param>
+            <returns>The concatenated string.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.Communication.MessageArrivedEventHandler">
+            <summary>
+            Receives notification that a message has arrived.
+            </summary>
+            <param name="message">The message that has arrived. This may contain an alias of the data passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/> in this call stack, but will not contain an alias to any data previously passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>.</param>
+        </member>
+    </members>
+</doc>
