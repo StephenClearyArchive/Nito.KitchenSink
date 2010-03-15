@@ -8,10 +8,9 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Nito.KitchenSink")]
 [assembly: AssemblyDescription("Everything except... well, you know.")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito Libraries")]
-[assembly: AssemblyCopyright("Copyright © 2009-2010")]
+[assembly: AssemblyCopyright("Copyright © 2009-2010 Nito Programs")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
