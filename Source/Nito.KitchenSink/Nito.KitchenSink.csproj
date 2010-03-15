@@ -37,9 +37,9 @@
     <DocumentationFile>bin\Release\Nito.KitchenSink.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nito.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nito.Linq, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Nito.Linq\Nito.Linq.dll</HintPath>
+      <HintPath>..\..\Libraries\Nito.Linq\Nito.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

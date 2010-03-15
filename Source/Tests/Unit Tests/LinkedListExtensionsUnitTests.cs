@@ -44,8 +44,11 @@ namespace UnitTests
             List<int> result = new List<int>();
             list.AddLast(13);
             list.AddLast(17);
-            var nodes = list.Nodes().Do(x => { if (x.Value == 13) list.Remove(x); });
-            Assert.IsTrue(nodes.Select(x => x.Value).SequenceEqual(new[] { 13, 17 }), "Nodes on a two-element list should result in a two-element sequence");
+            foreach (var node in list.Nodes())
+            {
+                if (node.Value == 13)
+                    list.Remove(node);
+            }
             Assert.IsTrue(list.Nodes().Select(x => x.Value).SequenceEqual(new[] { 17 }), "Nodes should allow removal of the current element");
         }
     }
