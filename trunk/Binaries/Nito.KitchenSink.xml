@@ -1574,6 +1574,16 @@
             <param name="buffer">The buffer used by the copy. The size of this buffer determines the sizes of reads and writes made to the streams.</param>
             <param name="progress">A callback method invoked with the number of bytes transferred so far. May be null.</param>
         </member>
+        <member name="M:Nito.KitchenSink.StreamExtensions.CopyTo(System.IO.Stream,System.IO.Stream,System.Byte[],System.Action{System.Int64},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Synchronously copies the contents of this stream into another stream, enabling cancellation.
+            </summary>
+            <param name="source">The stream that is the source of the copy.</param>
+            <param name="destination">The stream that is the destination of the copy.</param>
+            <param name="buffer">The buffer used by the copy. The size of this buffer determines the sizes of reads and writes made to the streams.</param>
+            <param name="progress">A callback method invoked with the number of bytes transferred so far. May be null.</param>
+            <param name="cancellationToken">A cancellation token which may be used to cancel the stream copy. May be null.</param>
+        </member>
         <member name="T:Nito.KitchenSink.PropertyChangedEventHandlerExtensions">
             <summary>
             Provides extension methods for <see cref="T:System.ComponentModel.PropertyChangedEventHandler"/> delegates.

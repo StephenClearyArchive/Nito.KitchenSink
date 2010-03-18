@@ -1,6 +1,6 @@
 Nito KitchenSink
-1, 2010-03-15
+2, 2010-03-18
 
-(depends on Nito Linq 0.1)
+(depends on Nito Linq 0.2)
 
 http://nitokitchensink.codeplex.com/
