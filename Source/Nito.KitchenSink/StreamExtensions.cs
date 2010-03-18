@@ -52,26 +52,38 @@ using System.Threading;
         /// <param name="cancellationToken">A cancellation token which may be used to cancel the stream copy. May be null.</param>
         public static void CopyTo(this Stream source, Stream destination, byte[] buffer, Action<long> progress, CancellationToken? cancellationToken)
         {
-            long bytesTransferred = 0;
-            while (true)
+            try
             {
-                int bytesRead = source.Read(buffer, 0, buffer.Length);
-                if (bytesRead == 0)
+                long bytesTransferred = 0;
+                while (true)
                 {
-                    break;
-                }
+                    int bytesRead = source.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
 
-                destination.Write(buffer, 0, bytesRead);
-                if (progress != null)
-                {
-                    bytesTransferred += bytesRead;
-                    progress(bytesTransferred);
-                }
+                    destination.Write(buffer, 0, bytesRead);
+                    if (progress != null)
+                    {
+                        bytesTransferred += bytesRead;
+                        progress(bytesTransferred);
+                    }
 
+                    if (cancellationToken != null)
+                    {
+                        cancellationToken.Value.ThrowIfCancellationRequested();
+                    }
+                }
+            }
+            catch
+            {
                 if (cancellationToken != null)
                 {
                     cancellationToken.Value.ThrowIfCancellationRequested();
                 }
+
+                throw;
             }
         }
     }
