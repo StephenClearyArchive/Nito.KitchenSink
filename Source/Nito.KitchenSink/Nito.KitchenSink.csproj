@@ -85,6 +85,7 @@
     <Compile Include="Communication\MultipleByteMultipleDelimiterFramer.cs" />
     <Compile Include="Containers\CircularBuffer.cs" />
     <Compile Include="Containers\Deque.cs" />
+    <Compile Include="EncodingExtensions.cs" />
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="FileSystemPath\FileSystemPath.cs" />
     <Compile Include="FileSystemPath\FileSystemPathExtensions.cs" />
