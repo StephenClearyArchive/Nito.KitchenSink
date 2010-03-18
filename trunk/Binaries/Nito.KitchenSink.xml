@@ -1761,5 +1761,19 @@
             </summary>
             <param name="message">The message that has arrived. This may contain an alias of the data passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/> in this call stack, but will not contain an alias to any data previously passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})"/>.</param>
         </member>
+        <member name="T:Nito.KitchenSink.EncodingExtensions">
+            <summary>
+            Extension methods for the <see cref="T:System.Text.Encoding"/> class.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.EncodingExtensions.GetString(System.Text.Encoding,System.IO.Stream,System.Boolean)">
+            <summary>
+            Decodes all bytes in a stream into a string.
+            </summary>
+            <param name="encoding">The character encoding to fall back to, if there are no byte order marks or if <paramref name="detectEncodingFromByteOrderMarks"/> is <c>false</c>.</param>
+            <param name="stream">The stream to be read.</param>
+            <param name="detectEncodingFromByteOrderMarks">Whether to look for byte order marks at the current position of the stream.</param>
+            <returns>The data from the stream, interpreted as a string according to the specified encoding.</returns>
+        </member>
     </members>
 </doc>
