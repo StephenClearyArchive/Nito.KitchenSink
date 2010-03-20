@@ -86,12 +86,15 @@
     <Compile Include="Communication\MultipleByteMultipleDelimiterFramer.cs" />
     <Compile Include="Containers\CircularBuffer.cs" />
     <Compile Include="Containers\Deque.cs" />
+    <Compile Include="CRC32.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="EncodingExtensions.cs" />
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="FileSystemPath\FileSystemPath.cs" />
     <Compile Include="FileSystemPath\FileSystemPathExtensions.cs" />
     <Compile Include="GuidExtensions.cs" />
+    <Compile Include="HackersDelight.cs" />
+    <Compile Include="HashAlgorithmExtensions.cs" />
     <Compile Include="Interop.cs" />
     <Compile Include="LinkedListExtensions.cs" />
     <Compile Include="ReferenceCountedDisposable.cs" />
