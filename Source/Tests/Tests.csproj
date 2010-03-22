@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Unit Tests\BooleanExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\CircularBufferUnitTests.cs" />
+    <Compile Include="Unit Tests\CRC16UnitTests.cs" />
     <Compile Include="Unit Tests\CRC32UnitTests.cs" />
     <Compile Include="Unit Tests\DequeUnitTests.cs" />
     <Compile Include="Unit Tests\ExceptionExtensionsUnitTests.cs" />
