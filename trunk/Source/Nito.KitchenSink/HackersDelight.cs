@@ -30,6 +30,25 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
+        /// Reverses the bits in an unsigned short of data.
+        /// </summary>
+        /// <param name="data">The unsigned short whose bits are to be reversed.</param>
+        /// <returns>The reversed data.</returns>
+        [CLSCompliant(false)]
+        public static ushort Reverse(ushort data)
+        {
+            unchecked
+            {
+                ushort ret = data;
+                ret = (ushort)((ret & 0x5555) << 1 | (ret >> 1) & 0x5555);
+                ret = (ushort)((ret & 0x3333) << 2 | (ret >> 2) & 0x3333);
+                ret = (ushort)((ret & 0x0F0F) << 4 | (ret >> 4) & 0x0F0F);
+                ret = (ushort)((ret & 0x00FF) << 8 | (ret >> 8) & 0x00FF);
+                return ret;
+            }
+        }
+
+        /// <summary>
         /// Reverses the bits in a byte of data.
         /// </summary>
         /// <param name="data">The byte whose bits are to be reversed.</param>

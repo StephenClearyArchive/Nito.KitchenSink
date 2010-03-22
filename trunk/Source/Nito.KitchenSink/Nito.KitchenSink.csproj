@@ -88,6 +88,7 @@
     <Compile Include="Communication\MultipleByteMultipleDelimiterFramer.cs" />
     <Compile Include="Containers\CircularBuffer.cs" />
     <Compile Include="Containers\Deque.cs" />
+    <Compile Include="CRC16.cs" />
     <Compile Include="CRC32.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="EncodingExtensions.cs" />
