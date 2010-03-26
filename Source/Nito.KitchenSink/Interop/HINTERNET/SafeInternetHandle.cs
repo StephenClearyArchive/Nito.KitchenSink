@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Nito.KitchenSink
+namespace Nito.KitchenSink.WinInet
 {
     /// <summary>
     /// Represents an unmanaged HINTERNET resource.
