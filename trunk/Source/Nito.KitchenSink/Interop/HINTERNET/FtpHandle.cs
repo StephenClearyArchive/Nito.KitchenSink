@@ -53,6 +53,49 @@ namespace Nito.KitchenSink
             NativeMethods.FtpSetCurrentDirectory(this.SafeInternetHandle, directory);
         }
 
+        public IList<FtpDirectoryEntry> FindFiles(string search, FindFilesFlags flags)
+        {
+            List<FtpDirectoryEntry> ret = new List<FtpDirectoryEntry>();
+            FtpDirectoryEntry entry;
+            Nito.KitchenSink.SafeInternetHandle find;
+            if (!NativeMethods.FtpFindFirstFile(this.SafeInternetHandle, search, flags, out entry, out find))
+            {
+                return ret;
+            }
+
+            using (find)
+            {
+                ret.Add(entry);
+                while (NativeMethods.FtpFindNextFile(find, out entry))
+                {
+                    ret.Add(entry);
+                }
+            }
+
+            return ret;
+        }
+
+        public IList<FtpDirectoryEntry> FindFiles(string search)
+        {
+            return this.FindFiles(search, FindFilesFlags.None);
+        }
+
+        public IList<FtpDirectoryEntry> FindFiles()
+        {
+            return this.FindFiles(string.Empty, FindFilesFlags.None);
+        }
+
+        [Flags]
+        public enum FindFilesFlags : uint
+        {
+            None = 0x0,
+            Hyperlink = 0x00000400,
+            NeedFile = 0x00000010,
+            NoCacheWrite = 0x04000000,
+            Reload = 0x80000000,
+            Resynchronize = 0x00000800,
+        }
+
         [Flags]
         public enum GetFileFlags : uint
         {

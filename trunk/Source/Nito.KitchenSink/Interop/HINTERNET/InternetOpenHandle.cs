@@ -23,7 +23,33 @@ namespace Nito.KitchenSink
         {
         }
 
-        // Connect -> InternetConnectHandle
+        public InternetConnectHandle Connect(string serverName, ushort serverPort, string username, string password, InternetConnectHandle.Service service, InternetConnectHandle.Flags flags)
+        {
+            switch (service)
+            {
+                case InternetConnectHandle.Service.Ftp:
+                    return new FtpHandle(this, serverName, serverPort, username, password, flags);
+                case InternetConnectHandle.Service.Gopher:
+                case InternetConnectHandle.Service.Http:
+                default:
+                    return new InternetConnectHandle(this, serverName, serverPort, username, password, service, flags);
+            }
+        }
+
+        public FtpHandle ConnectFtp(string serverName, ushort serverPort, string username, string password, InternetConnectHandle.Flags flags)
+        {
+            return new FtpHandle(this, serverName, serverPort, username, password, flags);
+        }
+
+        public FtpHandle ConnectFtp(string serverName, string username, string password, InternetConnectHandle.Flags flags)
+        {
+            return new FtpHandle(this, serverName, 0, username, password, flags);
+        }
+
+        public FtpHandle ConnectFtp(string serverName, string username, string password)
+        {
+            return new FtpHandle(this, serverName, 0, username, password, InternetConnectHandle.Flags.None);
+        }
 
         public enum AccessType : uint
         {

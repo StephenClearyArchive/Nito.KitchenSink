@@ -108,6 +108,7 @@
     <Compile Include="Interop\HINTERNET\NativeMethods.cs" />
     <Compile Include="Interop\HINTERNET\SafeInternetHandle.cs" />
     <Compile Include="Interop\Interop.cs" />
+    <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="LinkedListExtensions.cs" />
     <Compile Include="ReferenceCountedDisposable.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
