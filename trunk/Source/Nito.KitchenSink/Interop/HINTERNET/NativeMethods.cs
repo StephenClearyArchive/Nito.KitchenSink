@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using Nito.Linq;
 using System.ComponentModel;
 
-namespace Nito.KitchenSink
+namespace Nito.KitchenSink.WinInet
 {
     internal static partial class NativeMethods
     {
@@ -223,18 +223,19 @@ namespace Nito.KitchenSink
                             {
                                 Code = dwInternetStatus,
                                 RawData = lpvStatusInformation,
-                                Value = BitConverter.ToUInt32(lpvStatusInformation, 0),
+                                Value = BitConverter.ToInt32(lpvStatusInformation, 0),
                             };
                             break;
 
                         case InternetCallbackEventArgs.StatusCode.HandleCreated:
                         case InternetCallbackEventArgs.StatusCode.RequestComplete:
+                            IntPtr ptr = IntPtr.Size == 4 ? (IntPtr)BitConverter.ToUInt32(lpvStatusInformation, 0) : (IntPtr)BitConverter.ToUInt64(lpvStatusInformation, 0);
                             args = new InternetCallbackEventArgs.AsyncResult
                             {
                                 Code = dwInternetStatus,
                                 RawData = lpvStatusInformation,
-                                Result = IntPtr.Size == 4 ? (IntPtr)BitConverter.ToUInt32(lpvStatusInformation, 0) : (IntPtr)BitConverter.ToUInt64(lpvStatusInformation, 0),
-                                Error = IntPtr.Size == 4 ? BitConverter.ToUInt32(lpvStatusInformation, 4) : BitConverter.ToUInt32(lpvStatusInformation, 8),
+                                Result = IntPtr.Size == 4 ? (IntPtr)Marshal.ReadInt32(ptr) : (IntPtr)Marshal.ReadInt64(ptr),
+                                Error = IntPtr.Size == 4 ? Marshal.ReadInt32(ptr, 4) : Marshal.ReadInt32(ptr, 8),
                             };
                             break;
 
@@ -340,7 +341,7 @@ namespace Nito.KitchenSink
                 uint length = (uint)sb.Capacity + 1;
                 if (InternetGetLastResponseInfo(out code, sb, ref length))
                 {
-                    return new InternetException(code, sb.ToString());
+                    return new InternetException((int)code, sb.ToString());
                 }
                 else if (Marshal.GetLastWin32Error() != ERROR_INSUFFICIENT_BUFFER)
                 {
@@ -381,7 +382,7 @@ namespace Nito.KitchenSink
                 return new FtpDirectoryEntry()
                 {
                     Attributes = this.Attributes,
-                    Size = ((ulong)this.FileSizeHigh << 32) | this.FileSizeLow,
+                    Size = (long)(((ulong)this.FileSizeHigh << 32) | this.FileSizeLow),
                     Name = this.FileName,
                     CreationTime = DateTime.FromFileTime(FtpLocalFileTimeToFileTime(this.CreationTime)),
                     LastAccessTime = DateTime.FromFileTime(FtpLocalFileTimeToFileTime(this.LastAccessTime)),
