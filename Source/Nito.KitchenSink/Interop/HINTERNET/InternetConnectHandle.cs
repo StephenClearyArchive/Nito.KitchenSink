@@ -23,6 +23,8 @@ namespace Nito.KitchenSink
         [Flags]
         public enum Flags : uint
         {
+            None = 0x0,
+
             /// <summary>
             /// Use SSL/PCT for HTTP requests.
             /// </summary>

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Nito.KitchenSink
 {
+    [CLSCompliant(false)]
     public sealed class FtpDirectoryEntry
     {
         public AttributeFlags Attributes { get; set; }

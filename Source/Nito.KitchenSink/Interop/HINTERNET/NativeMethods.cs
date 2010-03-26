@@ -7,6 +7,7 @@ using System.Security;
 using System.Net;
 using System.Net.Sockets;
 using Nito.Linq;
+using System.ComponentModel;
 
 namespace Nito.KitchenSink
 {
@@ -31,7 +32,7 @@ namespace Nito.KitchenSink
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool InternetCloseHandle(IntPtr hInternet);
 
-        [DllImport("Wininet.dll", EntryPoint = "InternetOpen", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "InternetOpen", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         private static extern SafeInternetHandle DoInternetOpen(string lpszAgent, InternetOpenHandle.AccessType dwAccessType, string lpszProxyName, string lpszProxyBypass, InternetOpenHandle.Flags dwFlags);
 
         public static SafeInternetHandle InternetOpen(string agent, InternetOpenHandle.AccessType accessType, string proxyName, string proxyBypass, InternetOpenHandle.Flags flags)
@@ -45,7 +46,7 @@ namespace Nito.KitchenSink
             return ret;
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "InternetConnect", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "InternetConnect", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         private static extern SafeInternetHandle DoInternetConnect(SafeInternetHandle hInternet, string lpszServerName, ushort nServerPort, string lpszUserName, string lpszPassword, InternetConnectHandle.Service dwService, InternetConnectHandle.Flags dwFlags, IntPtr dwContext);
 
         public static SafeInternetHandle InternetConnect(SafeInternetHandle internet, string serverName, ushort serverPort, string username, string password, InternetConnectHandle.Service service, InternetConnectHandle.Flags flags)
@@ -59,7 +60,7 @@ namespace Nito.KitchenSink
             return ret;
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpCreateDirectory", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpCreateDirectory", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpCreateDirectory(SafeInternetHandle hConnect, string lpszDirectory);
 
@@ -71,7 +72,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpGetCurrentDirectory", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpGetCurrentDirectory", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpGetCurrentDirectory(SafeInternetHandle hConnect, StringBuilder lpszCurrentDirectory, ref uint lpdwCurrentDirectory);
 
@@ -87,7 +88,7 @@ namespace Nito.KitchenSink
             return ret.ToString();
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpDeleteFile", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpDeleteFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpDeleteFile(SafeInternetHandle hConnect, string lpszFileName);
 
@@ -99,7 +100,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpGetFile", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpGetFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpGetFile(SafeInternetHandle hConnect, string lpszRemoteFile, string lpszNewFile, [MarshalAs(UnmanagedType.Bool)] bool fFailIfExists, uint dwFlagsAndAttributes, FtpHandle.GetFileFlags dwFlags, IntPtr dwContext);
 
@@ -111,7 +112,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpPutFile", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpPutFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpPutFile(SafeInternetHandle hConnect, string lpszLocalFile, string lpszNewRemoteFile, FtpHandle.PutFileFlags dwFlags, IntPtr dwContext);
 
@@ -123,7 +124,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpRemoveDirectory", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpRemoveDirectory", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpRemoveDirectory(SafeInternetHandle hConnect, string lpszDirectory);
 
@@ -135,7 +136,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpRenameFile", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpRenameFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpRenameFile(SafeInternetHandle hConnect, string lpszExisting, string lpszNew);
 
@@ -147,7 +148,7 @@ namespace Nito.KitchenSink
             }
         }
 
-        [DllImport("Wininet.dll", EntryPoint = "FtpSetCurrentDirectory", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpSetCurrentDirectory", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpSetCurrentDirectory(SafeInternetHandle hConnect, string lpszDirectory);
 
@@ -264,20 +265,72 @@ namespace Nito.KitchenSink
             return ret;
         }
 
-        [DllImport("Wininet.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [DllImport("Wininet.dll", EntryPoint = "FtpFindFirstFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
+        private static extern SafeInternetHandle DoFtpFindFirstFile(SafeInternetHandle hConnect, string lpszSearchFile, out FtpWin32FindData lpFindFileData, FtpHandle.FindFilesFlags dwFlags, IntPtr dwContext);
+
+        public static bool FtpFindFirstFile(SafeInternetHandle connect, string search, FtpHandle.FindFilesFlags flags, out FtpDirectoryEntry first, out SafeInternetHandle find)
+        {
+            FtpWin32FindData data;
+            find = DoFtpFindFirstFile(connect, search, out data, flags, (IntPtr)1);
+            if (find.IsInvalid)
+            {
+                if (Marshal.GetLastWin32Error() == ERROR_NO_MORE_FILES)
+                {
+                    first = new FtpDirectoryEntry();
+                    return false;
+                }
+
+                throw GetLastInternetException();
+            }
+
+            first = data.ToFtpDirectoryEntry();
+            return true;
+        }
+
+        [DllImport("Wininet.dll", EntryPoint = "InternetFindNextFile", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
+        [return:MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DoFtpFindNextFile(SafeInternetHandle hFind, out FtpWin32FindData lpvFindData);
+
+        public static bool FtpFindNextFile(SafeInternetHandle find, out FtpDirectoryEntry next)
+        {
+            next = new FtpDirectoryEntry();
+            FtpWin32FindData data;
+            if (!DoFtpFindNextFile(find, out data))
+            {
+                if (Marshal.GetLastWin32Error() == ERROR_NO_MORE_FILES)
+                {
+                    return false;
+                }
+
+                throw GetLastInternetException();
+            }
+
+            next = data.ToFtpDirectoryEntry();
+            return true;
+        }
+
+        [DllImport("Wininet.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool InternetGetLastResponseInfo(out uint lpdwError, StringBuilder lpszBuffer, ref uint lpdwBufferLength);
 
         private const int MAX_PATH = 260;
         private const int ERROR_INSUFFICIENT_BUFFER = 122;
         private const int ERROR_INTERNET_EXTENDED_ERROR = 12003;
+        private const int ERROR_NO_MORE_FILES = 18;
 
         private static Exception GetLastInternetException()
         {
-            Exception ex = Interop.GetLastWin32Exception();
-            if (Marshal.GetLastWin32Error() != ERROR_INTERNET_EXTENDED_ERROR)
+            int win32Code = Marshal.GetLastWin32Error();
+
+            if (win32Code != ERROR_INTERNET_EXTENDED_ERROR)
             {
-                return ex;
+                string inetMessage = Interop.TryFormatMessageFromDll("Wininet.dll", win32Code);
+                if (inetMessage != null)
+                {
+                    return new Win32Exception(win32Code, "WinInet Error 0x" + win32Code.ToString("X") + ": " + inetMessage);
+                }
+
+                return new Win32Exception(win32Code);
             }
 
             uint code;
@@ -291,28 +344,50 @@ namespace Nito.KitchenSink
                 }
                 else if (Marshal.GetLastWin32Error() != ERROR_INSUFFICIENT_BUFFER)
                 {
-                    return ex;
+                    string inetMessage = Interop.TryFormatMessageFromDll("Wininet.dll", win32Code);
+                    if (inetMessage != null)
+                    {
+                        return new Win32Exception(win32Code, "WinInet Error 0x" + win32Code.ToString("X") + ": " + inetMessage);
+                    }
+
+                    return new Win32Exception(win32Code);
                 }
 
                 sb.Capacity *= 2;
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
+        // Normally, the Pack is correct at 8; however, for ease of use, we've redefined a couple of uint+uint pairs to be a single long,
+        //  so we need to adjust the packing so that padding isn't inserted after "Attributes".
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
         public struct FtpWin32FindData
         {
             public FtpDirectoryEntry.AttributeFlags Attributes;
             public long CreationTime;
             public long LastAccessTime;
             public long LastWriteTime;
-            public ulong FileSize;
-            public long _;
+            public uint FileSizeHigh;
+            public uint FileSizeLow;
+            public ulong _;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_PATH)]
             public string FileName;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
             public string AlternateFileName;
+
+            public FtpDirectoryEntry ToFtpDirectoryEntry()
+            {
+                return new FtpDirectoryEntry()
+                {
+                    Attributes = this.Attributes,
+                    Size = ((ulong)this.FileSizeHigh << 32) | this.FileSizeLow,
+                    Name = this.FileName,
+                    CreationTime = DateTime.FromFileTime(FtpLocalFileTimeToFileTime(this.CreationTime)),
+                    LastAccessTime = DateTime.FromFileTime(FtpLocalFileTimeToFileTime(this.LastAccessTime)),
+                    LastWriteTime = DateTime.FromFileTime(FtpLocalFileTimeToFileTime(this.LastWriteTime)),
+                };
+            }
         }
     }
 }
