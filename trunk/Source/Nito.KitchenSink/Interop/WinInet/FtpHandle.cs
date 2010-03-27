@@ -123,7 +123,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="directory">The directory to create.</param>
         public void CreateDirectory(string directory)
         {
-            NativeMethods.FtpCreateDirectory(this.SafeInternetHandle, directory);
+            UnsafeNativeMethods.FtpCreateDirectory(this.SafeInternetHandle, directory);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Nito.KitchenSink.WinInet
         /// <returns>The current working directory on the remote FTP server.</returns>
         public string GetCurrentDirectory()
         {
-            return NativeMethods.FtpGetCurrentDirectory(this.SafeInternetHandle);
+            return UnsafeNativeMethods.FtpGetCurrentDirectory(this.SafeInternetHandle);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="fileName">The file to delete.</param>
         public void DeleteFile(string fileName)
         {
-            NativeMethods.FtpDeleteFile(this.SafeInternetHandle, fileName);
+            UnsafeNativeMethods.FtpDeleteFile(this.SafeInternetHandle, fileName);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="flags">Additional flags for this action. At least <see cref="GetFileFlags.Ascii"/> or <see cref="GetFileFlags.Binary"/> should be specified.</param>
         public void GetFile(string remoteFile, string localFile, bool failIfExists, GetFileFlags flags)
         {
-            NativeMethods.FtpGetFile(this.SafeInternetHandle, remoteFile, localFile, failIfExists, flags);
+            UnsafeNativeMethods.FtpGetFile(this.SafeInternetHandle, remoteFile, localFile, failIfExists, flags);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="flags">Additional flags for this action. At least <see cref="PutFileFlags.Ascii"/> or <see cref="PutFileFlags.Binary"/> should be specified.</param>
         public void PutFile(string localFile, string remoteFile, PutFileFlags flags)
         {
-            NativeMethods.FtpPutFile(this.SafeInternetHandle, localFile, remoteFile, flags);
+            UnsafeNativeMethods.FtpPutFile(this.SafeInternetHandle, localFile, remoteFile, flags);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="directory">The directory to remove.</param>
         public void RemoveDirectory(string directory)
         {
-            NativeMethods.FtpRemoveDirectory(this.SafeInternetHandle, directory);
+            UnsafeNativeMethods.FtpRemoveDirectory(this.SafeInternetHandle, directory);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="newName">The new file name.</param>
         public void RenameFile(string oldName, string newName)
         {
-            NativeMethods.FtpRenameFile(this.SafeInternetHandle, oldName, newName);
+            UnsafeNativeMethods.FtpRenameFile(this.SafeInternetHandle, oldName, newName);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="directory">The new current working directory.</param>
         public void SetCurrentDirectory(string directory)
         {
-            NativeMethods.FtpSetCurrentDirectory(this.SafeInternetHandle, directory);
+            UnsafeNativeMethods.FtpSetCurrentDirectory(this.SafeInternetHandle, directory);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Nito.KitchenSink.WinInet
             List<FtpDirectoryEntry> ret = new List<FtpDirectoryEntry>();
             FtpDirectoryEntry entry;
             Nito.KitchenSink.WinInet.SafeInternetHandle find;
-            if (!NativeMethods.FtpFindFirstFile(this.SafeInternetHandle, search, flags, out entry, out find))
+            if (!UnsafeNativeMethods.FtpFindFirstFile(this.SafeInternetHandle, search, flags, out entry, out find))
             {
                 return ret;
             }
@@ -214,7 +214,7 @@ namespace Nito.KitchenSink.WinInet
             using (find)
             {
                 ret.Add(entry);
-                while (NativeMethods.FtpFindNextFile(find, out entry))
+                while (UnsafeNativeMethods.FtpFindNextFile(find, out entry))
                 {
                     ret.Add(entry);
                 }

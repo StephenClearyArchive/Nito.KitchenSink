@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿// <copyright file="SafeInternetHandle.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink.WinInet
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Represents an unmanaged HINTERNET resource.
     /// </summary>
     public sealed class SafeInternetHandle : SafeHandle
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SafeInternetHandle"/> class.
+        /// </summary>
         public SafeInternetHandle()
             : base(IntPtr.Zero, true)
         {
@@ -31,7 +35,7 @@ namespace Nito.KitchenSink.WinInet
         /// <returns>true if the handle is released successfully; otherwise, in the event of a catastrophic failure, false. In this case, it generates a releaseHandleFailed MDA Managed Debugging Assistant.</returns>
         protected override bool ReleaseHandle()
         {
-            return NativeMethods.InternetCloseHandle(this.handle);
+            return UnsafeNativeMethods.InternetCloseHandle(this.handle);
         }
     }
 }

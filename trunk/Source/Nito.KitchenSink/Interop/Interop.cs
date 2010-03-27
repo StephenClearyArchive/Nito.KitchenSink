@@ -51,7 +51,7 @@ namespace Nito.KitchenSink
         /// <returns>The error message, if found in the DLL; otherwise, an exception is thrown.</returns>
         public static string FormatMessageFromDll(string dll, int code)
         {
-            return NativeMethods.FormatMessageFromModule(dll, (uint)code);
+            return SafeNativeMethods.FormatMessageFromModule(dll, (uint)code);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Nito.KitchenSink
         /// <returns>The error message, if found in the DLL; otherwise, <c>null</c>.</returns>
         public static string TryFormatMessageFromDll(string dll, int code)
         {
-            return NativeMethods.TryFormatMessageFromModule(dll, (uint)code);
+            return SafeNativeMethods.TryFormatMessageFromModule(dll, (uint)code);
         }
     }
 }

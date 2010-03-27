@@ -61,7 +61,7 @@ namespace Nito.KitchenSink.WinInet
 
             set
             {
-                this.statusCallbackReference = NativeMethods.InternetSetStatusCallback(this.SafeInternetHandle, value);
+                this.statusCallbackReference = UnsafeNativeMethods.InternetSetStatusCallback(this.SafeInternetHandle, value);
                 this.statusCallback = value;
             }
         }
