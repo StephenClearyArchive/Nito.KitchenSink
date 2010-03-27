@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+﻿// <copyright file="HashAlgorithmExtensions.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System.Security.Cryptography;
+
     /// <summary>
     /// Provides OpenSSL-like extension methods for <see cref="HashAlgorithm"/> and derived classes.
     /// </summary>

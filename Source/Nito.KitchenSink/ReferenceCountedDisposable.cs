@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Disposables;
+﻿// <copyright file="ReferenceCountedDisposable.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System;
+    using System.Disposables;
+
     /// <summary>
     /// Provides a reference count for a wrapped disposable object.
     /// </summary>
@@ -60,7 +61,7 @@ namespace Nito.KitchenSink
             private readonly IDisposable disposable;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ReferenceCountedDisposable&lt;T&gt;.Reference"/> class with the specified parent.
+            /// Initializes a new instance of the <see cref="Reference"/> class with the specified parent.
             /// </summary>
             /// <param name="parent">The parent, which shares this reference count.</param>
             public Reference(ReferenceCountedDisposable<T> parent)

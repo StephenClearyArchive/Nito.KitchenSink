@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+﻿// <copyright file="CRC16.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Cryptography;
+
     /// <summary>
     /// A generalized CRC-16 algorithm.
     /// </summary>
@@ -44,7 +46,7 @@ namespace Nito.KitchenSink
         /// <param name="lookupTable">The lookup table.</param>
         public CRC16(Definition definition, ushort[] lookupTable)
         {
-            base.HashSizeValue = 16;
+            this.HashSizeValue = 16;
             this.definition = definition;
             this.lookupTable = lookupTable;
             this.Initialize();
@@ -65,6 +67,24 @@ namespace Nito.KitchenSink
         public CRC16()
             : this(Definition.Default)
         {
+        }
+
+        /// <summary>
+        /// Gets the result of the CRC-16 algorithm.
+        /// </summary>
+        public ushort Result
+        {
+            get
+            {
+                if (this.definition.ReverseResultBeforeFinalXor != this.definition.ReverseDataBytes)
+                {
+                    return (ushort)(HackersDelight.Reverse(this.remainder) ^ this.definition.FinalXorValue);
+                }
+                else
+                {
+                    return (ushort)(this.remainder ^ this.definition.FinalXorValue);
+                }
+            }
         }
 
         /// <summary>
@@ -94,21 +114,6 @@ namespace Nito.KitchenSink
                 }
 
                 return ret;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the CRC-16 calculations.
-        /// </summary>
-        public override void Initialize()
-        {
-            if (this.definition.ReverseDataBytes)
-            {
-                this.remainder = HackersDelight.Reverse(this.definition.Initializer);
-            }
-            else
-            {
-                this.remainder = this.definition.Initializer;
             }
         }
 
@@ -156,9 +161,25 @@ namespace Nito.KitchenSink
                     }
 
                     ++dividend;
-                } while (dividend != 0);
+                }
+                while (dividend != 0);
 
                 return ret;
+            }
+        }
+
+        /// <summary>
+        /// Initializes the CRC-16 calculations.
+        /// </summary>
+        public override void Initialize()
+        {
+            if (this.definition.ReverseDataBytes)
+            {
+                this.remainder = HackersDelight.Reverse(this.definition.Initializer);
+            }
+            else
+            {
+                this.remainder = this.definition.Initializer;
             }
         }
 
@@ -166,14 +187,14 @@ namespace Nito.KitchenSink
         /// Routes data written to the object into the hash algorithm for computing the hash.
         /// </summary>
         /// <param name="array">The input to compute the hash code for.</param>
-        /// <param name="ibStart">The offset into the byte array from which to begin using data.</param>
-        /// <param name="cbSize">The number of bytes in the byte array to use as data.</param>
-        protected override void HashCore(byte[] array, int ibStart, int cbSize)
+        /// <param name="offset">The offset into the byte array from which to begin using data.</param>
+        /// <param name="count">The number of bytes in the byte array to use as data.</param>
+        protected override void HashCore(byte[] array, int offset, int count)
         {
             unchecked
             {
                 ushort remainder = this.remainder;
-                for (int i = ibStart; i != ibStart + cbSize; ++i)
+                for (int i = offset; i != offset + count; ++i)
                 {
                     byte index = this.ReflectedIndex(remainder, array[i]);
                     remainder = this.ReflectedShift(remainder);
@@ -181,24 +202,6 @@ namespace Nito.KitchenSink
                 }
 
                 this.remainder = remainder;
-            }
-        }
-
-        /// <summary>
-        /// Gets the result of the CRC-16 algorithm.
-        /// </summary>
-        public ushort Result
-        {
-            get
-            {
-                if (this.definition.ReverseResultBeforeFinalXor != this.definition.ReverseDataBytes)
-                {
-                    return (ushort)(HackersDelight.Reverse(this.remainder) ^ this.definition.FinalXorValue);
-                }
-                else
-                {
-                    return (ushort)(this.remainder ^ this.definition.FinalXorValue);
-                }
             }
         }
 
@@ -258,32 +261,7 @@ namespace Nito.KitchenSink
         public struct Definition
         {
             /// <summary>
-            /// The normal (non-reversed, non-reciprocal) polynomial to use for the CRC calculations.
-            /// </summary>
-            public ushort TruncatedPolynomial { get; set; }
-
-            /// <summary>
-            /// The value to which the remainder is initialized at the beginning of the CRC calculation.
-            /// </summary>
-            public ushort Initializer { get; set; }
-
-            /// <summary>
-            /// The value by which the remainder is XOR'ed at the end of the CRC calculation.
-            /// </summary>
-            public ushort FinalXorValue { get; set; }
-
-            /// <summary>
-            /// Whether incoming data bytes are reversed/reflected.
-            /// </summary>
-            public bool ReverseDataBytes { get; set; }
-
-            /// <summary>
-            /// Whether the final remainder is reversed/reflected at the end of the CRC calculation before it is XOR'ed with <see cref="FinalXorValue"/>.
-            /// </summary>
-            public bool ReverseResultBeforeFinalXor { get; set; }
-
-            /// <summary>
-            /// A common CRC-16, used by ARC and LHA.
+            /// Gets a common CRC-16, used by ARC and LHA.
             /// </summary>
             public static Definition Default
             {
@@ -299,7 +277,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// A CRC-16 used by floppy disk formats, commonly misidentified as CCITT.
+            /// Gets a CRC-16 used by floppy disk formats, commonly misidentified as CCITT.
             /// </summary>
             public static Definition CcittFalse
             {
@@ -314,7 +292,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// CCITT, used by Kermit. Appears in "Numerical Recipes in C".
+            /// Gets a CRC-16 known as CCITT, used by Kermit. Appears in "Numerical Recipes in C".
             /// </summary>
             public static Definition Ccitt
             {
@@ -330,7 +308,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// XMODEM and ZMODEM. Appears in "Numerical Recipes in C".
+            /// Gets a CRC-16 used by XMODEM and ZMODEM. Appears in "Numerical Recipes in C".
             /// </summary>
             public static Definition XModem
             {
@@ -344,7 +322,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// X.25, V.42, T.30, RFC 1171. Appears in "Numerical Recipes in C".
+            /// Gets a CRC-16 used by X.25, V.42, T.30, RFC 1171. Appears in "Numerical Recipes in C".
             /// </summary>
             public static Definition X25
             {
@@ -360,6 +338,31 @@ namespace Nito.KitchenSink
                     };
                 }
             }
+
+            /// <summary>
+            /// Gets or sets the normal (non-reversed, non-reciprocal) polynomial to use for the CRC calculations.
+            /// </summary>
+            public ushort TruncatedPolynomial { get; set; }
+
+            /// <summary>
+            /// Gets or sets the value to which the remainder is initialized at the beginning of the CRC calculation.
+            /// </summary>
+            public ushort Initializer { get; set; }
+
+            /// <summary>
+            /// Gets or sets the value by which the remainder is XOR'ed at the end of the CRC calculation.
+            /// </summary>
+            public ushort FinalXorValue { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether incoming data bytes are reversed/reflected.
+            /// </summary>
+            public bool ReverseDataBytes { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether the final remainder is reversed/reflected at the end of the CRC calculation before it is XOR'ed with <see cref="FinalXorValue"/>.
+            /// </summary>
+            public bool ReverseResultBeforeFinalXor { get; set; }
         }
     }
 }

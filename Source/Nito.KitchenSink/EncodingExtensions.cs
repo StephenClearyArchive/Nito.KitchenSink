@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿// <copyright file="EncodingExtensions.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System.IO;
+    using System.Text;
+
     /// <summary>
     /// Extension methods for the <see cref="Encoding"/> class.
     /// </summary>
     public static class EncodingExtensions
     {
         /// <summary>
-        /// Decodes all bytes in a stream into a string.
+        /// Decodes all bytes from a stream into a string.
         /// </summary>
         /// <param name="encoding">The character encoding to fall back to, if there are no byte order marks or if <paramref name="detectEncodingFromByteOrderMarks"/> is <c>false</c>.</param>
         /// <param name="stream">The stream to be read.</param>
