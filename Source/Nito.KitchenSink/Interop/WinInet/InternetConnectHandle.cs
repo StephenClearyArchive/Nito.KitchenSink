@@ -14,7 +14,7 @@ namespace Nito.KitchenSink.WinInet
         /// <summary>
         /// Initializes a new instance of the <see cref="InternetConnectHandle"/> class with the specified parameters. Normally, <see cref="InternetOpenHandle.Connect"/> is used instead of this constructor.
         /// </summary>
-        /// <param name="parent">The parent internet connection.</param>
+        /// <param name="parent">The parent opened internet connection.</param>
         /// <param name="serverName">Name of the server to which to connect.</param>
         /// <param name="serverPort">The server port to which to connect.</param>
         /// <param name="username">The username to use for authentication.</param>
@@ -22,7 +22,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="service">The service type to which to connect.</param>
         /// <param name="flags">The connection flags.</param>
         public InternetConnectHandle(InternetHandle parent, string serverName, int serverPort, string username, string password, Service service, Flags flags)
-            : base(NativeMethods.InternetConnect(parent.SafeInternetHandle, serverName, (ushort)(short)serverPort, username, password, service, flags))
+            : base(UnsafeNativeMethods.InternetConnect(parent.SafeInternetHandle, serverName, (ushort)(short)serverPort, username, password, service, flags))
         {
         }
 

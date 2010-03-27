@@ -20,7 +20,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="proxyBypass">The list of host names or IP addresses that are not routed through the proxy when <paramref name="accessType"/> is <see cref="AccessType.Proxy"/>. This list may contain wildcards or be equal to the string <c>"&lt;local&gt;"</c>, but should not be an empty string.</param>
         /// <param name="flags">The flags to use for this internet handle.</param>
         public InternetOpenHandle(string agent, AccessType accessType, string proxyName, string proxyBypass, Flags flags)
-            : base(NativeMethods.InternetOpen(agent, accessType, proxyName, proxyBypass, flags))
+            : base(UnsafeNativeMethods.InternetOpen(agent, accessType, proxyName, proxyBypass, flags))
         {
         }
 
