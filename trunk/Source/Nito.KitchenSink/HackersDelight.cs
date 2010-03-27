@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="HackersDelight.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System;
+
     /// <summary>
     /// Helpful methods from the book "Hacker's Delight": http://www.amazon.com/gp/product/0201914654?ie=UTF8&tag=stepheclearys-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0201914654
     /// </summary>
@@ -64,6 +65,5 @@ namespace Nito.KitchenSink
                 return (byte)((0x01001001 * (s + t)) >> 24);
             }
         }
-
     }
 }

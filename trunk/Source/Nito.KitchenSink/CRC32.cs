@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+﻿// <copyright file="CRC32.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Cryptography;
+
     /// <summary>
     /// A generalized CRC-32 algorithm.
     /// </summary>
@@ -44,7 +46,7 @@ namespace Nito.KitchenSink
         /// <param name="lookupTable">The lookup table.</param>
         public CRC32(Definition definition, uint[] lookupTable)
         {
-            base.HashSizeValue = 32;
+            this.HashSizeValue = 32;
             this.definition = definition;
             this.lookupTable = lookupTable;
             this.Initialize();
@@ -65,6 +67,24 @@ namespace Nito.KitchenSink
         public CRC32()
             : this(Definition.Default)
         {
+        }
+
+        /// <summary>
+        /// Gets the result of the CRC-32 algorithm.
+        /// </summary>
+        public uint Result
+        {
+            get
+            {
+                if (this.definition.ReverseResultBeforeFinalXor != this.definition.ReverseDataBytes)
+                {
+                    return HackersDelight.Reverse(this.remainder) ^ this.definition.FinalXorValue;
+                }
+                else
+                {
+                    return this.remainder ^ this.definition.FinalXorValue;
+                }
+            }
         }
 
         /// <summary>
@@ -94,21 +114,6 @@ namespace Nito.KitchenSink
                 }
 
                 return ret;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the CRC-32 calculations.
-        /// </summary>
-        public override void Initialize()
-        {
-            if (this.definition.ReverseDataBytes)
-            {
-                this.remainder = HackersDelight.Reverse(this.definition.Initializer);
-            }
-            else
-            {
-                this.remainder = this.definition.Initializer;
             }
         }
 
@@ -156,9 +161,25 @@ namespace Nito.KitchenSink
                     }
 
                     ++dividend;
-                } while (dividend != 0);
+                }
+                while (dividend != 0);
 
                 return ret;
+            }
+        }
+
+        /// <summary>
+        /// Initializes the CRC-32 calculations.
+        /// </summary>
+        public override void Initialize()
+        {
+            if (this.definition.ReverseDataBytes)
+            {
+                this.remainder = HackersDelight.Reverse(this.definition.Initializer);
+            }
+            else
+            {
+                this.remainder = this.definition.Initializer;
             }
         }
 
@@ -166,14 +187,14 @@ namespace Nito.KitchenSink
         /// Routes data written to the object into the hash algorithm for computing the hash.
         /// </summary>
         /// <param name="array">The input to compute the hash code for.</param>
-        /// <param name="ibStart">The offset into the byte array from which to begin using data.</param>
-        /// <param name="cbSize">The number of bytes in the byte array to use as data.</param>
-        protected override void HashCore(byte[] array, int ibStart, int cbSize)
+        /// <param name="offset">The offset into the byte array from which to begin using data.</param>
+        /// <param name="count">The number of bytes in the byte array to use as data.</param>
+        protected override void HashCore(byte[] array, int offset, int count)
         {
             unchecked
             {
                 uint remainder = this.remainder;
-                for (int i = ibStart; i != ibStart + cbSize; ++i)
+                for (int i = offset; i != offset + count; ++i)
                 {
                     byte index = this.ReflectedIndex(remainder, array[i]);
                     remainder = this.ReflectedShift(remainder);
@@ -181,24 +202,6 @@ namespace Nito.KitchenSink
                 }
 
                 this.remainder = remainder;
-            }
-        }
-
-        /// <summary>
-        /// Gets the result of the CRC-32 algorithm.
-        /// </summary>
-        public uint Result
-        {
-            get
-            {
-                if (this.definition.ReverseResultBeforeFinalXor != this.definition.ReverseDataBytes)
-                {
-                    return HackersDelight.Reverse(this.remainder) ^ this.definition.FinalXorValue;
-                }
-                else
-                {
-                    return this.remainder ^ this.definition.FinalXorValue;
-                }
             }
         }
 
@@ -258,32 +261,7 @@ namespace Nito.KitchenSink
         public struct Definition
         {
             /// <summary>
-            /// The normal (non-reversed, non-reciprocal) polynomial to use for the CRC calculations.
-            /// </summary>
-            public uint TruncatedPolynomial { get; set; }
-
-            /// <summary>
-            /// The value to which the remainder is initialized at the beginning of the CRC calculation.
-            /// </summary>
-            public uint Initializer { get; set; }
-
-            /// <summary>
-            /// The value by which the remainder is XOR'ed at the end of the CRC calculation.
-            /// </summary>
-            public uint FinalXorValue { get; set; }
-
-            /// <summary>
-            /// Whether incoming data bytes are reversed/reflected.
-            /// </summary>
-            public bool ReverseDataBytes { get; set; }
-
-            /// <summary>
-            /// Whether the final remainder is reversed/reflected at the end of the CRC calculation before it is XOR'ed with <see cref="FinalXorValue"/>.
-            /// </summary>
-            public bool ReverseResultBeforeFinalXor { get; set; }
-
-            /// <summary>
-            /// The old IEEE standard; used by Ethernet, zip, PNG, etc. Note that this "default" CRC-32 definition is an older IEEE recommendation and there are better polynomials for new protocols. Known as "CRC-32", "CRC-32/ADCCP", and "PKZIP".
+            /// Gets a CRC-32 defined by the old IEEE standard; used by Ethernet, zip, PNG, etc. Note that this "default" CRC-32 definition is an older IEEE recommendation and there are better polynomials for new protocols. Known as "CRC-32", "CRC-32/ADCCP", and "PKZIP".
             /// </summary>
             public static Definition Default
             {
@@ -301,7 +279,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// Used by BZIP2. Known as "CRC-32/BZIP2" and "B-CRC-32".
+            /// Gets a CRC-32 used by BZIP2. Known as "CRC-32/BZIP2" and "B-CRC-32".
             /// </summary>
             public static Definition BZip2
             {
@@ -317,7 +295,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// A modern CRC-32 defined in RFC 3720. Known as "CRC-32C", "CRC-32/ISCSI", and "CRC-32/CASTAGNOLI".
+            /// Gets a modern CRC-32 defined in RFC 3720. Known as "CRC-32C", "CRC-32/ISCSI", and "CRC-32/CASTAGNOLI".
             /// </summary>
             public static Definition Castagnoli
             {
@@ -335,7 +313,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// Used by the MPEG-2 standard. Known as "CRC-32/MPEG-2".
+            /// Gets a CRC-32 used by the MPEG-2 standard. Known as "CRC-32/MPEG-2".
             /// </summary>
             public static Definition Mpeg2
             {
@@ -350,7 +328,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// Used by the POSIX "chksum" command; note that the chksum command-line program appends the file length to the contents unless it is empty. Known as "CRC-32/POSIX" and "CKSUM".
+            /// Gets a CRC-32 used by the POSIX "chksum" command; note that the chksum command-line program appends the file length to the contents unless it is empty. Known as "CRC-32/POSIX" and "CKSUM".
             /// </summary>
             public static Definition Posix
             {
@@ -365,7 +343,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// Used in the Aeronautical Information eXchange Model. Known as "CRC-32Q".
+            /// Gets a CRC-32 used in the Aeronautical Information eXchange Model. Known as "CRC-32Q".
             /// </summary>
             public static Definition Aixm
             {
@@ -379,7 +357,7 @@ namespace Nito.KitchenSink
             }
 
             /// <summary>
-            /// A very old CRC32, appearing in "Numerical Recipes in C". Known as "XFER".
+            /// Gets a very old CRC-32, appearing in "Numerical Recipes in C". Known as "XFER".
             /// </summary>
             public static Definition Xfer
             {
@@ -391,6 +369,31 @@ namespace Nito.KitchenSink
                     };
                 }
             }
+
+            /// <summary>
+            /// Gets or sets the normal (non-reversed, non-reciprocal) polynomial to use for the CRC calculations.
+            /// </summary>
+            public uint TruncatedPolynomial { get; set; }
+
+            /// <summary>
+            /// Gets or sets the value to which the remainder is initialized at the beginning of the CRC calculation.
+            /// </summary>
+            public uint Initializer { get; set; }
+
+            /// <summary>
+            /// Gets or sets the value by which the remainder is XOR'ed at the end of the CRC calculation.
+            /// </summary>
+            public uint FinalXorValue { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether incoming data bytes are reversed/reflected.
+            /// </summary>
+            public bool ReverseDataBytes { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether the final remainder is reversed/reflected at the end of the CRC calculation before it is XOR'ed with <see cref="FinalXorValue"/>.
+            /// </summary>
+            public bool ReverseResultBeforeFinalXor { get; set; }
         }
     }
 }

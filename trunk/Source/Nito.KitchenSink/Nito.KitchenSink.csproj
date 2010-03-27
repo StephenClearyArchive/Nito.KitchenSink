@@ -98,6 +98,7 @@
     <Compile Include="GuidExtensions.cs" />
     <Compile Include="HackersDelight.cs" />
     <Compile Include="HashAlgorithmExtensions.cs" />
+    <Compile Include="Interop\WinInet\SafeNativeMethods.cs" />
     <Compile Include="Interop\WinInet\FtpDirectoryEntry.cs" />
     <Compile Include="Interop\WinInet\FtpHandle.cs" />
     <Compile Include="Interop\WinInet\InternetCallbackEventArgs.cs" />
@@ -105,10 +106,10 @@
     <Compile Include="Interop\WinInet\InternetException.cs" />
     <Compile Include="Interop\WinInet\InternetHandle.cs" />
     <Compile Include="Interop\WinInet\InternetOpenHandle.cs" />
-    <Compile Include="Interop\WinInet\NativeMethods.cs" />
+    <Compile Include="Interop\WinInet\UnsafeNativeMethods.cs" />
     <Compile Include="Interop\WinInet\SafeInternetHandle.cs" />
     <Compile Include="Interop\Interop.cs" />
-    <Compile Include="Interop\NativeMethods.cs" />
+    <Compile Include="Interop\SafeNativeMethods.cs" />
     <Compile Include="LinkedListExtensions.cs" />
     <Compile Include="ReferenceCountedDisposable.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
