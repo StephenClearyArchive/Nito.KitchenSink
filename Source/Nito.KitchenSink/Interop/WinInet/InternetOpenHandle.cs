@@ -7,7 +7,7 @@ namespace Nito.KitchenSink.WinInet
     using System;
 
     /// <summary>
-    /// Represents a base internet handle that has been opened by calling the <c>InternetOpen</c> function. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="Dispose"/>.
+    /// Represents a base internet handle that has been opened by calling the <c>InternetOpen</c> function. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="InternetHandle.Dispose"/>.
     /// </summary>
     public sealed class InternetOpenHandle : InternetHandle
     {

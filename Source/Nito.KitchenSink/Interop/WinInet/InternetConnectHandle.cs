@@ -7,7 +7,7 @@ namespace Nito.KitchenSink.WinInet
     using System;
 
     /// <summary>
-    /// An internet connection handle (one that has been created using the <c>InternetConnect</c> function). Normally, a derived class such as <see cref="FtpHandle"/> is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="Dispose"/>.
+    /// An internet connection handle (one that has been created using the <c>InternetConnect</c> function). Normally, a derived class such as <see cref="FtpHandle"/> is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="InternetHandle.Dispose"/>.
     /// </summary>
     public class InternetConnectHandle : InternetHandle
     {
