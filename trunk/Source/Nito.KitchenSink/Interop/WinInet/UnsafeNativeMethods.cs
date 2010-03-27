@@ -59,8 +59,8 @@ namespace Nito.KitchenSink.WinInet
         /// </summary>
         /// <param name="agent">The user agent or process using WinInet. This is sent as the HTTP user agent and WinInet logs.</param>
         /// <param name="accessType">The type of the proxy used, if any.</param>
-        /// <param name="proxyName">The name of the proxy server if <paramref name="accessType"/> is <see cref="AccessType.Proxy"/>.</param>
-        /// <param name="proxyBypass">The list of host names or IP addresses that are not routed through the proxy when <paramref name="accessType"/> is <see cref="AccessType.Proxy"/>. This list may contain wildcards or be equal to the string <c>"&lt;local&gt;"</c>, but should not be an empty string.</param>
+        /// <param name="proxyName">The name of the proxy server if <paramref name="accessType"/> is <see cref="InternetOpenHandle.AccessType.Proxy"/>.</param>
+        /// <param name="proxyBypass">The list of host names or IP addresses that are not routed through the proxy when <paramref name="accessType"/> is <see cref="InternetOpenHandle.AccessType.Proxy"/>. This list may contain wildcards or be equal to the string <c>"&lt;local&gt;"</c>, but should not be an empty string.</param>
         /// <param name="flags">The flags to use for this internet handle.</param>
         /// <returns>The opened internet handle.</returns>
         public static SafeInternetHandle InternetOpen(string agent, InternetOpenHandle.AccessType accessType, string proxyName, string proxyBypass, InternetOpenHandle.Flags flags)
@@ -146,7 +146,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="remoteFile">The remote file to download.</param>
         /// <param name="localFile">The local path and filename to which to save the file.</param>
         /// <param name="failIfExists">Whether to fail if the local file specified by <paramref name="localFile"/> already exists.</param>
-        /// <param name="flags">Additional flags for this action. At least <see cref="GetFileFlags.Ascii"/> or <see cref="GetFileFlags.Binary"/> should be specified.</param>
+        /// <param name="flags">Additional flags for this action. At least <see cref="FtpHandle.GetFileFlags.Ascii"/> or <see cref="FtpHandle.GetFileFlags.Binary"/> should be specified.</param>
         public static void FtpGetFile(SafeInternetHandle connect, string remoteFile, string localFile, bool failIfExists, FtpHandle.GetFileFlags flags)
         {
             if (!DoFtpGetFile(connect, remoteFile, localFile, failIfExists, 0, flags, (IntPtr)1))
@@ -161,7 +161,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="connect">The connected internet handle.</param>
         /// <param name="localFile">The local file to upload.</param>
         /// <param name="remoteFile">The remote path and filename to which to save the file.</param>
-        /// <param name="flags">Additional flags for this action. At least <see cref="PutFileFlags.Ascii"/> or <see cref="PutFileFlags.Binary"/> should be specified.</param>
+        /// <param name="flags">Additional flags for this action. At least <see cref="FtpHandle.PutFileFlags.Ascii"/> or <see cref="FtpHandle.PutFileFlags.Binary"/> should be specified.</param>
         public static void FtpPutFile(SafeInternetHandle connect, string localFile, string remoteFile, FtpHandle.PutFileFlags flags)
         {
             if (!DoFtpPutFile(connect, localFile, remoteFile, flags, (IntPtr)1))

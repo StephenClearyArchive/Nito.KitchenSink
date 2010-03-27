@@ -8,12 +8,12 @@ namespace Nito.KitchenSink.WinInet
     using System.Collections.Generic;
 
     /// <summary>
-    /// An FTP connection handle. Normally, the <see cref="FtpConnection"/> class is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="Dispose"/>.
+    /// An FTP connection handle. Normally, the <c>FtpConnection</c> class is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="InternetHandle.Dispose"/>.
     /// </summary>
     public sealed class FtpHandle : InternetConnectHandle
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FtpHandle"/> class with the specified parameters. Normally, <see cref="InternetOpenHandle.Connect"/> or <see cref="InternetOpenHandle.ConnectFtp"/> is used instead of this constructor.
+        /// Initializes a new instance of the <see cref="FtpHandle"/> class with the specified parameters. Normally, <see cref="InternetOpenHandle.Connect"/> or <see cref="O:Nito.KitchenSink.WinInet.InternetOpenHandle.ConnectFtp"/> is used instead of this constructor.
         /// </summary>
         /// <param name="parent">The parent internet connection.</param>
         /// <param name="serverName">Name of the server to which to connect.</param>
@@ -27,7 +27,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Additional flags for the <see cref="FindFiles"/> operation.
+        /// Additional flags for the <see cref="O:Nito.KitchenSink.WinInet.FtpHandle.FindFiles"/> operation.
         /// </summary>
         [Flags]
         public enum FindFilesFlags : int
