@@ -98,6 +98,7 @@
     <Compile Include="GuidExtensions.cs" />
     <Compile Include="HackersDelight.cs" />
     <Compile Include="HashAlgorithmExtensions.cs" />
+    <Compile Include="Interop\WinInet\FtpConnection.cs" />
     <Compile Include="Interop\WinInet\SafeNativeMethods.cs" />
     <Compile Include="Interop\WinInet\FtpDirectoryEntry.cs" />
     <Compile Include="Interop\WinInet\FtpHandle.cs" />

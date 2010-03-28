@@ -8,7 +8,7 @@ namespace Nito.KitchenSink.WinInet
     using System.Collections.Generic;
 
     /// <summary>
-    /// An FTP connection handle. Normally, the <c>FtpConnection</c> class is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="InternetHandle.Dispose"/>.
+    /// An FTP connection handle. Normally, the <see cref="FtpConnection"/> class is used instead of this class. Note that this wrapper does NOT support asynchronous operations! Multiple threads may safely call <see cref="InternetHandle.Dispose"/>.
     /// </summary>
     public sealed class FtpHandle : InternetConnectHandle
     {
