@@ -285,6 +285,11 @@ namespace Nito.KitchenSink.WinInet
             return true;
         }
 
+        /// <summary>
+        /// Sends a command directly to the FTP server.
+        /// </summary>
+        /// <param name="connect">The internet connection handle.</param>
+        /// <param name="command">The command to send to the FTP server.</param>
         public static void FtpCommand(SafeInternetHandle connect, string command)
         {
             if (!DoFtpCommand(connect, false, 0, command, (IntPtr)1, IntPtr.Zero))
