@@ -41,6 +41,11 @@ namespace Nito.KitchenSink.WinInet
         private const int ERROR_NO_MORE_FILES = 18;
 
         /// <summary>
+        /// An invalid internet status callback.
+        /// </summary>
+        private static readonly IntPtr INTERNET_INVALID_STATUS_CALLBACK = (IntPtr)(-1);
+
+        /// <summary>
         /// The delegate type of the internet status callback wrapper, passed to <c>InternetSetStatusCallback</c>.
         /// </summary>
         /// <param name="hInternet">The internet handle. This parameter is ignored.</param>
@@ -220,7 +225,11 @@ namespace Nito.KitchenSink.WinInet
         {
             // Note: this will only work for synchronous callbacks! Asynchronous callbacks are not yet supported.
             InternetStatusCallback ret = CreateInternetStatusCallback(callback);
-            DoInternetSetStatusCallback(internet, ret);
+            if (DoInternetSetStatusCallback(internet, ret) == INTERNET_INVALID_STATUS_CALLBACK)
+            {
+                throw GetLastInternetException();
+            }
+
             return ret;
         }
 
