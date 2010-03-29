@@ -141,7 +141,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Gets or sets the current directory on the remote FTP server.
+        /// Gets or sets the current directory on the remote FTP server. This may be set to an absolute or relative directory.
         /// </summary>
         public string CurrentDirectory
         {
@@ -157,18 +157,8 @@ namespace Nito.KitchenSink.WinInet
 
             set
             {
-                if (value == "..")
-                {
-                    int lastSlash = this.CurrentDirectory.LastIndexOf('/');
-                    if (lastSlash > 0)
-                    {
-                        this.CurrentDirectory = this.currentDirectory.Substring(0, lastSlash - 1);
-                        return;
-                    }
-                }
-
                 this.ftpHandle.SetCurrentDirectory(value);
-                this.currentDirectory = value;
+                this.currentDirectory = null;
             }
         }
 
