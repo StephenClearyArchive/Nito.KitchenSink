@@ -127,6 +127,17 @@ namespace Nito.KitchenSink.WinInet
         /// Connects to the specified FTP server.
         /// </summary>
         /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="username">The username to use for authentication.</param>
+        /// <param name="password">The password to use for authentication.</param>
+        public void Connect(string serverName, string username, string password)
+        {
+            this.Connect(serverName, 0, username, password, InternetConnectHandle.Flags.None);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
         /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
         public void Connect(string serverName, InternetConnectHandle.Flags internetConnectFlags)
         {
