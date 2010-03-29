@@ -254,6 +254,15 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
+        /// Sends a command directly to the FTP server.
+        /// </summary>
+        /// <param name="command">The command to send to the FTP server.</param>
+        public void SendCommand(string command)
+        {
+            this.ftpHandle.SendCommand(command);
+        }
+
+        /// <summary>
         /// Closes the FTP connection, aborting any operations that are in progress on another thread. This may be used to abort a  <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> operation as well.
         /// </summary>
         public void Dispose()

@@ -241,5 +241,14 @@ namespace Nito.KitchenSink.WinInet
         {
             return this.FindFiles(string.Empty, FindFilesFlags.None);
         }
+
+        /// <summary>
+        /// Sends a command directly to the FTP server.
+        /// </summary>
+        /// <param name="command">The command to send to the FTP server.</param>
+        public void SendCommand(string command)
+        {
+            UnsafeNativeMethods.FtpCommand(this.SafeInternetHandle, command);
+        }
     }
 }

@@ -285,6 +285,14 @@ namespace Nito.KitchenSink.WinInet
             return true;
         }
 
+        public static void FtpCommand(SafeInternetHandle connect, string command)
+        {
+            if (!DoFtpCommand(connect, false, 0, command, (IntPtr)1, IntPtr.Zero))
+            {
+                throw GetLastInternetException();
+            }
+        }
+
         [DllImport("Wininet.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool InternetGetLastResponseInfo(out uint lpdwError, StringBuilder lpszBuffer, ref uint lpdwBufferLength);
@@ -336,6 +344,10 @@ namespace Nito.KitchenSink.WinInet
 
         [DllImport("Wininet.dll", EntryPoint = "InternetSetStatusCallback", SetLastError = true)]
         private static extern IntPtr DoInternetSetStatusCallback(SafeInternetHandle hInternet, InternetStatusCallback lpfnInternetCallback);
+
+        [DllImport("Wininet.dll", EntryPoint = "FtpCommand", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DoFtpCommand(SafeInternetHandle hConnect, [MarshalAs(UnmanagedType.Bool)] bool fExpectResponse, uint dwFlags, string lpszCommand, IntPtr dwContext, IntPtr phFtpCommand);
 
         /// <summary>
         /// Creates a wrapper for the provided internet status callback delegate.
