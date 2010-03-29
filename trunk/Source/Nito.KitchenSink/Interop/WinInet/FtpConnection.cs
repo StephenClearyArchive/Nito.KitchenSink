@@ -20,7 +20,7 @@ namespace Nito.KitchenSink.WinInet
         /// <summary>
         /// The underlying FTP handle.
         /// </summary>
-        private readonly FtpHandle ftpHandle;
+        private FtpHandle ftpHandle;
 
         /// <summary>
         /// The current working directory on the remote FTP server, if known. May be <c>null</c>.
@@ -28,95 +28,12 @@ namespace Nito.KitchenSink.WinInet
         private string currentDirectory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
+        /// Initializes a new instance of the <see cref="FtpConnection"/> class.
         /// </summary>
         /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="serverPort">The server port to which to connect.</param>
-        /// <param name="username">The username to use for authentication.</param>
-        /// <param name="password">The password to use for authentication.</param>
-        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
-        public FtpConnection(string process, string serverName, int serverPort, string username, string password, InternetConnectHandle.Flags internetConnectFlags)
+        public FtpConnection(string process)
         {
             this.internetOpenHandle = new InternetOpenHandle(process);
-            this.ftpHandle = new FtpHandle(this.internetOpenHandle, serverName, serverPort, username, password, internetConnectFlags);
-            this.ftpHandle.StatusCallback = (args) =>
-                {
-                    if (this.Progress != null)
-                    {
-                        this.Progress(args);
-                    }
-                };
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="serverPort">The server port to which to connect.</param>
-        /// <param name="username">The username to use for authentication.</param>
-        /// <param name="password">The password to use for authentication.</param>
-        public FtpConnection(string process, string serverName, int serverPort, string username, string password)
-            : this(process, serverName, serverPort, username, password, InternetConnectHandle.Flags.None)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="username">The username to use for authentication.</param>
-        /// <param name="password">The password to use for authentication.</param>
-        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
-        public FtpConnection(string process, string serverName, string username, string password, InternetConnectHandle.Flags internetConnectFlags)
-            : this(process, serverName, 0, username, password, internetConnectFlags)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
-        public FtpConnection(string process, string serverName, InternetConnectHandle.Flags internetConnectFlags)
-            : this(process, serverName, 0, null, null, internetConnectFlags)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        public FtpConnection(string process, string serverName)
-            : this(process, serverName, 0, null, null, InternetConnectHandle.Flags.None)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="serverPort">The server port to which to connect.</param>
-        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
-        public FtpConnection(string process, string serverName, int serverPort, InternetConnectHandle.Flags internetConnectFlags)
-            : this(process, serverName, serverPort, null, null, internetConnectFlags)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FtpConnection"/> class, connecting to the specified FTP server.
-        /// </summary>
-        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
-        /// <param name="serverName">Name of the server to which to connect.</param>
-        /// <param name="serverPort">The server port to which to connect.</param>
-        public FtpConnection(string process, string serverName, int serverPort)
-            : this(process, serverName, serverPort, null, null, InternetConnectHandle.Flags.None)
-        {
         }
 
         /// <summary>
@@ -141,7 +58,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Gets or sets the current directory on the remote FTP server. This may be set to an absolute or relative directory.
+        /// Gets or sets the current directory on the remote FTP server. This may be set to an absolute or relative directory. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before reading or writing this property.
         /// </summary>
         public string CurrentDirectory
         {
@@ -163,7 +80,92 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Creates the specified directory on the remote FTP server.
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="serverPort">The server port to which to connect.</param>
+        /// <param name="username">The username to use for authentication.</param>
+        /// <param name="password">The password to use for authentication.</param>
+        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
+        public void Connect(string serverName, int serverPort, string username, string password, InternetConnectHandle.Flags internetConnectFlags)
+        {
+            this.ftpHandle = new FtpHandle(this.internetOpenHandle, serverName, serverPort, username, password, internetConnectFlags);
+            this.ftpHandle.StatusCallback = (args) =>
+            {
+                if (this.Progress != null)
+                {
+                    this.Progress(args);
+                }
+            };
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="serverPort">The server port to which to connect.</param>
+        /// <param name="username">The username to use for authentication.</param>
+        /// <param name="password">The password to use for authentication.</param>
+        public void Connect(string serverName, int serverPort, string username, string password)
+        {
+            this.Connect(serverName, serverPort, username, password, InternetConnectHandle.Flags.None);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="username">The username to use for authentication.</param>
+        /// <param name="password">The password to use for authentication.</param>
+        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
+        public void Connect(string process, string serverName, string username, string password, InternetConnectHandle.Flags internetConnectFlags)
+        {
+            this.Connect(serverName, 0, username, password, internetConnectFlags);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
+        public void Connect(string serverName, InternetConnectHandle.Flags internetConnectFlags)
+        {
+            this.Connect(serverName, 0, null, null, internetConnectFlags);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        public void Connect(string serverName)
+        {
+            this.Connect(serverName, 0, null, null, InternetConnectHandle.Flags.None);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="serverPort">The server port to which to connect.</param>
+        /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
+        public void Connect(string serverName, int serverPort, InternetConnectHandle.Flags internetConnectFlags)
+        {
+            this.Connect(serverName, serverPort, null, null, internetConnectFlags);
+        }
+
+        /// <summary>
+        /// Connects to the specified FTP server.
+        /// </summary>
+        /// <param name="serverName">Name of the server to which to connect.</param>
+        /// <param name="serverPort">The server port to which to connect.</param>
+        public void Connect(string serverName, int serverPort)
+        {
+            this.Connect(serverName, serverPort, null, null, InternetConnectHandle.Flags.None);
+        }
+
+        /// <summary>
+        /// Creates the specified directory on the remote FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="directory">The directory to create.</param>
         public void CreateDirectory(string directory)
@@ -172,7 +174,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Deletes the specified file on the remote FTP server.
+        /// Deletes the specified file on the remote FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="fileName">The file to delete.</param>
         public void DeleteFile(string fileName)
@@ -181,7 +183,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Downloads the specified remote file from the FTP server, saving it at a local path and filename.
+        /// Downloads the specified remote file from the FTP server, saving it at a local path and filename. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="remoteFile">The remote file to download.</param>
         /// <param name="localFile">The local path and filename to which to save the file.</param>
@@ -193,7 +195,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Uploads the specified local file to the FTP server, saving it at a remote path and filename.
+        /// Uploads the specified local file to the FTP server, saving it at a remote path and filename. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="localFile">The local file to upload.</param>
         /// <param name="remoteFile">The remote path and filename to which to save the file.</param>
@@ -204,7 +206,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Removes the specified directory from the remote FTP server.
+        /// Removes the specified directory from the remote FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="directory">The directory to remove.</param>
         public void RemoveDirectory(string directory)
@@ -213,7 +215,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Renames the specified file on the FTP server.
+        /// Renames the specified file on the FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="oldName">The old file name.</param>
         /// <param name="newName">The new file name.</param>
@@ -223,7 +225,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Finds matching files on the remote FTP server.
+        /// Finds matching files on the remote FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <param name="search">The search string, which may include wildcards and/or directory information.</param>
         /// <returns>All files matching the query on the remote FTP server.</returns>
@@ -233,7 +235,7 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Retrieves all files from the current working directory on the remote FTP server.
+        /// Retrieves a directory listing of all files from the current working directory on the remote FTP server. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before invoking this method.
         /// </summary>
         /// <returns>All files in the current working directory on the remote FTP server.</returns>
         public IList<FtpDirectoryEntry> FindFiles()
@@ -242,11 +244,15 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
-        /// Closes the FTP connection, aborting any operations that are in progress on another thread.
+        /// Closes the FTP connection, aborting any operations that are in progress on another thread. This may be used to abort a  <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> operation as well.
         /// </summary>
         public void Dispose()
         {
-            this.ftpHandle.Dispose();
+            if (this.ftpHandle != null)
+            {
+                this.ftpHandle.Dispose();
+            }
+
             this.internetOpenHandle.Dispose();
         }
     }
