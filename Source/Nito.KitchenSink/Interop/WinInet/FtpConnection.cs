@@ -13,16 +13,6 @@ namespace Nito.KitchenSink.WinInet
     public sealed class FtpConnection : IDisposable
     {
         /// <summary>
-        /// The underlying InternetOpen handle.
-        /// </summary>
-        private readonly InternetOpenHandle internetOpenHandle;
-
-        /// <summary>
-        /// The underlying FTP handle.
-        /// </summary>
-        private FtpHandle ftpHandle;
-
-        /// <summary>
         /// The current working directory on the remote FTP server, if known. May be <c>null</c>.
         /// </summary>
         private string currentDirectory;
@@ -33,7 +23,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="process">The name of the process or component making use of this FTP connection (used for logging).</param>
         public FtpConnection(string process)
         {
-            this.internetOpenHandle = new InternetOpenHandle(process);
+            this.InternetHandle = new InternetOpenHandle(process);
         }
 
         /// <summary>
@@ -58,6 +48,16 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
+        /// Gets the underlying internet handle.
+        /// </summary>
+        public InternetOpenHandle InternetHandle { get; private set; }
+
+        /// <summary>
+        /// Gets the underlying FTP handle. Returns <c>null</c> until <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> is invoked.
+        /// </summary>
+        public FtpHandle FtpHandle { get; private set; }
+
+        /// <summary>
         /// Gets or sets the current directory on the remote FTP server. This may be set to an absolute or relative directory. <see cref="O:Nito.KitchenSink.WinInet.FtpConnection.Connect"/> must be called before reading or writing this property.
         /// </summary>
         public string CurrentDirectory
@@ -66,7 +66,7 @@ namespace Nito.KitchenSink.WinInet
             {
                 if (this.currentDirectory == null)
                 {
-                    this.currentDirectory = this.ftpHandle.GetCurrentDirectory();
+                    this.currentDirectory = this.FtpHandle.GetCurrentDirectory();
                 }
 
                 return this.currentDirectory;
@@ -74,7 +74,7 @@ namespace Nito.KitchenSink.WinInet
 
             set
             {
-                this.ftpHandle.SetCurrentDirectory(value);
+                this.FtpHandle.SetCurrentDirectory(value);
                 this.currentDirectory = null;
             }
         }
@@ -89,8 +89,8 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="internetConnectFlags">The connection flags, such as <see cref="InternetConnectHandle.Flags.Passive"/> for passive FTP.</param>
         public void Connect(string serverName, int serverPort, string username, string password, InternetConnectHandle.Flags internetConnectFlags)
         {
-            this.ftpHandle = new FtpHandle(this.internetOpenHandle, serverName, serverPort, username, password, internetConnectFlags);
-            this.ftpHandle.StatusCallback = (args) =>
+            this.FtpHandle = new FtpHandle(this.InternetHandle, serverName, serverPort, username, password, internetConnectFlags);
+            this.FtpHandle.StatusCallback = (args) =>
             {
                 if (this.Progress != null)
                 {
@@ -180,7 +180,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="directory">The directory to create.</param>
         public void CreateDirectory(string directory)
         {
-            this.ftpHandle.CreateDirectory(directory);
+            this.FtpHandle.CreateDirectory(directory);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="fileName">The file to delete.</param>
         public void DeleteFile(string fileName)
         {
-            this.ftpHandle.DeleteFile(fileName);
+            this.FtpHandle.DeleteFile(fileName);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="type">The type of file to transfer.</param>
         public void GetFile(string remoteFile, string localFile, bool failIfExists, FileTransferType type)
         {
-            this.ftpHandle.GetFile(remoteFile, localFile, failIfExists, (FtpHandle.GetFileFlags)type);
+            this.FtpHandle.GetFile(remoteFile, localFile, failIfExists, (FtpHandle.GetFileFlags)type);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="type">The type of file to transfer.</param>
         public void PutFile(string localFile, string remoteFile, FileTransferType type)
         {
-            this.ftpHandle.PutFile(localFile, remoteFile, (FtpHandle.PutFileFlags)type);
+            this.FtpHandle.PutFile(localFile, remoteFile, (FtpHandle.PutFileFlags)type);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="directory">The directory to remove.</param>
         public void RemoveDirectory(string directory)
         {
-            this.ftpHandle.RemoveDirectory(directory);
+            this.FtpHandle.RemoveDirectory(directory);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="newName">The new file name.</param>
         public void RenameFile(string oldName, string newName)
         {
-            this.ftpHandle.RenameFile(oldName, newName);
+            this.FtpHandle.RenameFile(oldName, newName);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Nito.KitchenSink.WinInet
         /// <returns>All files matching the query on the remote FTP server.</returns>
         public IList<FtpDirectoryEntry> FindFiles(string search)
         {
-            return this.ftpHandle.FindFiles(search);
+            return this.FtpHandle.FindFiles(search);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace Nito.KitchenSink.WinInet
         /// <returns>All files in the current working directory on the remote FTP server.</returns>
         public IList<FtpDirectoryEntry> FindFiles()
         {
-            return this.ftpHandle.FindFiles();
+            return this.FtpHandle.FindFiles();
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Nito.KitchenSink.WinInet
         /// <param name="command">The command to send to the FTP server.</param>
         public void SendCommand(string command)
         {
-            this.ftpHandle.SendCommand(command);
+            this.FtpHandle.SendCommand(command);
         }
 
         /// <summary>
@@ -267,12 +267,12 @@ namespace Nito.KitchenSink.WinInet
         /// </summary>
         public void Dispose()
         {
-            if (this.ftpHandle != null)
+            if (this.FtpHandle != null)
             {
-                this.ftpHandle.Dispose();
+                this.FtpHandle.Dispose();
             }
 
-            this.internetOpenHandle.Dispose();
+            this.InternetHandle.Dispose();
         }
     }
 }

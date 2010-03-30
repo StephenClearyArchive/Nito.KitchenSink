@@ -67,6 +67,39 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
+        /// Sets the timeout value for establishing a connection, in milliseconds.
+        /// </summary>
+        public int MilisecondsConnectTimeout
+        {
+            set
+            {
+                UnsafeNativeMethods.SetOption(this.SafeInternetHandle, UnsafeNativeMethods.INTERNET_OPTION_CONNECT_TIMEOUT, value);
+            }
+        }
+
+        /// <summary>
+        /// Sets the timeout value for receiving a response, in milliseconds.
+        /// </summary>
+        public int MillisecondsReceiveTimeout
+        {
+            set
+            {
+                UnsafeNativeMethods.SetOption(this.SafeInternetHandle, UnsafeNativeMethods.INTERNET_OPTION_RECEIVE_TIMEOUT, value);
+            }
+        }
+
+        /// <summary>
+        /// Sets the timeout value for sending a command, in milliseconds.
+        /// </summary>
+        public int MillisecondsSendTimeout
+        {
+            set
+            {
+                UnsafeNativeMethods.SetOption(this.SafeInternetHandle, UnsafeNativeMethods.INTERNET_OPTION_SEND_TIMEOUT, value);
+            }
+        }
+
+        /// <summary>
         /// Closes the internet handle. This method may be safely invoked by any thread; if a thread is in a blocking operation, another thread may close this handle to abort the operation.
         /// </summary>
         public void Dispose()
