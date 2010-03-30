@@ -46,6 +46,21 @@ namespace Nito.KitchenSink.WinInet
         private static readonly IntPtr INTERNET_INVALID_STATUS_CALLBACK = (IntPtr)(-1);
 
         /// <summary>
+        /// Gets or sets a uint that contains the timeout value (in milliseconds) to use for connection requests.
+        /// </summary>
+        public const uint INTERNET_OPTION_CONNECT_TIMEOUT = 2;
+
+        /// <summary>
+        /// Gets or sets a uint that contains the timeout value (in milliseconds) to send a request.
+        /// </summary>
+        public const uint INTERNET_OPTION_SEND_TIMEOUT = 5;
+
+        /// <summary>
+        /// Gets or sets a uint that contains the timeout value (in milliseconds) to receive a response to a request.
+        /// </summary>
+        public const uint INTERNET_OPTION_RECEIVE_TIMEOUT = 6;
+
+        /// <summary>
         /// The delegate type of the internet status callback wrapper, passed to <c>InternetSetStatusCallback</c>.
         /// </summary>
         /// <param name="hInternet">The internet handle. This parameter is ignored.</param>
@@ -298,6 +313,21 @@ namespace Nito.KitchenSink.WinInet
             }
         }
 
+        /// <summary>
+        /// Sets an option on the specified internet handle to the specified <c>int</c> value.
+        /// </summary>
+        /// <param name="internet">The internet handle.</param>
+        /// <param name="option">The option to set.</param>
+        /// <param name="value">The value to set the option to.</param>
+        public static void SetOption(SafeInternetHandle internet, uint option, int value)
+        {
+            byte[] data = BitConverter.GetBytes(value);
+            if (!DoInternetSetBinaryOption(internet, option, data, 4))
+            {
+                throw GetLastInternetException();
+            }
+        }
+
         [DllImport("Wininet.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool InternetGetLastResponseInfo(out uint lpdwError, StringBuilder lpszBuffer, ref uint lpdwBufferLength);
@@ -353,6 +383,10 @@ namespace Nito.KitchenSink.WinInet
         [DllImport("Wininet.dll", EntryPoint = "FtpCommand", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool DoFtpCommand(SafeInternetHandle hConnect, [MarshalAs(UnmanagedType.Bool)] bool fExpectResponse, uint dwFlags, string lpszCommand, IntPtr dwContext, IntPtr phFtpCommand);
+
+        [DllImport("Wininet.dll", EntryPoint = "InternetSetOption", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DoInternetSetBinaryOption(SafeInternetHandle hInternet, uint dwOption, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] byte[] lpBuffer, uint dwBufferLength);
 
         /// <summary>
         /// Creates a wrapper for the provided internet status callback delegate.
