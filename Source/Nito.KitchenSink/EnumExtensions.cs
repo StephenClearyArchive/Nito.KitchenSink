@@ -66,5 +66,25 @@ namespace Nito.KitchenSink
                 return (T)Convert.ChangeType(Convert.ToUInt64(value) & ~Convert.ToUInt64(flag), Enum.GetUnderlyingType(typeof(T)));
             }
         }
+
+        /// <summary>
+        /// Adds or removes a bit flag or set of bit flags in an enumeration value and returns the new value.
+        /// </summary>
+        /// <typeparam name="T">The type of enumeration.</typeparam>
+        /// <param name="value">The value on which to operate.</param>
+        /// <param name="flag">The flag(s) to add to or remove from <paramref name="value"/>.</param>
+        /// <param name="add">Whether to add or remove the flags; <c>true</c> adds the flags; <c>false</c> removes them.</param>
+        /// <returns>The new value.</returns>
+        public static T AddOrRemove<T>(this Enum value, T flag, bool add)
+        {
+            if (add)
+            {
+                return value.Add(flag);
+            }
+            else
+            {
+                return value.Remove(flag);
+            }
+        }
     }
 }
