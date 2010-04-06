@@ -92,6 +92,7 @@
     <Compile Include="CRC32.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="EncodingExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="FileSystemPath\FileSystemPath.cs" />
     <Compile Include="FileSystemPath\FileSystemPathExtensions.cs" />
