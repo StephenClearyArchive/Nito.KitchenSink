@@ -7,6 +7,7 @@ namespace Nito.KitchenSink
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
+    using Nito.Linq;
 
     /// <summary>
     /// A generalized CRC-32 algorithm.
@@ -184,6 +185,26 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
+        /// Updates the hash value by hashing the provided byte buffer. <see cref="Initialize"/> should be called before invoking this method for the first time.
+        /// </summary>
+        /// <param name="buffer">The input byte array to include in the hash calculation.</param>
+        public void Update(IList<byte> buffer)
+        {
+            unchecked
+            {
+                uint remainder = this.remainder;
+                foreach (byte data in buffer)
+                {
+                    byte index = this.ReflectedIndex(remainder, data);
+                    remainder = this.ReflectedShift(remainder);
+                    remainder ^= this.lookupTable[index];
+                }
+
+                this.remainder = remainder;
+            }
+        }
+
+        /// <summary>
         /// Routes data written to the object into the hash algorithm for computing the hash.
         /// </summary>
         /// <param name="array">The input to compute the hash code for.</param>
@@ -191,18 +212,7 @@ namespace Nito.KitchenSink
         /// <param name="count">The number of bytes in the byte array to use as data.</param>
         protected override void HashCore(byte[] array, int offset, int count)
         {
-            unchecked
-            {
-                uint remainder = this.remainder;
-                for (int i = offset; i != offset + count; ++i)
-                {
-                    byte index = this.ReflectedIndex(remainder, array[i]);
-                    remainder = this.ReflectedShift(remainder);
-                    remainder ^= this.lookupTable[index];
-                }
-
-                this.remainder = remainder;
-            }
+            this.Update(array.Slice(offset, count));
         }
 
         /// <summary>
