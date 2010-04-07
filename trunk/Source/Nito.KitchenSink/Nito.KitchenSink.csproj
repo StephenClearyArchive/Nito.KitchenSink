@@ -83,6 +83,7 @@
     <Compile Include="Anonymous\A.cs" />
     <Compile Include="Anonymous\AnonymousComparer.cs" />
     <Compile Include="Anonymous\AnonymousDisposable.cs" />
+    <Compile Include="BinaryConverter.cs" />
     <Compile Include="CciSharp\DependencyPropertyAttribute.cs" />
     <Compile Include="CciSharp\ReadOnlyAttribute.cs" />
     <Compile Include="Communication\MultipleByteMultipleDelimiterFramer.cs" />
