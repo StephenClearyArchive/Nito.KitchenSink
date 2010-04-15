@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BB905DFE-117C-41D8-9A37-B434F73854A5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nito.KitchenSink._35</RootNamespace>
+    <AssemblyName>Nito.KitchenSink</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Binaries\35.Rx\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\Binaries\35.Rx\Nito.KitchenSink.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Nito.Linq">
+      <HintPath>..\..\Libraries\Nito.Linq\35.Rx\Nito.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.CoreEx, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Interactive, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Threading, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Nito.KitchenSink\Anonymous\A.cs">
+      <Link>Anonymous\A.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Anonymous\AnonymousComparer.cs">
+      <Link>Anonymous\AnonymousComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Anonymous\AnonymousDisposable.cs">
+      <Link>Anonymous\AnonymousDisposable.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\AsyncOperationExtensions.cs">
+      <Link>AsyncOperationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\BinaryConverter.cs">
+      <Link>BinaryConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\BooleanExtensions.cs">
+      <Link>BooleanExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\CciSharp\DependencyPropertyAttribute.cs">
+      <Link>CciSharp\DependencyPropertyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\CciSharp\ReadOnlyAttribute.cs">
+      <Link>CciSharp\ReadOnlyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Communication\IFramer.cs">
+      <Link>Communication\IFramer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Communication\MultipleByteDelimiterFramer.cs">
+      <Link>Communication\MultipleByteDelimiterFramer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Communication\MultipleByteMultipleDelimiterFramer.cs">
+      <Link>Communication\MultipleByteMultipleDelimiterFramer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Communication\SingleByteDelimiterFramer.cs">
+      <Link>Communication\SingleByteDelimiterFramer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Containers\CircularBuffer.cs">
+      <Link>Containers\CircularBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Containers\Deque.cs">
+      <Link>Containers\Deque.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\CRC16.cs">
+      <Link>CRC16.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\CRC32.cs">
+      <Link>CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\DisposableExtensions.cs">
+      <Link>DisposableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\EncodingExtensions.cs">
+      <Link>EncodingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\EnumExtensions.cs">
+      <Link>EnumExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\EqualityComparer.cs">
+      <Link>EqualityComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\ExceptionExtensions.cs">
+      <Link>ExceptionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\FileSystemPath\FileSystemPath.cs">
+      <Link>FileSystemPath\FileSystemPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\FileSystemPath\FileSystemPathExtensions.cs">
+      <Link>FileSystemPath\FileSystemPathExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\GuidExtensions.cs">
+      <Link>GuidExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\HackersDelight.cs">
+      <Link>HackersDelight.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\HashAlgorithmExtensions.cs">
+      <Link>HashAlgorithmExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs">
+      <Link>INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\INotifyPropertyChanged\NotifyPropertyChangedBase.cs">
+      <Link>INotifyPropertyChanged\NotifyPropertyChangedBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs">
+      <Link>INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\Interop.cs">
+      <Link>Interop\Interop.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\SafeNativeMethods.cs">
+      <Link>Interop\SafeNativeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\FtpConnection.cs">
+      <Link>Interop\WinInet\FtpConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\FtpDirectoryEntry.cs">
+      <Link>Interop\WinInet\FtpDirectoryEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\FtpHandle.cs">
+      <Link>Interop\WinInet\FtpHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\InternetCallbackEventArgs.cs">
+      <Link>Interop\WinInet\InternetCallbackEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\InternetConnectHandle.cs">
+      <Link>Interop\WinInet\InternetConnectHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\InternetException.cs">
+      <Link>Interop\WinInet\InternetException.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\InternetHandle.cs">
+      <Link>Interop\WinInet\InternetHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\InternetOpenHandle.cs">
+      <Link>Interop\WinInet\InternetOpenHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\SafeInternetHandle.cs">
+      <Link>Interop\WinInet\SafeInternetHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\SafeNativeMethods.cs">
+      <Link>Interop\WinInet\SafeNativeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Interop\WinInet\UnsafeNativeMethods.cs">
+      <Link>Interop\WinInet\UnsafeNativeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\LinkedListExtensions.cs">
+      <Link>LinkedListExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\ObjectExtensions.cs">
+      <Link>ObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\ReferenceCountedDisposable.cs">
+      <Link>ReferenceCountedDisposable.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Reflection\ObjectExtensions.cs">
+      <Link>Reflection\ObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\RolloverLogTraceListener.cs">
+      <Link>RolloverLogTraceListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\SimplePropertyPath.cs">
+      <Link>SimplePropertyPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\StreamExtensions.cs">
+      <Link>StreamExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\StringExtensions.cs">
+      <Link>StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\TaskExtensions.cs">
+      <Link>TaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\WeakCollection.cs">
+      <Link>WeakCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\WeakReference.cs">
+      <Link>WeakReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\_internal\SafeGCHandle.cs">
+      <Link>_internal\SafeGCHandle.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

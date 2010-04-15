@@ -1,5 +1,5 @@
 To create a new release of Nito.KitchenSink:
-1) Set version number in AssemblyInfo.
+1) Set version number in SharedAssemblyInfo.
 2) Build in Release mode.
 3) Run all unit tests.
 4) Checkin sources (not binaries).
