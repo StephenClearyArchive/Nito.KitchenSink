@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><ItemProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><Properties><Property><Name>svn:externals</Name><Value>-r 41288 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries Nito.Linq
 </Value></Property><Property><Name>svn:externals</Name><Value>-r 41318 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries Nito.Linq
 </Value></Property><Property><Name>svn:externals</Name><Value>-r 46229 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/35.Rx Nito.Linq
+</Value></Property><Property><Name>svn:externals</Name><Value>-r 46401 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/35.Rx Nito.Linq/35.Rx
+-r 46401 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
 </Value></Property></Properties></ItemProperties>
