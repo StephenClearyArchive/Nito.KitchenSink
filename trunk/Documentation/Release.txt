@@ -2,5 +2,6 @@ To create a new release of Nito.KitchenSink:
 1) Set version number in AssemblyInfo.
 2) Build in Release mode.
 3) Run all unit tests.
-4) Source-index PDBs.
-5) Checkin entire project and create new CodePlex release.
+4) Checkin sources (not binaries).
+5) Source-index PDBs.
+6) Checkin entire project and create new CodePlex release.
