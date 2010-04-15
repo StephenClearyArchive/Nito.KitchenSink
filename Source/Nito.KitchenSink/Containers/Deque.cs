@@ -305,7 +305,7 @@ namespace Nito.KitchenSink
                 return;
             }
 
-            this.DoInsertRange(index, EnumerableEx.Return(item), 1);
+            this.DoInsertRange(index, EnumerableSource.Return(item), 1);
         }
 
         /// <summary>
