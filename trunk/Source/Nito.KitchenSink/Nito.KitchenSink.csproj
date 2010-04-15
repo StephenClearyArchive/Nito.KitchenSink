@@ -59,6 +59,7 @@
   <ItemGroup>
     <Reference Include="Nito.Linq">
       <HintPath>..\..\Libraries\Nito.Linq\40.Rx\Nito.Linq.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
