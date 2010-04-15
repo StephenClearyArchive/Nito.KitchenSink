@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Nito.KitchenSink")]
+[assembly: AssemblyTitle("Nito.KitchenSink for .NET 3.5 SP1 Client with Rx")]
 [assembly: AssemblyDescription("Everything except... well, you know.")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito Libraries")]
@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.4.0.0")]
