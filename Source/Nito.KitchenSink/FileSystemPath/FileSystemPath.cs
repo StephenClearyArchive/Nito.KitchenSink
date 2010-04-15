@@ -15,7 +15,7 @@ namespace Nito.KitchenSink
         /// Initializes a new instance of the <see cref="FileSystemPath"/> class with the specified actual path string.
         /// </summary>
         /// <param name="path">The actual path string. May not be <c>null</c>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/> is <c>null</c>.</exception>
         public FileSystemPath(string path)
         {
             if (path == null)
