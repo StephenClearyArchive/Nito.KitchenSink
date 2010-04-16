@@ -39,7 +39,7 @@ namespace Nito.KitchenSink
             string data = null;
             if (ex.Data != null && ex.Data.Count != 0)
             {
-                var dataStrings = ex.Data.Cast<DictionaryEntry>().Select(x => "\"" + x.Key.ToString().PrintableEscape() + "\" = \"" + x.Value.ToString().PrintableEscape() + "\"");
+                var dataStrings = ex.Data.Cast<DictionaryEntry>().Select(x => "\"" + Convert.ToString(x.Key).PrintableEscape() + "\" = \"" + Convert.ToString(x.Value).PrintableEscape() + "\"");
                 data = "{ " + dataStrings.Join(", ") + " }";
             }
 
