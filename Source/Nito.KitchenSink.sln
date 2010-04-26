@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B6BEA741-7F95-42B8-993E-58EE49D419AD}"
 	ProjectSection(SolutionItems) = preProject
 		..\Documentation\Release.txt = ..\Documentation\Release.txt
+		Requirements.txt = Requirements.txt
 		Source-index PDBs.cmd = Source-index PDBs.cmd
 	EndProjectSection
 EndProject
