@@ -1,0 +1,2 @@
+Code Contracts, Standard Edition:
+. http://msdn.microsoft.com/en-us/devlabs/dd491992.aspx
