@@ -10,6 +10,7 @@ namespace Nito.KitchenSink.Dynamic
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Dynamic;
+    using System.Linq;
     using System.Reflection;
     using Nito.Linq;
 
@@ -108,24 +109,46 @@ namespace Nito.KitchenSink.Dynamic
                 }
             }
 
-            // Resolve and invoke the method
+            // Resolve the method
+            const BindingFlags flags = BindingFlags.InvokeMethod | BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public;
+            object state;
+            MethodBase method;
             try
             {
-                result = this.type.InvokeMember(binder.Name, BindingFlags.InvokeMethod | BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public, null, null, args);
+                var methods = this.type.GetMethods(flags).Where(x => x.Name == binder.Name);
+                method = Type.DefaultBinder.BindToMethod(flags, methods.ToArray(), ref args, null, null, null, out state);
             }
             catch (Exception ex)
             {
                 Trace.TraceEvent(TraceEventType.Error, 0, "Could not find static method " + binder.Name + " on type " + this.type.Name + ": " + ex.Dump(false));
-                result = null;
-                return false;
+                throw;
             }
 
-            // Convert any ref/out arguments into RefOutArg results
-            for (int i = 0; i != args.Length; ++i)
+            // Ensure that all ref/out arguments were properly wrapped
+            if (method.GetParameters().Count(x => x.ParameterType.IsByRef) != refArguments.Count(x => x != null))
             {
-                if (refArguments[i] != null)
+                throw new ArgumentException("ref/out parameters need a RefOutArg wrapper when invoking " + this.type.Name + "." + binder.Name + ".");
+            }
+
+            // Invoke the method, allowing exceptions to propogate
+            try
+            {
+                result = method.Invoke(null, args);
+            }
+            finally
+            {
+                if (state != null)
                 {
-                    refArguments[i].ValueAsObject = args[i];
+                    Type.DefaultBinder.ReorderArgumentArray(ref args, state);
+                }
+
+                // Convert any ref/out arguments into RefOutArg results
+                for (int i = 0; i != args.Length; ++i)
+                {
+                    if (refArguments[i] != null)
+                    {
+                        refArguments[i].ValueAsObject = args[i];
+                    }
                 }
             }
 
