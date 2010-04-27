@@ -130,5 +130,26 @@ namespace Tests.Unit_Tests
         {
             parameter = 13;
         }
+
+
+        [TestMethod]
+        public void Dynamic_ReadStaticProperty_ReadsProperty()
+        {
+            Dynamic_ReadStaticProperty_ReadsProperty_Property = 13;
+            var dynamicClass = DynamicStaticTypeMembers.Create(this.GetType());
+            int result = dynamicClass.Dynamic_ReadStaticProperty_ReadsProperty_Property;
+            Assert.AreEqual(13, result);
+        }
+        public static int Dynamic_ReadStaticProperty_ReadsProperty_Property { get; set; }
+
+
+        [TestMethod]
+        public void Dynamic_WriteStaticProperty_WritesProperty()
+        {
+            var dynamicClass = DynamicStaticTypeMembers.Create(this.GetType());
+            dynamicClass.Dynamic_WriteStaticProperty_WritesProperty_Property = 31;
+            Assert.AreEqual(31, Dynamic_WriteStaticProperty_WritesProperty_Property);
+        }
+        public static int Dynamic_WriteStaticProperty_WritesProperty_Property { get; set; }
     }
 }
