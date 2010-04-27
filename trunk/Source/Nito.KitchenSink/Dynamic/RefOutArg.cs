@@ -50,10 +50,9 @@ namespace Nito.KitchenSink.Dynamic
         /// <summary>
         /// Creates a new instance of the <see cref="RefOutArg"/> class wrapping the specified value.
         /// </summary>
-        /// <typeparam name="T">The type of value to wrap.</typeparam>
         /// <param name="value">The value to wrap.</param>
         /// <returns>A new instance of the <see cref="RefOutArg"/> class wrapping the specified value.</returns>
-        public static RefOutArg Create<T>(T value)
+        public static RefOutArg Create(object value)
         {
             return new RefOutArg { ValueAsObject = value };
         }
