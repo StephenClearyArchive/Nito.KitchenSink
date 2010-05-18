@@ -30,6 +30,15 @@ namespace Nito.KitchenSink.WinInet
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return "0x" + this.handle.ToString("X" + IntPtr.Size * 2);
+        }
+
+        /// <summary>
         /// Executes the code required to free the handle.
         /// </summary>
         /// <returns>true if the handle is released successfully; otherwise, in the event of a catastrophic failure, false. In this case, it generates a releaseHandleFailed MDA Managed Debugging Assistant.</returns>

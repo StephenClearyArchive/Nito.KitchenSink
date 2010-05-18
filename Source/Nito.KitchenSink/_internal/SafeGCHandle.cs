@@ -69,5 +69,14 @@ namespace Nito.KitchenSink
             GCHandle.FromIntPtr(this.handle).Free();
             return true;
         }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return "0x" + this.handle.ToString("X" + IntPtr.Size * 2);
+        }
     }
 }

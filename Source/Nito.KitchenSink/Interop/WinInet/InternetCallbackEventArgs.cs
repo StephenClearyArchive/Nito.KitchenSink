@@ -134,6 +134,15 @@ namespace Nito.KitchenSink.WinInet
         public byte[] RawData { get; set; }
 
         /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return this.Code.ToString();
+        }
+
+        /// <summary>
         /// A notification including socket endpoint information.
         /// </summary>
         public sealed class Socket : InternetCallbackEventArgs
@@ -142,6 +151,15 @@ namespace Nito.KitchenSink.WinInet
             /// Gets or sets the socket endpoint information.
             /// </summary>
             public EndPoint EndPoint { get; set; }
+
+            /// <summary>
+            /// Returns a <see cref="System.String"/> that represents this instance.
+            /// </summary>
+            /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+            public override string ToString()
+            {
+                return base.ToString() + ": " + Convert.ToString(this.EndPoint);
+            }
         }
 
         /// <summary>
@@ -183,6 +201,15 @@ namespace Nito.KitchenSink.WinInet
             /// Gets or sets the numerical information; this is actually a UInt32.
             /// </summary>
             public int Value { get; set; }
+
+            /// <summary>
+            /// Returns a <see cref="System.String"/> that represents this instance.
+            /// </summary>
+            /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+            public override string ToString()
+            {
+                return base.ToString() + ": " + Convert.ToString(this.Value);
+            }
         }
 
         /// <summary>
@@ -210,6 +237,15 @@ namespace Nito.KitchenSink.WinInet
             /// Gets or sets the string information.
             /// </summary>
             public string Value { get; set; }
+
+            /// <summary>
+            /// Returns a <see cref="System.String"/> that represents this instance.
+            /// </summary>
+            /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+            public override string ToString()
+            {
+                return base.ToString() + ": " + Convert.ToString(this.Value);
+            }
         }
     }
 }

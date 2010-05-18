@@ -205,6 +205,15 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return "0x" + this.Result.ToString("X4");
+        }
+
+        /// <summary>
         /// Routes data written to the object into the hash algorithm for computing the hash.
         /// </summary>
         /// <param name="array">The input to compute the hash code for.</param>
