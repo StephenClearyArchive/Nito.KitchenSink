@@ -169,6 +169,22 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var ret = "(" + (this.root == null ? "<null>" : this.root.ToString()) + ")";
+            if (this.path != null)
+            {
+                ret += "." + this.path;
+            }
+
+            ret += " = " + (this.value == null ? "<null>" : this.value.ToString());
+            return ret;
+        }
+
+        /// <summary>
         /// Updates the evaluated value and raises <see cref="INotifyPropertyChanged.PropertyChanged"/> if necessary.
         /// </summary>
         /// <param name="newValue">The newly-evaluated value.</param>
@@ -401,6 +417,21 @@ namespace Nito.KitchenSink
                 }
 
                 info.SetValue(this.Object, value, null);
+            }
+
+            /// <summary>
+            /// Returns a <see cref="System.String"/> that represents this instance.
+            /// </summary>
+            /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+            public override string ToString()
+            {
+                if (this.Object == null)
+                {
+                    return "(<null>)." + this.Name + " = <null>";
+                }
+
+                var value = this.Evaluate();
+                return "(" + this.Object.ToString() + ")." + this.Name + " = " + (value == null ? "<null>" : value.ToString());
             }
         }
     }

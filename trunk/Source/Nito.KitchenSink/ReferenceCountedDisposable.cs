@@ -51,6 +51,15 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return Convert.ToString(this.Value);
+        }
+
+        /// <summary>
         /// A reference-counted wrapper around a disposable object.
         /// </summary>
         public sealed class Reference : IDisposable
@@ -81,6 +90,15 @@ namespace Nito.KitchenSink
             void IDisposable.Dispose()
             {
                 this.disposable.Dispose();
+            }
+
+            /// <summary>
+            /// Returns a <see cref="System.String"/> that represents this instance.
+            /// </summary>
+            /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+            public override string ToString()
+            {
+                return Convert.ToString(this.Value);
             }
         }
     }

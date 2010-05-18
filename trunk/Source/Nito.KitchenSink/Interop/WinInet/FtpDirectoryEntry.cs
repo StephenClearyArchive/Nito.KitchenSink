@@ -75,5 +75,14 @@ namespace Nito.KitchenSink.WinInet
         {
             get { return (this.Attributes & AttributeFlags.Directory) == AttributeFlags.Directory; }
         }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

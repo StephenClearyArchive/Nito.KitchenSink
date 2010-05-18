@@ -53,5 +53,20 @@ namespace Nito.KitchenSink
         {
             this.safeHandle.Dispose();
         }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var tmp = this.Target;
+            if (tmp == null)
+            {
+                return typeof(T).Name + ": <null>";
+            }
+
+            return typeof(T).Name + ": " + tmp.ToString();
+        }
     }
 }

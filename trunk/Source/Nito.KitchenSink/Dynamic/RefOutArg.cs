@@ -2,6 +2,7 @@
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 
+using System;
 namespace Nito.KitchenSink.Dynamic
 {
     /// <summary>
@@ -55,6 +56,15 @@ namespace Nito.KitchenSink.Dynamic
         public static RefOutArg Create(object value)
         {
             return new RefOutArg { ValueAsObject = value };
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return Convert.ToString(this.ValueAsObject);
         }
     }
 }
