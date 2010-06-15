@@ -98,7 +98,6 @@
       <summary>
             Empties the collection.
             </summary>
-      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.Clear" inheritedFromTypeName="ICollection">this.Count == 0</ensures>
     </member>
     <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Contains(`0)">
       <summary>
@@ -127,6 +126,13 @@
             </summary>
       <returns>The sequence of live objects.</returns>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WeakCollection`1.LiveList">
       <summary>
@@ -216,6 +222,13 @@
       <summary>
             Closes the internet handle. This method may be safely invoked by any thread; if a thread is in a blocking operation, another thread may close this handle to abort the operation.
             </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WinInet.InternetHandle.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetHandle.SafeInternetHandle">
       <summary>
@@ -622,6 +635,13 @@
             An entry in an FTP directory listing.
             </summary>
     </member>
+    <member name="M:Nito.KitchenSink.WinInet.FtpDirectoryEntry.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.WinInet.FtpDirectoryEntry.Attributes">
       <summary>
             Gets or sets the basic attributes of the file or subdirectory.
@@ -780,6 +800,13 @@
             Updates the hash value by hashing the provided byte buffer. <see cref="M:Nito.KitchenSink.CRC32.Initialize" /> should be called before invoking this method for the first time.
             </summary>
       <param name="buffer">The input byte array to include in the hash calculation.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CRC32.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CRC32.HashCore(System.Byte[],System.Int32,System.Int32)">
       <summary>
@@ -1026,6 +1053,13 @@
             </summary>
       <returns>Whether the handle was released successfully.</returns>
     </member>
+    <member name="M:Nito.KitchenSink.SafeGCHandle.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.SafeGCHandle.Handle">
       <summary>
             Gets the underlying allocated garbage collection handle.
@@ -1060,6 +1094,13 @@
       <summary>
             Frees the weak reference.
             </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakReference`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WeakReference`1.Target">
       <summary>
@@ -1436,6 +1477,13 @@
             Unsubscribes from all objects in the property path.
             </summary>
     </member>
+    <member name="M:Nito.KitchenSink.SimplePropertyPath.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="M:Nito.KitchenSink.SimplePropertyPath.UpdateValue(System.Object)">
       <summary>
             Updates the evaluated value and raises <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> if necessary.
@@ -1518,6 +1566,13 @@
             Writes the value of the property named <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Name" /> for <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object" />. This cannot be called if <see cref="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object" /> is null.
             </summary>
       <param name="value">The new value of the property.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object">
       <summary>
@@ -1655,6 +1710,13 @@
             Converts this path into an absolute path, using the current directory if necessary. This path may not be an empty path.
             </summary>
       <returns>An absolute path.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.FileSystemPath.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.FileSystemPath.RandomFileName">
       <summary>
@@ -2016,6 +2078,13 @@
             </summary>
       <returns>A reference-counted wrapper around the same disposable object.</returns>
     </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Value">
       <summary>
             Gets the underlying disposable object.
@@ -2042,6 +2111,13 @@
             Reduces the reference count on the underlying disposable object.
             </summary>
     </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.Value">
       <summary>
             Gets the underlying disposable object.
@@ -2056,6 +2132,13 @@
       <summary>
             Initializes a new instance of the <see cref="T:Nito.KitchenSink.WinInet.SafeInternetHandle" /> class.
             </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WinInet.SafeInternetHandle.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.WinInet.SafeInternetHandle.ReleaseHandle">
       <summary>
@@ -2073,6 +2156,13 @@
       <summary>
             Arguments for <see cref="T:Nito.KitchenSink.WinInet.InternetHandle.InternetCallback" /> delegates.
             </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Code">
       <summary>
@@ -2199,6 +2289,13 @@
             A notification including socket endpoint information.
             </summary>
     </member>
+    <member name="M:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Socket.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Socket.EndPoint">
       <summary>
             Gets or sets the socket endpoint information.
@@ -2238,6 +2335,13 @@
             A notification including numerical information.
             </summary>
     </member>
+    <member name="M:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Number.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Number.Value">
       <summary>
             Gets or sets the numerical information; this is actually a UInt32.
@@ -2262,6 +2366,13 @@
       <summary>
             A notification including string information.
             </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.String.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.String.Value">
       <summary>
@@ -2482,6 +2593,13 @@
             </summary>
       <param name="value">The value to wrap.</param>
       <returns>A new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class wrapping the specified value.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.RefOutArg.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.Dynamic.RefOutArg.ValueAsObject">
       <summary>
@@ -2742,6 +2860,13 @@
       <typeparam name="T">The underlying type to wrap.</typeparam>
       <returns>An instance of <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" />, as a dynamic type.</returns>
     </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
     <member name="T:Nito.KitchenSink.SafeNativeMethods">
       <summary>
             Native methods that are safe for any caller.
@@ -2958,6 +3083,13 @@
             Updates the hash value by hashing the provided byte buffer. <see cref="M:Nito.KitchenSink.CRC16.Initialize" /> should be called before invoking this method for the first time.
             </summary>
       <param name="buffer">The input byte array to include in the hash calculation.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CRC16.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CRC16.HashCore(System.Byte[],System.Int32,System.Int32)">
       <summary>
