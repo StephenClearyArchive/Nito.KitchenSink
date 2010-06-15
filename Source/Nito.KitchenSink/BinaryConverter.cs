@@ -47,7 +47,7 @@ namespace Nito.KitchenSink
             /// <param name="littleEndian">If <c>true</c>, this binary converter is little-endian; if <c>false</c>, this binary converter is big-endian.</param>
             public EndianBinaryConverter(bool littleEndian)
             {
-                this.reversesBytes = littleEndian == BitConverter.IsLittleEndian;
+                this.reversesBytes = littleEndian != BitConverter.IsLittleEndian;
             }
 
             /// <summary>
