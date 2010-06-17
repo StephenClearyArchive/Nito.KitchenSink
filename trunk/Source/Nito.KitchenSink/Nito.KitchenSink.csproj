@@ -129,6 +129,8 @@
   <ItemGroup>
     <Compile Include="AsyncOperationExtensions.cs" />
     <Compile Include="BooleanExtensions.cs" />
+    <Compile Include="CommaSeparatedValueFormatter.cs" />
+    <Compile Include="CommaSeparatedValueParser.cs" />
     <Compile Include="Communication\IFramer.cs" />
     <Compile Include="Communication\MultipleByteDelimiterFramer.cs" />
     <Compile Include="Communication\SingleByteDelimiterFramer.cs" />
@@ -138,6 +140,11 @@
     <Compile Include="INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="TextReaders\LineMappingTextReader.cs" />
+    <Compile Include="TextReaders\NormalizeCrLfTextReader.cs" />
+    <Compile Include="TextReaders\PeekableTextReader.cs" />
+    <Compile Include="TextReaders\PositionTrackingTextReader.cs" />
+    <Compile Include="TextReaders\PutbackBufferTextReader.cs" />
     <Compile Include="RolloverLogTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
@@ -184,6 +191,8 @@
     <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="SimplePropertyPath.cs" />
     <Compile Include="TaskExtensions.cs" />
+    <Compile Include="TextReaders\SourceTextReader.cs" />
+    <Compile Include="TextReaderExtensions.cs" />
     <Compile Include="WeakCollection.cs" />
     <Compile Include="WeakReference.cs" />
     <Compile Include="_internal\SafeGCHandle.cs" />
