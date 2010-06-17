@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Unit Tests\BooleanExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\CircularBufferUnitTests.cs" />
+    <Compile Include="Unit Tests\CommaSeparatedValueReaderUnitTests.cs" />
     <Compile Include="Unit Tests\DynamicUnitTests.cs" />
     <Compile Include="Unit Tests\EnumExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\CRC16UnitTests.cs" />
