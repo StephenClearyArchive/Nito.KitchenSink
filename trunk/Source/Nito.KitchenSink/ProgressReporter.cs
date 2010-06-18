@@ -23,7 +23,15 @@
         }
 
         /// <summary>
-        /// Reports the progress to the UI thread. Note that the progress update is asynchronous with respect to the reporting Task. For a synchronous progress update, wait on the returned <see cref="Task"/>.
+        /// Gets the task scheduler which executes tasks on the UI thread.
+        /// </summary>
+        public TaskScheduler Scheduler
+        {
+            get { return this.scheduler; }
+        }
+
+        /// <summary>
+        /// Reports the progress to the UI thread. This method should be called from the task. Note that the progress update is asynchronous with respect to the reporting Task. For a synchronous progress update, wait on the returned <see cref="Task"/>.
         /// </summary>
         /// <param name="action">The action to perform in the context of the UI thread. Note that this action is run asynchronously on the UI thread.</param>
         /// <returns>The task queued to the UI thread.</returns>
@@ -33,12 +41,81 @@
         }
 
         /// <summary>
-        /// Reports the progress to the UI thread, and waits for the UI thread to process the update before returning.
+        /// Reports the progress to the UI thread, and waits for the UI thread to process the update before returning. This method should be called from the task.
         /// </summary>
         /// <param name="action">The action to perform in the context of the UI thread.</param>
         public void ReportProgress(Action action)
         {
             this.ReportProgressAsync(action).Wait();
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task finishes execution.
+        /// </summary>
+        /// <param name="task">The task to monitor for successful completion.</param>
+        /// <param name="action">The action to take when the task has successfully completed, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle successful completion. This is normally ignored.</returns>
+        public Task RegisterSucceededHandler(Task task, Action action)
+        {
+            return task.ContinueWith(_ => action(), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, this.scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task finishes execution and returns a result.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the task result.</typeparam>
+        /// <param name="task">The task to monitor for successful completion.</param>
+        /// <param name="action">The action to take when the task has successfully completed, in the context of the UI thread. The argument to the action is the return value of the task.</param>
+        /// <returns>The continuation created to handle successful completion. This is normally ignored.</returns>
+        public Task RegisterSucceededHandler<TResult>(Task<TResult> task, Action<TResult> action)
+        {
+            return task.ContinueWith(t => action(t.Result), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, this.Scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task becomes faulted.
+        /// </summary>
+        /// <param name="task">The task to monitor for faulting.</param>
+        /// <param name="action">The action to take when the task has faulted, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle faulting. This is normally ignored.</returns>
+        public Task RegisterFaultedHandler(Task task, Action<Exception> action)
+        {
+            return task.ContinueWith(t => action(t.Exception), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, this.Scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task becomes faulted.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the task result.</typeparam>
+        /// <param name="task">The task to monitor for faulting.</param>
+        /// <param name="action">The action to take when the task has faulted, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle faulting. This is normally ignored.</returns>
+        public Task RegisterFaultedHandler<TResult>(Task<TResult> task, Action<Exception> action)
+        {
+            return task.ContinueWith(t => action(t.Exception), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, this.Scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task is cancelled.
+        /// </summary>
+        /// <param name="task">The task to monitor for cancellation.</param>
+        /// <param name="action">The action to take when the task is cancelled, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle cancellation. This is normally ignored.</returns>
+        public Task RegisterCancelledHandler(Task task, Action action)
+        {
+            return task.ContinueWith(_ => action(), CancellationToken.None, TaskContinuationOptions.OnlyOnCanceled, this.Scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task is cancelled.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the task result.</typeparam>
+        /// <param name="task">The task to monitor for cancellation.</param>
+        /// <param name="action">The action to take when the task is cancelled, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle cancellation. This is normally ignored.</returns>
+        public Task RegisterCancelledHandler<TResult>(Task<TResult> task, Action action)
+        {
+            return task.ContinueWith(_ => action(), CancellationToken.None, TaskContinuationOptions.OnlyOnCanceled, this.Scheduler);
         }
     }
 }
