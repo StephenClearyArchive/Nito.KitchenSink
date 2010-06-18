@@ -50,7 +50,30 @@
         }
 
         /// <summary>
-        /// Registers a UI thread handler for when the specified task finishes execution.
+        /// Registers a UI thread handler for when the specified task finishes execution, whether it finishes with success, failiure, or cancellation.
+        /// </summary>
+        /// <param name="task">The task to monitor for completion.</param>
+        /// <param name="action">The action to take when the task has completed, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle completion. This is normally ignored.</returns>
+        public Task RegisterContinuation(Task task, Action action)
+        {
+            return task.ContinueWith(_ => action(), CancellationToken.None, TaskContinuationOptions.None, this.scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task finishes execution, whether it finishes with success, failiure, or cancellation.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the task result.</typeparam>
+        /// <param name="task">The task to monitor for completion.</param>
+        /// <param name="action">The action to take when the task has completed, in the context of the UI thread.</param>
+        /// <returns>The continuation created to handle completion. This is normally ignored.</returns>
+        public Task RegisterContinuation<TResult>(Task<TResult> task, Action action)
+        {
+            return task.ContinueWith(_ => action(), CancellationToken.None, TaskContinuationOptions.None, this.scheduler);
+        }
+
+        /// <summary>
+        /// Registers a UI thread handler for when the specified task successfully finishes execution.
         /// </summary>
         /// <param name="task">The task to monitor for successful completion.</param>
         /// <param name="action">The action to take when the task has successfully completed, in the context of the UI thread.</param>
@@ -61,7 +84,7 @@
         }
 
         /// <summary>
-        /// Registers a UI thread handler for when the specified task finishes execution and returns a result.
+        /// Registers a UI thread handler for when the specified task successfully finishes execution and returns a result.
         /// </summary>
         /// <typeparam name="TResult">The type of the task result.</typeparam>
         /// <param name="task">The task to monitor for successful completion.</param>
