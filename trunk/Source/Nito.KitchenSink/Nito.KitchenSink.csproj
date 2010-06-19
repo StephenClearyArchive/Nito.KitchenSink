@@ -127,6 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdoExtensions.cs" />
     <Compile Include="AsyncOperationExtensions.cs" />
     <Compile Include="BackgroundWorkerExtensions.cs" />
     <Compile Include="BooleanExtensions.cs" />
