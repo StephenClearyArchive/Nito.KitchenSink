@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Nito.KitchenSink\AdoExtensions.cs">
+      <Link>AdoExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Nito.KitchenSink\Anonymous\A.cs">
       <Link>Anonymous\A.cs</Link>
     </Compile>
