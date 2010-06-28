@@ -117,6 +117,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files\Microsoft Cloud Programmability\Reactive Extensions\v1.0.2521.0\Net4\System.Interactive.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -137,13 +138,17 @@
     <Compile Include="Communication\MultipleByteDelimiterFramer.cs" />
     <Compile Include="Communication\SingleByteDelimiterFramer.cs" />
     <Compile Include="DelimitedText\Lexer.cs" />
+    <Compile Include="DelimitedText\Parser.cs" />
     <Compile Include="DelimitedText\Token.cs" />
     <Compile Include="Dynamic\RefOutArg.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EnumeratorWrapper.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="ObservablePipeline.cs" />
     <Compile Include="ProgressReporter.cs" />
     <Compile Include="TextReaders\LineMappingTextReader.cs" />
     <Compile Include="TextReaders\NormalizeCrLfTextReader.cs" />
