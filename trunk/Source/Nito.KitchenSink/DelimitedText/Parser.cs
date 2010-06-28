@@ -67,6 +67,11 @@ namespace Nito.KitchenSink.DelimitedText
                         //  record.Count returns 0 at this point.
                         this.Warning("Parser: Empty line detected in file.");
                     }
+                    else if (lastTokenType == TokenType.FieldSeparator)
+                    {
+                        // A FieldSeparator followed by an EndOfRecord implies an empty field at the end of the record.
+                        record.Add(string.Empty);
+                    }
                     else
                     {
                         // The record has ended, so we return it to the caller.
