@@ -136,6 +136,8 @@
     <Compile Include="Communication\IFramer.cs" />
     <Compile Include="Communication\MultipleByteDelimiterFramer.cs" />
     <Compile Include="Communication\SingleByteDelimiterFramer.cs" />
+    <Compile Include="DelimitedText\Lexer.cs" />
+    <Compile Include="DelimitedText\Token.cs" />
     <Compile Include="Dynamic\RefOutArg.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
