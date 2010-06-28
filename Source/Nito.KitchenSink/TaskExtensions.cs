@@ -8,6 +8,7 @@ namespace Nito.KitchenSink
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
+using System.ComponentModel;
 
     /// <summary>
     /// Extension methods for the <see cref="Task"/> class, and task-related functionality.
@@ -90,6 +91,46 @@ namespace Nito.KitchenSink
             var waitFor = new WaitHandle[] { waitHandle, cancellationToken.WaitHandle };
             int result = WaitHandle.WaitAny(waitFor, millisecondsTimeout);
             return result != WaitHandle.WaitTimeout;
+        }
+
+        /// <summary>
+        /// Tries to set the task completion based on a completed source task.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result of the source task and task completion.</typeparam>
+        /// <param name="taskCompletionSource">The task completion source.</param>
+        /// <param name="task">The completed task.</param>
+        /// <returns><c>true</c> if the task completion was set correctly; <c>false</c> if the task completion had already completed.</returns>
+        public static bool TrySetFromTask<TResult>(this TaskCompletionSource<TResult> taskCompletionSource, Task<TResult> task)
+        {
+            switch (task.Status)
+            {
+                case TaskStatus.RanToCompletion:
+                    return taskCompletionSource.TrySetResult(task.Result);
+                case TaskStatus.Faulted:
+                    return taskCompletionSource.TrySetException(task.Exception);
+                case TaskStatus.Canceled:
+                    return taskCompletionSource.TrySetCanceled();
+                default:
+                    throw new InvalidOperationException("The task has not completed.");
+            }
+        }
+
+        /// <summary>
+        /// Tries to set the task completion based on a completed <see cref="AsyncCompletedEventArgs"/> or derived class.
+        /// </summary>
+        /// <typeparam name="TTaskResult">The result type of this task completion.</typeparam>
+        /// <typeparam name="TAsyncArgs">The type derived from <see cref="AsyncCompletedEventArgs"/> which is used to complete the task completion.</typeparam>
+        /// <param name="taskCompletionSource">The task completion source.</param>
+        /// <param name="args">The results of the completed asynchronous operation.</param>
+        /// <param name="transform">The delegate that extracts the task result value from the asynchronous event completion arguments.</param>
+        /// <returns><c>true</c> if the task completion was set correctly; <c>false</c> if the task completion had already been completed.</returns>
+        public static bool TrySetFromAsyncCompletedEventArgs<TTaskResult, TAsyncArgs>(this TaskCompletionSource<TTaskResult> taskCompletionSource, TAsyncArgs args, Func<TAsyncArgs, TTaskResult> transform) where TAsyncArgs : AsyncCompletedEventArgs
+        {
+            if (args.Error != null)
+                return taskCompletionSource.TrySetException(args.Error);
+            if (args.Cancelled)
+                return taskCompletionSource.TrySetCanceled();
+            return taskCompletionSource.TrySetResult(transform(args));
         }
     }
 }
