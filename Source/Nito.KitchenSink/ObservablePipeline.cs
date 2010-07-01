@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Nito.KitchenSink
 {
-#if NO
     using System.Collections.Concurrent;
     using System.Threading;
     using System.Threading.Tasks;
 
+#if NO
     internal interface IObservablePipeline<T> : IObservable<T>
     {
         IObservable<Notification<T>> GetConsumingObservable();
@@ -65,6 +65,57 @@ namespace Nito.KitchenSink
 
 
     }
+#endif
+
+    internal class SubjectWithSubscriptionNotification<T> : ISubject<T>
+    {
+        private readonly Subject<T> subject;
+
+        public SubjectWithSubscriptionNotification()
+        {
+            this.subject = new Subject<T>();
+        }
+
+        public event Action Subscribed;
+
+        public void OnCompleted()
+        {
+            this.subject.OnCompleted();
+        }
+
+        public void OnError(Exception error)
+        {
+            this.subject.OnError(error);
+        }
+
+        public void OnNext(T value)
+        {
+            this.subject.OnNext(value);
+        }
+
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            IDisposable ret = this.subject.Subscribe(observer);
+            if (this.Subscribed != null)
+            {
+                this.Subscribed();
+            }
+
+            return ret;
+        }
+    }
+
+    internal interface IPublishingTask<T>
+    {
+        Task Task { get; }
+        IObservable<T> Observable { get; }
+    }
+
+    internal sealed class AnonymousPublishingTask<T> : IPublishingTask<T>
+    {
+        public Task Task { get; set; }
+        public IObservable<T> Observable { get; set; }
+    }
 
     internal static class RxExtensions
     {
@@ -85,40 +136,41 @@ namespace Nito.KitchenSink
             throw new NotImplementedException();
         }
 
-        public static IObservable<T> GetConsumingObservable<T>(this BlockingCollection<T> collection)
+        public static IPublishingTask<T> GetConsumingObservable<T>(this BlockingCollection<T> collection)
         {
-            return collection.GetConsumingObservable(CancellationToken.None);
+            return collection.GetConsumingPublishingTask(CancellationToken.None);
         }
 
-        public static IObservable<T> GetConsumingObservable<T>(this BlockingCollection<T> collection, CancellationToken cancellationToken)
+        public static IPublishingTask<T> GetConsumingPublishingTask<T>(this BlockingCollection<T> collection, CancellationToken cancellationToken)
         {
-            var ret = new Subject<T>();
             var privateCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken).Token;
-            Task.Factory.StartNew(() =>
-            {
-                foreach (var item in collection.GetConsumingEnumerable(privateCancellationToken))
+            var subject = new Subject<T>();
+            var ret = new Task(
+                () =>
                 {
-                    ret.OnNext(item);
-                }
-            }, privateCancellationToken)
-            .ContinueWith(task =>
-            {
-                if (task.IsCanceled)
-                {
-                    ret.OnError(new OperationCanceledException(cancellationToken));
-                }
-                else if (task.IsFaulted)
-                {
-                    ret.OnError(task.Exception);
-                }
-                else
-                {
-                    ret.OnCompleted();
-                }
-            });
+                    foreach (var item in collection.GetConsumingEnumerable(privateCancellationToken))
+                    {
+                        subject.OnNext(item);
+                    }
+                },
+                privateCancellationToken).ContinueWith(
+                    task =>
+                    {
+                        if (task.IsCanceled)
+                        {
+                            subject.OnError(new OperationCanceledException(cancellationToken));
+                        }
+                        else if (task.IsFaulted)
+                        {
+                            subject.OnError(task.Exception);
+                        }
+                        else
+                        {
+                            subject.OnCompleted();
+                        }
+                    });
 
-            return ret;
+            return new AnonymousPublishingTask<T> { Task = ret, Observable = subject };
         }
     }
-#endif
 }
