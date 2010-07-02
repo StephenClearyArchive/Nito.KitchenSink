@@ -23,13 +23,21 @@ namespace Nito.KitchenSink
         public EnumeratorWrapper(IEnumerable<T> source)
         {
             this.source = source.GetEnumerator();
-            this.Done = this.source.MoveNext();
+            this.More = this.source.MoveNext();
         }
 
         /// <summary>
         /// Gets a value indicating whether the enumerable sequence has completed. If <see cref="Done"/> is true, then <see cref="Current"/> is undefined.
         /// </summary>
-        public bool Done { get; private set; }
+        public bool Done
+        {
+            get { return !this.More; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the enumerable sequence has completed. If <see cref="More"/> is false, then <see cref="Current"/> is undefined.
+        /// </summary>
+        public bool More { get; private set; }
 
         /// <summary>
         /// Gets the element at the current position of the enumerator.
@@ -47,8 +55,8 @@ namespace Nito.KitchenSink
         /// </returns>
         public bool MoveNext()
         {
-            this.Done = this.source.MoveNext();
-            return this.Done;
+            this.More = this.source.MoveNext();
+            return !this.Done;
         }
 
         /// <summary>

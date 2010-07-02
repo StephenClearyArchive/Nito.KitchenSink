@@ -8,41 +8,37 @@ using Nito.KitchenSink;
 
 namespace UnitTests
 {
+    using System.Diagnostics;
+
     [TestClass]
     public class CommaSeparatedValueReaderUnitTests
     {
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void CSV_WithUndefinedHeaders_RejectsEmptyStream()
+        public void CSV_WithUndefinedHeaders_ReadsEmptyStream()
         {
-            var csv = new StringReader(string.Empty);
-            var result = new CommaSeparatedValueParser(csv, false).ReadDynamic();
-            result.Any();
+            var result = new CommaSeparatedValueParser(string.Empty, false).ReadDynamic().ToArray();
+            Assert.AreEqual(0, result.Length);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void CSV_WithUserDefinedHeaders_RejectsEmptyStream()
+        public void CSV_WithUserDefinedHeaders_ReadsEmptyStream()
         {
-            var csv = new StringReader(string.Empty);
-            var result = new CommaSeparatedValueParser(csv, false, new [] { "test" }).ReadDynamic();
-            result.Any();
+            var result = new CommaSeparatedValueParser(string.Empty, false, new[] { "test" }).ReadDynamic().ToArray();
+            Assert.AreEqual(0, result.Length);
         }
 
         [TestMethod]
         public void CSV_WithUndefinedHeaders_WithSingleField_ReadsData()
         {
-            var csv = new StringReader("data");
-            var result = new CommaSeparatedValueParser(csv, false).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("data", false).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("data", result[0].Field0);
+            Assert.AreEqual("data", result[0].Property0);
         }
 
         [TestMethod]
         public void CSV_WithUserDefinedHeaders_WithSingleField_ReadsData()
         {
-            var csv = new StringReader("data");
-            var result = new CommaSeparatedValueParser(csv, false, new [] { "test" }).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("data", false, new[] { "test" }).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -50,8 +46,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithCSVDefinedHeaders_WithSingleField_ReadsData()
         {
-            var csv = new StringReader("test\r\ndata");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test\r\ndata").ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -59,8 +54,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithCSVAndUserDefinedHeaders_WithSingleField_ReadsData()
         {
-            var csv = new StringReader("test\r\ndata");
-            var result = new CommaSeparatedValueParser(csv, headers:new [] { "test" }).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test\r\ndata", headers: new[] { "test" }).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -68,17 +62,15 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithUndefinedHeaders_WithSingleEscapedField_ReadsData()
         {
-            var csv = new StringReader("\"data\"");
-            var result = new CommaSeparatedValueParser(csv, false).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("\"data\"", false).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("data", result[0].Field0);
+            Assert.AreEqual("data", result[0].Property0);
         }
 
         [TestMethod]
         public void CSV_WithUserDefinedHeaders_WithSingleEscapedField_ReadsData()
         {
-            var csv = new StringReader("\"data\"");
-            var result = new CommaSeparatedValueParser(csv, false, new[] { "test" }).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("\"data\"", false, new[] { "test" }).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -86,8 +78,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithCSVDefinedHeaders_WithSingleEscapedField_ReadsData()
         {
-            var csv = new StringReader("test\r\n\"data\"");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test\r\n\"data\"").ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -95,8 +86,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithCSVAndUserDefinedHeaders_WithSingleEscapedField_ReadsData()
         {
-            var csv = new StringReader("test\r\n\"data\"");
-            var result = new CommaSeparatedValueParser(csv, headers: new[] { "test" }).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test\r\n\"data\"", headers: new[] { "test" }).ReadDynamic().ToArray();
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("data", result[0].test);
         }
@@ -104,8 +94,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithMultipleRecords_ReadsData()
         {
-            var csv = new StringReader("test,Value\r\n\"data\",13\r\nother,15");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test,Value\r\n\"data\",13\r\nother,15").ReadDynamic().ToArray();
             Assert.AreEqual(2, result.Length);
             Assert.AreEqual("data", result[0].test);
             Assert.AreEqual("13", result[0].Value);
@@ -116,8 +105,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_EndingWithCrLf_ReadsData()
         {
-            var csv = new StringReader("test,Value\r\n\"data\",13\r\nother,15\r\n");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test,Value\r\n\"data\",13\r\nother,15\r\n").ReadDynamic().ToArray();
             Assert.AreEqual(2, result.Length);
             Assert.AreEqual("data", result[0].test);
             Assert.AreEqual("13", result[0].Value);
@@ -128,8 +116,7 @@ namespace UnitTests
         [TestMethod]
         public void CSV_WithEscapedValue_ReadsData()
         {
-            var csv = new StringReader("test,Value\r\n\"da\"\"t,\r\na\",13\r\nother,15\r\n");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test,Value\r\n" + "\"da\"\"t,\r\na\",13\r\n" + "other,15\r\n").ReadDynamic().ToArray();
             Assert.AreEqual(2, result.Length);
             Assert.AreEqual("da\"t,\r\na", result[0].test);
             Assert.AreEqual("13", result[0].Value);
@@ -141,24 +128,14 @@ namespace UnitTests
         [ExpectedException(typeof(InvalidDataException))]
         public void CSV_RejectsInvalidCharacters()
         {
-            var csv = new StringReader("test,Value\r\n\"data\",13\r\not\rher,15\r\n");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test,Value\r\n\"data\",13\r\not\rher,15\r\n").ReadDynamic().ToArray();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void CSV_RejectsUnsquareData()
         {
-            var csv = new StringReader("test,Value\r\n\"data\",13\r\nother\r\n");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void CSV_RejectsInvalidEnding()
-        {
-            var csv = new StringReader("test,Value\r\n\"data\",13\r\nother,15\r");
-            var result = new CommaSeparatedValueParser(csv).ReadDynamic().ToArray();
+            var result = new CommaSeparatedValueParser("test,Value\r\n\"data\",13\r\nother\r\n").ReadDynamic().ToArray();
         }
     }
 }

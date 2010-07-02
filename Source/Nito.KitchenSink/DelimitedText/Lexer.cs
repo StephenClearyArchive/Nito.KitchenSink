@@ -12,6 +12,11 @@ namespace Nito.KitchenSink.DelimitedText
     public sealed class Lexer : IEnumerable<Token>
     {
         /// <summary>
+        /// The trace source to which messages are written during lexing.
+        /// </summary>
+        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.DelimitedText.Lexer");
+
+        /// <summary>
         /// The character used as a field separator.
         /// </summary>
         private readonly char fieldSeparator;
@@ -33,11 +38,6 @@ namespace Nito.KitchenSink.DelimitedText
         }
 
         /// <summary>
-        /// Gets or sets the trace source to which messages are written during lexing.
-        /// </summary>
-        public TraceSource Tracer { get; set; }
-
-        /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
@@ -50,7 +50,7 @@ namespace Nito.KitchenSink.DelimitedText
             // Wrapping the source enumerator allows us to cache the return value of the IEnumerator.MoveNext method.
             using (var source = this.data.CreateEnumeratorWrapper())
             {
-                while (!source.Done)
+                while (source.More)
                 {
                     // Read the current character.
                     var ch = source.Current;
@@ -59,7 +59,7 @@ namespace Nito.KitchenSink.DelimitedText
                         // Consume the field separator character and publish a FieldSeparator token.
                         source.MoveNext();
                         token.Type = TokenType.FieldSeparator;
-                        this.Information("Lexer: field separator.");
+                        Information("Lexer: field separator.");
                         yield return token;
                     }
                     else if (ch == '\r')
@@ -68,14 +68,14 @@ namespace Nito.KitchenSink.DelimitedText
                         source.MoveNext();
 
                         // Consume a '\n' character if it immediately follows the '\r'.
-                        if (!source.Done && source.Current == '\n')
+                        if (source.More && source.Current == '\n')
                         {
                             source.MoveNext();
                         }
 
                         // Publish an EndOfRecord token.
                         token.Type = TokenType.EndOfRecord;
-                        this.Information("Lexer: end of record.");
+                        Information("Lexer: end of record.");
                         yield return token;
                     }
                     else if (ch == '\n')
@@ -83,34 +83,33 @@ namespace Nito.KitchenSink.DelimitedText
                         // Consume the '\n' character and publish an EndOfRecord token.
                         source.MoveNext();
                         token.Type = TokenType.EndOfRecord;
-                        this.Information("Lexer: end of record.");
+                        Information("Lexer: end of record.");
                         yield return token;
                     }
                     else
                     {
                         // At this point, the token must be FieldData, so prepare to read in the field data, one character at a time.
                         token.Type = TokenType.FieldData;
-                        var sb = new StringBuilder();
 
                         if (ch != '\"')
                         {
                             // The field data is not escaped.
                             token.Data = this.ReadUnescapedFieldValue(source);
-                            this.Information("Lexer: unescaped field data.");
+                            Information("Lexer: unescaped field data.");
                             yield return token;
                         }
                         else
                         {
                             // The field data is escaped.
-                            token.Data = sb.ToString();
-                            this.Information("Lexer: escaped field data.");
+                            token.Data = this.ReadEscapedFieldValue(source);
+                            Information("Lexer: escaped field data.");
                             yield return token;
                         }
                     }
                 }
             }
 
-            this.Information("Lexer: no more tokens.");
+            Information("Lexer: no more tokens.");
         }
 
         /// <summary>
@@ -128,24 +127,18 @@ namespace Nito.KitchenSink.DelimitedText
         /// Traces the specified informational message.
         /// </summary>
         /// <param name="message">The informational message to trace.</param>
-        private void Information(string message)
+        private static void Information(string message)
         {
-            if (this.Tracer != null)
-            {
-                this.Tracer.TraceEvent(TraceEventType.Information, 0, message);
-            }
+            Tracer.TraceEvent(TraceEventType.Information, 0, message);
         }
 
         /// <summary>
         /// Traces the specified warning message.
         /// </summary>
         /// <param name="message">The warning message to trace.</param>
-        private void Warning(string message)
+        private static void Warning(string message)
         {
-            if (this.Tracer != null)
-            {
-                this.Tracer.TraceEvent(TraceEventType.Warning, 0, message);
-            }
+            Tracer.TraceEvent(TraceEventType.Warning, 0, message);
         }
 
         /// <summary>
@@ -161,7 +154,7 @@ namespace Nito.KitchenSink.DelimitedText
             sb.Append(source.Current);
             source.MoveNext();
 
-            while (!source.Done)
+            while (source.More)
             {
                 var ch = source.Current;
                 if (ch == this.fieldSeparator || ch == '\r' || ch == '\n')
@@ -192,7 +185,7 @@ namespace Nito.KitchenSink.DelimitedText
             // Consume the '\"' character.
             source.MoveNext();
 
-            while (!source.Done)
+            while (source.More)
             {
                 var ch = source.Current;
                 if (ch == '\"')
@@ -212,7 +205,7 @@ namespace Nito.KitchenSink.DelimitedText
             }
 
             // The while loop was exited by reaching the end of the source sequence, so publish the last FieldData token (with a warning, since the ending double quote was never found).
-            this.Warning("Lexer: Last entry in file is not complete; check for file truncation.");
+            Warning("Lexer: Last entry in file is not complete; check for file truncation.");
             return sb.ToString();
         }
     }

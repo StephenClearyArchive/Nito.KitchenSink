@@ -13,6 +13,11 @@ namespace Nito.KitchenSink.DelimitedText
     public sealed class Parser : IEnumerable<List<string>>
     {
         /// <summary>
+        /// The trace source to which messages are written during parsing.
+        /// </summary>
+        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.DelimitedText.Parser");
+
+        /// <summary>
         /// The underlying lexer.
         /// </summary>
         private readonly IEnumerable<Token> lexer;
@@ -35,11 +40,6 @@ namespace Nito.KitchenSink.DelimitedText
         {
             this.lexer = new Lexer(data, fieldSeparator);
         }
-
-        /// <summary>
-        /// Gets or sets the trace source to which messages are written during lexing.
-        /// </summary>
-        public TraceSource Tracer { get; set; }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -65,7 +65,7 @@ namespace Nito.KitchenSink.DelimitedText
                     {
                         // Ignore but warn about empty lines.
                         //  record.Count returns 0 at this point.
-                        this.Warning("Parser: Empty line detected in file.");
+                        Warning("Parser: Empty line detected in file.");
                     }
                     else if (lastTokenType == TokenType.FieldSeparator)
                     {
@@ -76,8 +76,9 @@ namespace Nito.KitchenSink.DelimitedText
                     {
                         // The record has ended, so we return it to the caller.
                         //  record.Count is > 0 at this point.
-                        this.Information("Parser: End of record (with data).");
+                        Information("Parser: End of record (with data).");
                         yield return record;
+                        record.Clear();
                     }
                 }
                 else if (token.Type == TokenType.FieldSeparator)
@@ -87,12 +88,12 @@ namespace Nito.KitchenSink.DelimitedText
                     if (lastTokenType == TokenType.FieldData)
                     {
                         // Since this FieldSepartor is following FieldData, it should just be ignored.
-                        this.Information("Parser: Ignoring FieldSeparator following FieldData.");
+                        Information("Parser: Ignoring FieldSeparator following FieldData.");
                     }
                     else
                     {
                         // Since this FieldSeparator is following a FieldSeparator or EndOfRecord, an empty FieldData is implied.
-                        this.Information("Parser: Appending empty field data.");
+                        Information("Parser: Appending empty field data.");
                         record.Add(string.Empty);
                     }
                 }
@@ -103,12 +104,12 @@ namespace Nito.KitchenSink.DelimitedText
                     if (lastTokenType == TokenType.FieldData)
                     {
                         // Just ignore extraneous data.
-                        this.Warning("Parser: Extra data in field. Ignoring \"" + token.Data + "\".");
+                        Warning("Parser: Extra data in field. Ignoring \"" + token.Data + "\".");
                     }
                     else
                     {
                         // Add FieldData to the record.
-                        this.Information("Parser: Appending field data.");
+                        Information("Parser: Appending field data.");
                         record.Add(token.Data);
                     }
                 }
@@ -138,24 +139,18 @@ namespace Nito.KitchenSink.DelimitedText
         /// Traces the specified informational message.
         /// </summary>
         /// <param name="message">The informational message to trace.</param>
-        private void Information(string message)
+        private static void Information(string message)
         {
-            if (this.Tracer != null)
-            {
-                this.Tracer.TraceEvent(TraceEventType.Information, 0, message);
-            }
+            Tracer.TraceEvent(TraceEventType.Information, 0, message);
         }
 
         /// <summary>
         /// Traces the specified warning message.
         /// </summary>
         /// <param name="message">The warning message to trace.</param>
-        private void Warning(string message)
+        private static void Warning(string message)
         {
-            if (this.Tracer != null)
-            {
-                this.Tracer.TraceEvent(TraceEventType.Warning, 0, message);
-            }
+            Tracer.TraceEvent(TraceEventType.Warning, 0, message);
         }
     }
 }
