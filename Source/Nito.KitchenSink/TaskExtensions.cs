@@ -90,6 +90,11 @@ using System.ComponentModel;
         {
             var waitFor = new WaitHandle[] { waitHandle, cancellationToken.WaitHandle };
             int result = WaitHandle.WaitAny(waitFor, millisecondsTimeout);
+            if (result == 1)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
             return result != WaitHandle.WaitTimeout;
         }
 
