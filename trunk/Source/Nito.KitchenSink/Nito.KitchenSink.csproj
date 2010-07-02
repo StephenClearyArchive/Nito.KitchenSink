@@ -35,7 +35,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -98,6 +98,7 @@
     <CodeContractsBaseLineFile />
     <CodeContractsRuntimeCheckingLevel>ReleaseRequires</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsExtraRewriteOptions />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -144,6 +145,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumeratorWrapper.cs" />
     <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="ExpandoObjectExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
