@@ -78,7 +78,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\Binaries\40.Rx\Nito.KitchenSink.xml</DocumentationFile>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
@@ -96,7 +96,7 @@
     <CodeContractsPlatformPath />
     <CodeContractsExtraAnalysisOptions />
     <CodeContractsBaseLineFile />
-    <CodeContractsRuntimeCheckingLevel>ReleaseRequires</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsRuntimeCheckingLevel>Preconditions</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsExtraRewriteOptions />
   </PropertyGroup>
@@ -156,6 +156,7 @@
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="ObservablePipeline.cs" />
     <Compile Include="ProgressReporter.cs" />
+    <Compile Include="ReferenceEqualityComparer.cs" />
     <Compile Include="TextReaders\LineMappingTextReader.cs" />
     <Compile Include="TextReaders\NormalizeCrLfTextReader.cs" />
     <Compile Include="TextReaders\PeekableTextReader.cs" />

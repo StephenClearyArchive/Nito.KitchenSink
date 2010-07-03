@@ -17,6 +17,11 @@ namespace Nito.KitchenSink
         private static readonly IEqualityComparer valueDefault = new DefaultEqualityComparer();
 
         /// <summary>
+        /// An instance of <c>ReferenceEqualityComparer</c>.
+        /// </summary>
+        private static readonly IEqualityComparer referenceDefault = new ReferenceEqualityComparer<object>();
+
+        /// <summary>
         /// Gets the default implementation of <see cref="IEqualityComparer"/>.
         /// </summary>
         /// <remarks>
@@ -25,6 +30,14 @@ namespace Nito.KitchenSink
         public static IEqualityComparer Default
         {
             get { return valueDefault; }
+        }
+
+        /// <summary>
+        /// Gets an implementation of <see cref="IEqualityComparer"/> that always compares by object reference equality.
+        /// </summary>
+        public static IEqualityComparer ReferenceDefault
+        {
+            get { return referenceDefault; }
         }
 
         /// <summary>
