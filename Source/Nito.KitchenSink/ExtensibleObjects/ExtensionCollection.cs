@@ -18,13 +18,13 @@ namespace Nito.KitchenSink.ExtensibleObjects
         /// <summary>
         /// The owner of this collection of extension objects.
         /// </summary>
-        private readonly IExtensibleObject owner;
+        private readonly object owner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionCollection"/> class with the specified owner.
         /// </summary>
         /// <param name="owner">The owner of this collection of extension objects.</param>
-        public ExtensionCollection(IExtensibleObject owner)
+        public ExtensionCollection(object owner)
         {
             this.owner = owner;
             this.list = new List<IExtension>();
