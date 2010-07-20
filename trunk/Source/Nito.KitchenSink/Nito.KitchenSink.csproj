@@ -141,6 +141,7 @@
     <Compile Include="DelimitedText\Lexer.cs" />
     <Compile Include="DelimitedText\Parser.cs" />
     <Compile Include="DelimitedText\Token.cs" />
+    <Compile Include="Disposables\SafeDisposable.cs" />
     <Compile Include="Dynamic\RefOutArg.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumeratorWrapper.cs" />
@@ -181,7 +182,7 @@
     <Compile Include="Containers\Deque.cs" />
     <Compile Include="CRC16.cs" />
     <Compile Include="CRC32.cs" />
-    <Compile Include="DisposableExtensions.cs" />
+    <Compile Include="Disposables\DisposableExtensions.cs" />
     <Compile Include="EncodingExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="EqualityComparer.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="Interop\Interop.cs" />
     <Compile Include="Interop\SafeNativeMethods.cs" />
     <Compile Include="LinkedListExtensions.cs" />
-    <Compile Include="ReferenceCountedDisposable.cs" />
+    <Compile Include="Disposables\ReferenceCountedDisposable.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="SimplePropertyPath.cs" />
     <Compile Include="TaskExtensions.cs" />
@@ -233,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Character Streams\" />
+    <Folder Include="Mathematics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
