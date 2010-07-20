@@ -132,8 +132,14 @@
     <Compile Include="..\Nito.KitchenSink\CRC32.cs">
       <Link>CRC32.cs</Link>
     </Compile>
-    <Compile Include="..\Nito.KitchenSink\DisposableExtensions.cs">
-      <Link>DisposableExtensions.cs</Link>
+    <Compile Include="..\Nito.KitchenSink\Disposables\DisposableExtensions.cs">
+      <Link>Disposables\DisposableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Disposables\ReferenceCountedDisposable.cs">
+      <Link>Disposables\ReferenceCountedDisposable.cs</Link>
+    </Compile>
+    <Compile Include="..\Nito.KitchenSink\Disposables\SafeDisposable.cs">
+      <Link>Disposables\SafeDisposable.cs</Link>
     </Compile>
     <Compile Include="..\Nito.KitchenSink\EncodingExtensions.cs">
       <Link>EncodingExtensions.cs</Link>
@@ -218,9 +224,6 @@
     </Compile>
     <Compile Include="..\Nito.KitchenSink\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Nito.KitchenSink\ReferenceCountedDisposable.cs">
-      <Link>ReferenceCountedDisposable.cs</Link>
     </Compile>
     <Compile Include="..\Nito.KitchenSink\ReferenceEqualityComparer.cs">
       <Link>ReferenceEqualityComparer.cs</Link>
