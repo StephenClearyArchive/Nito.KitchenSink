@@ -164,6 +164,9 @@
     <Compile Include="ObservablePipeline.cs" />
     <Compile Include="ProgressReporter.cs" />
     <Compile Include="ReferenceEqualityComparer.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TextReaders\LineMappingTextReader.cs" />
     <Compile Include="TextReaders\NormalizeCrLfTextReader.cs" />
     <Compile Include="TextReaders\PeekableTextReader.cs" />
