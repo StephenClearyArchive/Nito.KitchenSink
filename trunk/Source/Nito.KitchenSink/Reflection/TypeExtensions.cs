@@ -29,9 +29,7 @@
 
             // Take those base definitions and check if any of them are object.Equals. If there are any, then we know that the type overrides
             //  object.Equals or derives from a type that overrides object.Equals.
-            var objectEqualsMethod = (from method in equalsMethods
-                                      where method.DeclaringType == typeof(object)
-                                      select method).Any();
+            var objectEqualsMethod = equalsMethods.Any(method => method.DeclaringType == typeof(object));
 
             return !objectEqualsMethod;
         }
