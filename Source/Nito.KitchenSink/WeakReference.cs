@@ -19,7 +19,7 @@ namespace Nito.KitchenSink
         /// <summary>
         /// The contained <see cref="SafeGCHandle"/>.
         /// </summary>
-        private SafeGCHandle safeHandle;
+        private readonly SafeGCHandle safeHandle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakReference{T}"/> class, referencing the specified object.
