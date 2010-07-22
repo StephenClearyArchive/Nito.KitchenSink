@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// A strongly-typed wrapper around <see cref="IObjectId"/>. Derived types use value equality, and are considered equal if they both refer to the same <see cref="ObjectId"/>, even if the type parameter <typeparamref name="T"/> is different. All members are fully threadsafe.
+    /// A strongly-typed wrapper around <see cref="ObjectId"/>. Derived types use value equality, and are considered equal if they both refer to the same <see cref="ObjectId"/>, even if the type parameter <typeparamref name="T"/> is different. All members are fully threadsafe.
     /// </summary>
     /// <typeparam name="T">A type of the target object. This does not have to be the exact type of the target object.</typeparam>
     public interface IObjectIdReference<out T> where T : class
@@ -11,7 +11,7 @@
         /// <summary>
         /// The object id that is wrapped by this instance. This value never changes.
         /// </summary>
-        IObjectId ObjectId { get; }
+        ObjectId ObjectId { get; }
 
         /// <summary>
         /// Gets a value indicating whether the target is still alive (has not been garbage collected). This must be the same as <c>ObjectId.IsAlive</c>.
@@ -33,13 +33,13 @@
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
         /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
-        void Register(Action<IObjectId> action);
+        void Register(Action<ObjectId> action);
     }
 
     /// <summary>
     /// The abstract base class for object id references.
     /// </summary>
-    public abstract class ObjectIdReferenceBase : IEquatable<ObjectIdReferenceBase>
+    internal abstract class ObjectIdReferenceBase : IEquatable<ObjectIdReferenceBase>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectIdReferenceBase"/> class referring to the specified object id.
@@ -53,7 +53,7 @@
         /// <summary>
         /// The object id that is wrapped by this instance. This value never changes.
         /// </summary>
-        public IObjectId ObjectId { get; private set; }
+        public ObjectId ObjectId { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the target is still alive (has not been garbage collected). This must be the same as <c>ObjectId.IsAlive</c>.
@@ -76,7 +76,7 @@
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
         /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
-        public void Register(Action<IObjectId> action)
+        public void Register(Action<ObjectId> action)
         {
             this.ObjectId.Register(action);
         }
@@ -124,10 +124,10 @@
     }
 
     /// <summary>
-    /// A strongly-typed wrapper around <see cref="IObjectId"/>. Uses value equality; two instances are considered equal if they both refer to the same <see cref="ObjectId"/>, even if the type parameter <typeparamref name="T"/> is different. All members are fully threadsafe.
+    /// A strongly-typed wrapper around <see cref="ObjectId"/>. Uses value equality; two instances are considered equal if they both refer to the same <see cref="ObjectId"/>, even if the type parameter <typeparamref name="T"/> is different. All members are fully threadsafe.
     /// </summary>
     /// <typeparam name="T">A type of the target object. This does not have to be the exact type of the target object.</typeparam>
-    public sealed class ObjectIdReference<T> : ObjectIdReferenceBase, IObjectIdReference<T> where T : class
+    internal sealed class ObjectIdReference<T> : ObjectIdReferenceBase, IObjectIdReference<T> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectIdReferenceBase"/> class referring to the specified object id.
@@ -143,7 +143,7 @@
         /// </summary>
         public T Target
         {
-            get { return ((ObjectId)this.ObjectId).TargetAs<T>(); }
+            get { return this.ObjectId.TargetAs<T>(); }
         }
     }
 }
