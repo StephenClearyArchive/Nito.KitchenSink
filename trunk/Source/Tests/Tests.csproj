@@ -63,6 +63,9 @@
     <Compile Include="Unit Tests\GuidExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\INotifyPropertyChangedExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\LinkedListExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\MathUnitTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Unit Tests\MultiByteDelimiterFramerUnitTests.cs" />
     <Compile Include="Unit Tests\MultiByteMultiDelimiterFramerUnitTests.cs" />
     <Compile Include="Unit Tests\NotifyPropertyChangedBaseUnitTests.cs" />
