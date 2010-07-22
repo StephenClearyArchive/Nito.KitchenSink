@@ -4,42 +4,14 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// A unique identifier for a tracked object (target). Derived types use reference equality. Also acts as a weakly-typed weak reference for the tracked object. All members are fully threadsafe.
-    /// </summary>
-    public interface IObjectId
-    {
-        /// <summary>
-        /// Gets a value indicating whether the target is still alive (has not been garbage collected).
-        /// </summary>
-        bool IsAlive { get; }
-
-        /// <summary>
-        /// Gets the target object. Will return null if the object has been garbage collected.
-        /// </summary>
-        object Target { get; }
-
-        /// <summary>
-        /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
-        /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target.</param>
-        void Register(Action action);
-
-        /// <summary>
-        /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
-        /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback takes a single parameter: this <see cref="IObjectId"/>.</param>
-        void Register(Action<IObjectId> action);
-    }
-
-    /// <summary>
     /// A unique identifier for a tracked object (target). Uses reference equality. Also acts as a weakly-typed weak reference for the tracked object.
     /// </summary>
-    internal sealed class ObjectId : IObjectId
+    public sealed class ObjectId
     {
         /// <summary>
         /// The list of registered actions to invoke when the target is GC'ed. This member must be locked when accessed unless the target has been GC'ed.
         /// </summary>
-        private readonly List<Action<IObjectId>> registeredActions;
+        private readonly List<Action<ObjectId>> registeredActions;
 
         /// <summary>
         /// The underlying weak reference to the target object. This may be <c>null</c> if the GC Detection Thread has already detected that the tracked object has been GC'ed. Code that accesses this member must lock <see cref="referenceLock"/>.
@@ -51,9 +23,13 @@
         /// </summary>
         private readonly object referenceLock;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectId"/> class, identifying the specified target object.
+        /// </summary>
+        /// <param name="target">The target object identified by this object id instance.</param>
         internal ObjectId(object target)
         {
-            this.registeredActions = new List<Action<IObjectId>>();
+            this.registeredActions = new List<Action<ObjectId>>();
             this.reference = new WeakReference<object>(target);
             this.referenceLock = new object();
         }
@@ -118,8 +94,8 @@
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback takes a single parameter: this <see cref="IObjectId"/>.</param>
-        public void Register(Action<IObjectId> action)
+        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback takes a single parameter: this <see cref="ObjectId"/>.</param>
+        public void Register(Action<ObjectId> action)
         {
             // First, determine if the target is alive.
             // If it is alive, we want to keep it alive until the end of this method (see comments at the end of this method).

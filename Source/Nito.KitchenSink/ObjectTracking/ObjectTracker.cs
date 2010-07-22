@@ -143,11 +143,11 @@
         }
 
         /// <summary>
-        /// Tracks a target object. Creates an <see cref="IObjectId"/> if one doesn't already exist for the target, and returns that object id.
+        /// Tracks a target object. Creates an <see cref="ObjectId"/> if one doesn't already exist for the target, and returns that object id.
         /// </summary>
         /// <param name="target">The target object to track.</param>
-        /// <returns>A unique <see cref="IObjectId"/> that identifies and tracks the target object.</returns>
-        public IObjectId TrackObject(object target)
+        /// <returns>A unique <see cref="ObjectId"/> that identifies and tracks the target object.</returns>
+        public ObjectId TrackObject(object target)
         {
             var type = target.GetType();
 
@@ -187,10 +187,10 @@
         }
 
         /// <summary>
-        /// Tracks a target object. Creates an <see cref="IObjectId"/> if one doesn't already exist for the target, and returns a strongly-typed reference to that object id.
+        /// Tracks a target object. Creates an <see cref="ObjectId"/> if one doesn't already exist for the target, and returns a strongly-typed reference to that object id.
         /// </summary>
         /// <param name="target">The target object to track.</param>
-        /// <returns>A strongly-typed reference to the unique <see cref="IObjectId"/> that identifies and tracks the target object.</returns>
+        /// <returns>A strongly-typed reference to the unique <see cref="ObjectId"/> that identifies and tracks the target object.</returns>
         public IObjectIdReference<T> Track<T>(T target) where T : class
         {
             return new ObjectIdReference<T>((ObjectId)TrackObject(target));
