@@ -154,6 +154,12 @@
     <Compile Include="INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="INotifyPropertyChanged\PropertyChangedEventHandlerExtensions.cs" />
+    <Compile Include="Mathematics\Financial.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mathematics\Numeric.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="ObservablePipeline.cs" />
     <Compile Include="ProgressReporter.cs" />
@@ -234,7 +240,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Character Streams\" />
-    <Folder Include="Mathematics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
