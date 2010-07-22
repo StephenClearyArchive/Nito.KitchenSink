@@ -21,5 +21,15 @@ namespace Nito.KitchenSink
         {
             return new AnonymousComparer<T> { Compare = compare };
         }
+
+        /// <summary>
+        /// Creates and returns an <see cref="AnonymousDisposable"/> using the specified delegate.
+        /// </summary>
+        /// <param name="dispose">The action to take when the disposable object is disposed.</param>
+        /// <returns>An <see cref="AnonymousDisposable"/>.</returns>
+        public static AnonymousDisposable Disposable(Action dispose)
+        {
+            return new AnonymousDisposable { Dispose = dispose };
+        }
     }
 }
