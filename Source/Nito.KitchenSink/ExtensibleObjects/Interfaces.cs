@@ -11,13 +11,13 @@ namespace Nito.KitchenSink.ExtensibleObjects
     public interface IExtension
     {
         /// <summary>
-        /// Enables an extension object to find out when it has been aggregated. Called when the extension is added to the <see cref="IExtensibleObject.Extensions"/> property.
+        /// Enables an extension object to find out when it has been aggregated. Called when the extension is added to the <see cref="IExtensibleObject.Extensions"/> property. This method may not raise an exception.
         /// </summary>
         /// <param name="owner">The extensible object that aggregates this extension. This object may implement <see cref="IExtensibleObject"/>.</param>
         void Attach(object owner);
 
         /// <summary>
-        /// Enables an object to find out when it is no longer aggregated. Called when an extension is removed from the <see cref="IExtensibleObject.Extensions"/> property.
+        /// Enables an object to find out when it is no longer aggregated. Called when an extension is removed from the <see cref="IExtensibleObject.Extensions"/> property. This method may not raise an exception and may be called from any thread.
         /// </summary>
         /// <param name="owner">The extensible object that no longer aggregates this extension. This object may implement <see cref="IExtensibleObject"/>.</param>
         void Detach(object owner);
