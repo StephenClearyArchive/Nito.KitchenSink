@@ -25,11 +25,6 @@ namespace Nito.KitchenSink
         IEnumerable<T> CompleteList { get; }
 
         /// <summary>
-        /// Gets a sequence of live objects from the collection without causing a purge.
-        /// </summary>
-        IEnumerable<T> LiveListWithoutPurge { get; }
-
-        /// <summary>
         /// Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
         /// </summary>
         int CompleteCount { get; }
@@ -100,17 +95,6 @@ namespace Nito.KitchenSink
             get
             {
                 return this.list.Select(x => x.Target);
-            }
-        }
-
-        /// <summary>
-        /// Gets a sequence of live objects from the collection without causing a purge.
-        /// </summary>
-        public IEnumerable<T> LiveListWithoutPurge
-        {
-            get
-            {
-                return this.CompleteList.Where(x => x != null);
             }
         }
 
@@ -287,7 +271,7 @@ namespace Nito.KitchenSink
         /// <returns>True if the collection contains a specific value; false if it does not.</returns>
         bool ICollection<T>.Contains(T item)
         {
-            return this.LiveListWithoutPurge.Contains(item);
+            return this.LiveList.Where(x => x != null).Contains(item);
         }
 
         /// <summary>
