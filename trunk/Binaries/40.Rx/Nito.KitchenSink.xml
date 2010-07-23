@@ -4,188 +4,45 @@
     <name>Nito.KitchenSink</name>
   </assembly>
   <members>
-    <member name="T:Nito.KitchenSink.IWeakCollection`1">
+    <member name="T:Nito.KitchenSink.TextReaderExtensions">
       <summary>
-            A collection of weak references to objects of type <typeparamref name="T" />.
-            </summary>
-      <typeparam name="T">The type of objects to hold weak references to.</typeparam>
-    </member>
-    <member name="M:Nito.KitchenSink.IWeakCollection`1.Purge">
-      <summary>
-            Removes all dead objects from the collection.
+            Extension methods for <see cref="T:System.IO.TextReader" /> classes.
             </summary>
     </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveList">
+    <member name="M:Nito.KitchenSink.TextReaderExtensions.ApplyPutbackBuffer``1(``0)">
       <summary>
-            Gets a sequence of live objects from the collection, causing a purge.
+            Wraps this <see cref="T:System.IO.TextReader" /> with a putback buffer.
             </summary>
+      <param name="source">The <see cref="T:System.IO.TextReader" /> to wrap.</param>
+      <returns>A <see cref="T:System.IO.TextReader" /> with a putback buffer.</returns>
     </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteList">
+    <member name="M:Nito.KitchenSink.TextReaderExtensions.NormalizeCrLf``1(``0)">
       <summary>
-            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+            Wraps this <see cref="T:System.IO.TextReader" />, converting any <c>\r\n</c>, <c>\r</c>, or <c>\n</c> character sequences to just <c>\n</c>.
             </summary>
+      <param name="source">The <see cref="T:System.IO.TextReader" /> to wrap.</param>
+      <returns>A <see cref="T:System.IO.TextReader" /> with normalized line endings.</returns>
     </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveListWithoutPurge">
+    <member name="M:Nito.KitchenSink.TextReaderExtensions.ApplyLineMapping``1(``0)">
       <summary>
-            Gets a sequence of live objects from the collection without causing a purge.
+            Wraps this <see cref="T:System.IO.TextReader" />, counting the lines and columns as characters are read.
             </summary>
+      <param name="source">The <see cref="T:System.IO.TextReader" /> to wrap.</param>
+      <returns>A <see cref="T:System.IO.TextReader" /> with counted lines and columns.</returns>
     </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteCount">
+    <member name="M:Nito.KitchenSink.TextReaderExtensions.Peekable``1(``0)">
       <summary>
-            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
+            Wraps this <see cref="T:System.IO.TextReader" />, ensuring that <see cref="M:System.IO.TextReader.Peek" /> will only return <c>-1</c> when the end of the stream is reached.
             </summary>
+      <param name="source">The <see cref="T:System.IO.TextReader" /> to wrap.</param>
+      <returns>A peekable <see cref="T:System.IO.TextReader" />.</returns>
     </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.DeadCount">
+    <member name="M:Nito.KitchenSink.TextReaderExtensions.ApplyPositionTracking``1(``0)">
       <summary>
-            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
+            Wraps this <see cref="T:System.IO.TextReader" />, tracking the position of the stream as it is read.
             </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCount">
-      <summary>
-            Gets the number of live entries in the collection, causing a purge. O(n).
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCountWithoutPurge">
-      <summary>
-            Gets the number of live entries in the collection without causing a purge. O(n).
-            </summary>
-    </member>
-    <member name="T:Nito.KitchenSink.WeakCollection`1">
-      <summary>
-            A collection of weak references to objects. Weak references are purged by iteration/count operations, not by add/remove operations.
-            </summary>
-      <typeparam name="T">The type of object to hold weak references to.</typeparam>
-      <remarks>
-        <para>Since the collection holds weak references to the actual objects, the collection is comprised of both living and dead references. Living references refer to objects that have not been garbage collected, and may be used as normal references. Dead references refer to objects that have been garbage collected.</para>
-        <para>Dead references do consume resources; each dead reference is a garbage collection handle.</para>
-        <para>Dead references may be cleaned up by a <see cref="M:Nito.KitchenSink.WeakCollection`1.Purge" /> operation. Some properties and methods cause a purge as a side effect; the member documentation specifies whether a purge takes place.</para>
-      </remarks>
-    </member>
-    <member name="F:Nito.KitchenSink.WeakCollection`1.list">
-      <summary>
-            The actual collection of strongly-typed weak references.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakCollection`1" /> class that is empty.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.Add(`0)">
-      <summary>
-            Adds a weak reference to an object to the collection. Does not cause a purge.
-            </summary>
-      <param name="item">The object to add a weak reference to.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.Remove(`0)">
-      <summary>
-            Removes a weak reference to an object from the collection. Does not cause a purge.
-            </summary>
-      <param name="item">The object to remove a weak reference to.</param>
-      <returns>True if the object was found and removed; false if the object was not found.</returns>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.Purge">
-      <summary>
-            Removes all dead objects from the collection.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.Dispose">
-      <summary>
-            Frees all resources held by the collection.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.Clear">
-      <summary>
-            Empties the collection.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Contains(`0)">
-      <summary>
-            Determines whether the collection contains a specific value.
-            </summary>
-      <param name="item">The object to locate.</param>
-      <returns>True if the collection contains a specific value; false if it does not.</returns>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#CopyTo(`0[],System.Int32)">
-      <summary>
-            Copies all live objects to an array.
-            </summary>
-      <param name="array">The destination array.</param>
-      <param name="arrayIndex">The index to begin writing into the array.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#IEnumerable{T}#GetEnumerator">
-      <summary>
-            Gets a sequence of live objects from the collection, causing a purge.
-            </summary>
-      <returns>The sequence of live objects.</returns>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#IEnumerable#GetEnumerator">
-      <summary>
-            Gets a sequence of live objects from the collection, causing a purge.
-            </summary>
-      <returns>The sequence of live objects.</returns>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakCollection`1.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveList">
-      <summary>
-            Gets a sequence of live objects from the collection, causing a purge.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteList">
-      <summary>
-            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveListWithoutPurge">
-      <summary>
-            Gets a sequence of live objects from the collection without causing a purge.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteCount">
-      <summary>
-            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.DeadCount">
-      <summary>
-            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCount">
-      <summary>
-            Gets the number of live entries in the collection, causing a purge. O(n).
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCountWithoutPurge">
-      <summary>
-            Gets the number of live entries in the collection without causing a purge. O(n).
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Count">
-      <summary>
-            Gets the number of live entries in the collection, causing a purge. O(n).
-            </summary>
-      <getter>
-        <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.get_Count" inheritedFromTypeName="ICollection">Contract.Result&lt;int&gt;() &gt;= 0</ensures>
-      </getter>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#IsReadOnly">
-      <summary>
-            Gets a value indicating whether the collection is read only. Always returns false.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakCollection`1.UnsafeLiveList">
-      <summary>
-            Gets a sequence of live objects from the collection, causing a purge. The entire sequence MUST always be enumerated!
-            </summary>
+      <param name="source">The <see cref="T:System.IO.TextReader" /> to wrap.</param>
+      <returns>A <see cref="T:System.IO.TextReader" /> with position tracking.</returns>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.InternetOpenHandle">
       <summary>
@@ -998,6 +855,77 @@
             Gets the maximum number of archived log files.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection">
+      <summary>
+            A collection of extension objects, which are notified as they are added to and removed from this collection.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.IExtensionCollection">
+      <summary>
+            A collection of extension objects, which are notified when they are added to or removed from this collection.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.list">
+      <summary>
+            The underlying collection of extension objects.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.owner">
+      <summary>
+            The owner of this collection of extension objects.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.#ctor(System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection" /> class with the specified owner.
+            </summary>
+      <param name="owner">The owner of this collection of extension objects.</param>
+    </member>
+    <member name="T:Nito.KitchenSink.EnumeratorWrapper`1">
+      <summary>
+            Provides a wrapper around a source <see cref="T:System.Collections.Generic.IEnumerator`1" />, with a cached <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.Done" /> value.
+            </summary>
+      <typeparam name="T">The type of objects being enumerated.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.EnumeratorWrapper`1.source">
+      <summary>
+            The source enumerator.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.EnumeratorWrapper`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.EnumeratorWrapper`1" /> class, taking its source enumerator from <see cref="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" />. <see cref="M:System.Collections.IEnumerator.MoveNext" /> is also called once before returning.
+            </summary>
+      <param name="source">The source enumerable.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.EnumeratorWrapper`1.MoveNext">
+      <summary>
+            Advances the enumerator to the next element of the collection. Returns <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.Done" />.
+            </summary>
+      <returns>
+            true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
+            </returns>
+    </member>
+    <member name="M:Nito.KitchenSink.EnumeratorWrapper`1.Dispose">
+      <summary>
+            Disposes the wrapped enumerator.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.EnumeratorWrapper`1.Done">
+      <summary>
+            Gets a value indicating whether the enumerable sequence has completed. If <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.Done" /> is true, then <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.Current" /> is undefined.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.EnumeratorWrapper`1.More">
+      <summary>
+            Gets a value indicating whether the enumerable sequence has completed. If <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.More" /> is false, then <see cref="P:Nito.KitchenSink.EnumeratorWrapper`1.Current" /> is undefined.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.EnumeratorWrapper`1.Current">
+      <summary>
+            Gets the element at the current position of the enumerator.
+            </summary>
+    </member>
     <member name="T:Nito.KitchenSink.AsyncOperationExtensions">
       <summary>
             Provides methods useful when dealing with <see cref="T:System.ComponentModel.AsyncOperation" /> instances.
@@ -1030,87 +958,6 @@
             </summary>
       <param name="synchronizationContext">The synchronization context on which to post the delegate.</param>
       <param name="method">The parameterless delegate to invoke.</param>
-    </member>
-    <member name="T:Nito.KitchenSink.SafeGCHandle">
-      <summary>
-            Helper class to help with managing <see cref="T:System.Runtime.InteropServices.GCHandle" /> resources.
-            </summary>
-      <remarks>
-        <para>The only reason this isn't <c>public</c> is to prevent misuse by end users.</para>
-        <para>Note that this class can only be used to represent <see cref="T:System.Runtime.InteropServices.GCHandle" /> objects that should be freed when garbage collected (or disposed). This class cannot be used in several interop situations, such as passing ownership of an object to a callback function.</para>
-      </remarks>
-    </member>
-    <member name="M:Nito.KitchenSink.SafeGCHandle.#ctor(System.Object,System.Runtime.InteropServices.GCHandleType)">
-      <summary>
-            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SafeGCHandle" /> class referring to the target in the given way.
-            </summary>
-      <param name="target">The object to reference.</param>
-      <param name="type">The way to reference the object.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.SafeGCHandle.ReleaseHandle">
-      <summary>
-            Frees the garbage collection handle.
-            </summary>
-      <returns>Whether the handle was released successfully.</returns>
-    </member>
-    <member name="M:Nito.KitchenSink.SafeGCHandle.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="P:Nito.KitchenSink.SafeGCHandle.Handle">
-      <summary>
-            Gets the underlying allocated garbage collection handle.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.SafeGCHandle.IsInvalid">
-      <summary>
-            Gets a value indicating whether the handle value is invalid.
-            </summary>
-    </member>
-    <member name="T:Nito.KitchenSink.WeakReference`1">
-      <summary>
-            Represents a weak reference, which references an object while still allowing that object to be reclaimed by garbage collection.
-            </summary>
-      <remarks>
-        <para>We define our own type, unrelated to <see cref="T:System.WeakReference" /> both to provide type safety and because <see cref="T:System.WeakReference" /> is an incorrect implementation (it does not implement <see cref="T:System.IDisposable" />).</para>
-      </remarks>
-      <typeparam name="T">The type of object to reference.</typeparam>
-    </member>
-    <member name="F:Nito.KitchenSink.WeakReference`1.safeHandle">
-      <summary>
-            The contained <see cref="T:Nito.KitchenSink.SafeGCHandle" />.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakReference`1.#ctor(`0)">
-      <summary>
-            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakReference`1" /> class, referencing the specified object.
-            </summary>
-      <param name="target">The object to track. May not be null.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakReference`1.Dispose">
-      <summary>
-            Frees the weak reference.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.WeakReference`1.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakReference`1.Target">
-      <summary>
-            Gets the referenced object. Will return null if the object has been garbage collected.
-            </summary>
-    </member>
-    <member name="P:Nito.KitchenSink.WeakReference`1.IsAlive">
-      <summary>
-            Gets a value indicating whether the object is still alive (has not been garbage collected).
-            </summary>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.UnsafeNativeMethods">
       <summary>
@@ -1401,6 +1248,170 @@
       <param name="specialFolder">The special folder.</param>
       <returns>The file system path of the special folder.</returns>
     </member>
+    <member name="T:Nito.KitchenSink.PutbackBufferTextReader`1">
+      <summary>
+            A wrapper around a source <see cref="T:System.IO.TextReader" />, providing a "putback buffer", where characters can be pushed back to the <see cref="T:System.IO.TextReader" />. This class does perform buffering.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="T:Nito.KitchenSink.SourceTextReader`1">
+      <summary>
+            A base class for a <see cref="T:System.IO.TextReader" /> that wraps another <see cref="T:System.IO.TextReader" />. This class does not perform any buffering, but derived classes may.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.SourceTextReader`1.source">
+      <summary>
+            The source <see cref="T:System.IO.TextReader" />.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.SourceTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SourceTextReader`1" /> class.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" />.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SourceTextReader`1.Dispose(System.Boolean)">
+      <summary>
+            Releases the unmanaged resources used by the <see cref="T:System.IO.TextReader" /> and optionally releases the managed resources (including the source <see cref="T:System.IO.TextReader" />).
+            </summary>
+      <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SourceTextReader`1.Peek">
+      <summary>
+            Reads the next character without changing the state of the reader or the character source. Returns the next available character without actually reading it from the input stream.
+            </summary>
+      <returns>An integer representing the next character to be read, or -1 if no more characters are available or the stream does not support seeking.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="M:Nito.KitchenSink.SourceTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="P:Nito.KitchenSink.SourceTextReader`1.BaseReader">
+      <summary>
+            Gets the underlying <see cref="T:System.IO.TextReader" />.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.PutbackBufferTextReader`1.putbackBuffer">
+      <summary>
+            The buffer of characters that have been put back and not yet read again.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.PutbackBufferTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.PutbackBufferTextReader`1" /> class wrapping the specified <see cref="T:System.IO.TextReader" />.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" /> to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.PutbackBufferTextReader`1.Putback(System.Char)">
+      <summary>
+            Pushes the specified character back onto this <see cref="T:System.IO.TextReader" />. The character pushed back should be the most recently read character that has not already been pushed back (i.e., characters should only be pushed back if they were read).
+            </summary>
+      <param name="ch">The character to push back.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.PutbackBufferTextReader`1.Peek">
+      <summary>
+            Reads the next character without changing the state of the reader or the character source. Returns the next available character without actually reading it from the input stream.
+            </summary>
+      <returns>An integer representing the next character to be read, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="M:Nito.KitchenSink.PutbackBufferTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="P:Nito.KitchenSink.PutbackBufferTextReader`1.BufferCount">
+      <summary>
+            Gets the putback buffer count.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ExpandoObjectExtensions">
+      <summary>
+            Extension methods for the <see cref="T:System.Dynamic.ExpandoObject" /> class.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ExpandoObjectExtensions.AddProperties``1(System.Dynamic.ExpandoObject,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Adds a sequence of values as properties on the <see cref="T:System.Dynamic.ExpandoObject" />. Any existing properties with the same name are overwritten. Returns the same <see cref="T:System.Dynamic.ExpandoObject" /> for chaining.
+            </summary>
+      <typeparam name="T">The type of values to add.</typeparam>
+      <param name="this">The object to which to add the properties.</param>
+      <param name="values">The values to add as properties.</param>
+      <param name="names">The names to use for the properties. This may be <c>null</c>. If this parameter is <c>null</c> or does not contain enough names for the values, the property name will be of the form "Property<i>n</i>", where <i>n</i> is the index in the value sequence.</param>
+      <returns>The <see cref="T:System.Dynamic.ExpandoObject" /><paramref name="this" />.</returns>
+    </member>
+    <member name="T:Nito.KitchenSink.AdoExtensions">
+      <summary>
+            Provides extension methods for ADO.NET classes.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.CreateCommand(System.Data.Common.DbConnection,System.String)">
+      <summary>
+            Creates a new command associated with this connection, with the specified command text.
+            </summary>
+      <param name="this">The database connection.</param>
+      <param name="commandText">The command text for this command.</param>
+      <returns>The new command.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.ExecuteCommand(System.Data.Common.DbConnection,System.String,System.Object[])">
+      <summary>
+            Executes a command against the database and returns its scalar result, or <c>null</c> if there was no result.
+            </summary>
+      <param name="this">The connection executing the command.</param>
+      <param name="commandText">The command to execute.</param>
+      <param name="parameters">Any parameters to pass to the command. <c>null</c> values are replaced with <c>DBNull.Value</c>.</param>
+      <returns>The scalar result of the command, or <c>null</c> if there was no result.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.ExecuteCommand``1(System.Data.Common.DbConnection,System.String,System.Object[])">
+      <summary>
+            Executes a command against the database and returns its scalar result, or <c>(T)null</c> if there was no result.
+            </summary>
+      <typeparam name="T">The type of the result.</typeparam>
+      <param name="this">The connection executing the command.</param>
+      <param name="commandText">The command to execute.</param>
+      <param name="commandParameters">Parameters to pass to the command. <c>null</c> values are replaced with <c>DBNull.Value</c>.</param>
+      <returns>The scalar result of the command, or <c>(T)null</c> if there was no result.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.CreateParameterValue``1(System.Data.Common.DbCommand,``0)">
+      <summary>
+            Creates a new, unnamed command parameter with the specified value.
+            </summary>
+      <param name="this">The command receiving the parameter.</param>
+      <param name="value">The value of the parameter. If <c>null</c>, then the parameter is given a value of <c>DBNull.Value</c>.</param>
+      <returns>The new command parameter</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.AddRange(System.Data.Common.DbParameterCollection,System.Collections.Generic.IEnumerable{System.Data.Common.DbParameter})">
+      <summary>
+            Adds a sequence of parameters to a parameter collection.
+            </summary>
+      <param name="this">The parameter collection to which to add the parameters.</param>
+      <param name="parameters">The parameters to add.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.AddParameterValues(System.Data.Common.DbCommand,System.Collections.Generic.IEnumerable{System.Object})">
+      <summary>
+            Adds a sequence of values to the parameter collection of a command.
+            </summary>
+      <param name="this">The command containing the parameter collection to which to add the parameters.</param>
+      <param name="parameterValues">The parameter values to add. Any <c>null</c> entries are given a value of <c>DBNull.Value</c>.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.AdoExtensions.AddParameterValue``1(System.Data.Common.DbCommand,``0)">
+      <summary>
+            Adds a single parameter value to the parameter collection of a command.
+            </summary>
+      <param name="this">The command containing the parameter collection to which to add the parameter.</param>
+      <param name="value">The value of the parameter. If <c>null</c>, then the parameter is given a value of <c>DBNull.Value</c>.</param>
+    </member>
     <member name="T:Nito.KitchenSink.SimplePropertyPath">
       <summary>
             Provides a way to monitor changes along a property path.
@@ -1594,6 +1605,79 @@
             Gets the name of the property subscribed to.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.ReferenceCountedDisposable`1">
+      <summary>
+            Provides a reference count for a wrapped disposable object.
+            </summary>
+      <typeparam name="T">The type of object to wrap.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.ReferenceCountedDisposable`1.disposable">
+      <summary>
+            The underlying reference counted disposable.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ReferenceCountedDisposable`1" /> class, wrapping the specified disposable object.
+            </summary>
+      <param name="value">The disposable object to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.System#IDisposable#Dispose">
+      <summary>
+            Reduces the reference count on the underlying disposable object.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.AddReference">
+      <summary>
+            Adds a reference count to this wrapper.
+            </summary>
+      <returns>A reference-counted wrapper around the same disposable object.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Value">
+      <summary>
+            Gets the underlying disposable object.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference">
+      <summary>
+            A reference-counted wrapper around a disposable object.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.disposable">
+      <summary>
+            A reference-counted child disposable object.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.#ctor(Nito.KitchenSink.ReferenceCountedDisposable{`0})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference" /> class with the specified parent.
+            </summary>
+      <param name="parent">The parent, which shares this reference count.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.System#IDisposable#Dispose">
+      <summary>
+            Reduces the reference count on the underlying disposable object.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.Value">
+      <summary>
+            Gets the underlying disposable object.
+            </summary>
+    </member>
     <member name="T:Nito.KitchenSink.LinkedListExtensions">
       <summary>
             Extension methods for <see cref="T:System.Collections.Generic.LinkedList`1" />.
@@ -1617,6 +1701,11 @@
             An instance of <see cref="T:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer" />.
             </summary>
     </member>
+    <member name="F:Nito.KitchenSink.EqualityComparer.referenceDefault">
+      <summary>
+            An instance of <c>ReferenceEqualityComparer</c>.
+            </summary>
+    </member>
     <member name="P:Nito.KitchenSink.EqualityComparer.Default">
       <summary>
             Gets the default implementation of <see cref="T:System.Collections.IEqualityComparer" />.
@@ -1624,6 +1713,11 @@
       <remarks>
         <para>The default implementation uses <see cref="M:System.Object.Equals(System.Object,System.Object)" /> and <see cref="M:System.Object.GetHashCode" /> to implement <see cref="T:System.Collections.IEqualityComparer" />.</para>
       </remarks>
+    </member>
+    <member name="P:Nito.KitchenSink.EqualityComparer.ReferenceDefault">
+      <summary>
+            Gets an implementation of <see cref="T:System.Collections.IEqualityComparer" /> that always compares by object reference equality.
+            </summary>
     </member>
     <member name="T:Nito.KitchenSink.EqualityComparer.DefaultEqualityComparer">
       <summary>
@@ -1773,6 +1867,77 @@
             Gets a value indicating whether this path is absolute.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.DelimitedText.Lexer">
+      <summary>
+            Parses an input stream into tokens.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.Lexer.Tracer">
+      <summary>
+            The trace source to which messages are written during lexing.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.Lexer.fieldSeparator">
+      <summary>
+            The character used as a field separator.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.Lexer.data">
+      <summary>
+            The source data.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.#ctor(System.Collections.Generic.IEnumerable{System.Char},System.Char)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.DelimitedText.Lexer" /> class.
+            </summary>
+      <param name="data">The delimited text data.</param>
+      <param name="fieldSeparator">The field separator character.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.System#Collections#IEnumerable#GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+      <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            </returns>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.Information(System.String)">
+      <summary>
+            Traces the specified informational message.
+            </summary>
+      <param name="message">The informational message to trace.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.Warning(System.String)">
+      <summary>
+            Traces the specified warning message.
+            </summary>
+      <param name="message">The warning message to trace.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.ReadUnescapedFieldValue(Nito.KitchenSink.EnumeratorWrapper{System.Char})">
+      <summary>
+            Reads a single unescaped field data value from the source. The source must be currently positioned on the first character of the field data. On return, the source is either at the end of the input or is positioned on the first character that is not part of the field data.
+            </summary>
+      <param name="source">The source from which to read.</param>
+      <returns>The field data value.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Lexer.ReadEscapedFieldValue(Nito.KitchenSink.EnumeratorWrapper{System.Char})">
+      <summary>
+            Reads a single escaped field data value from the source. The source must be currently positioned on the opening double quote of the field data. On return, the source is either at the end of the input or is positioned on the first character that is not part of the field data (past the closing double quote).
+            </summary>
+      <param name="source">The source from which to read.</param>
+      <returns>The field data value.</returns>
+    </member>
     <member name="T:Nito.KitchenSink.TaskExtensions">
       <summary>
             Extension methods for the <see cref="T:System.Threading.Tasks.Task" /> class, and task-related functionality.
@@ -1805,6 +1970,28 @@
       <param name="cancellationToken">The cancellation token.</param>
       <exception cref="T:System.OperationCanceledException">The cancellation token was signalled before the operation completed.</exception>
       <returns>Returns <c>true</c> if the handle was signalled, and <c>false</c> if there was a timeout.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.TaskExtensions.TrySetFromTask``1(System.Threading.Tasks.TaskCompletionSource{``0},System.Threading.Tasks.Task{``0})">
+      <summary>
+            Tries to set the task completion based on a completed source task.
+            </summary>
+      <typeparam name="TResult">The type of the result of the source task and task completion.</typeparam>
+      <param name="taskCompletionSource">The task completion source.</param>
+      <param name="task">The completed task.</param>
+      <returns>
+        <c>true</c> if the task completion was set correctly; <c>false</c> if the task completion had already completed.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.TaskExtensions.TrySetFromAsyncCompletedEventArgs``2(System.Threading.Tasks.TaskCompletionSource{``0},``1,System.Func{``1,``0})">
+      <summary>
+            Tries to set the task completion based on a completed <see cref="T:System.ComponentModel.AsyncCompletedEventArgs" /> or derived class.
+            </summary>
+      <typeparam name="TTaskResult">The result type of this task completion.</typeparam>
+      <typeparam name="TAsyncArgs">The type derived from <see cref="T:System.ComponentModel.AsyncCompletedEventArgs" /> which is used to complete the task completion.</typeparam>
+      <param name="taskCompletionSource">The task completion source.</param>
+      <param name="args">The results of the completed asynchronous operation.</param>
+      <param name="transform">The delegate that extracts the task result value from the asynchronous event completion arguments.</param>
+      <returns>
+        <c>true</c> if the task completion was set correctly; <c>false</c> if the task completion had already been completed.</returns>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.InternetException">
       <summary>
@@ -2050,78 +2237,12 @@
       <param name="compare">Compares two objects and returns a value less than 0 if its first argument is less than its second argument, 0 if its two arguments are equal, or greater than 0 if its first argument is greater than its second argument.</param>
       <returns>An <see cref="T:Nito.KitchenSink.AnonymousComparer`1" />.</returns>
     </member>
-    <member name="T:Nito.KitchenSink.ReferenceCountedDisposable`1">
+    <member name="M:Nito.KitchenSink.A.Disposable(System.Action)">
       <summary>
-            Provides a reference count for a wrapped disposable object.
+            Creates and returns an <see cref="T:Nito.KitchenSink.AnonymousDisposable" /> using the specified delegate.
             </summary>
-      <typeparam name="T">The type of object to wrap.</typeparam>
-    </member>
-    <member name="F:Nito.KitchenSink.ReferenceCountedDisposable`1.disposable">
-      <summary>
-            The underlying reference counted disposable.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.#ctor(`0)">
-      <summary>
-            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ReferenceCountedDisposable`1" /> class, wrapping the specified disposable object.
-            </summary>
-      <param name="value">The disposable object to wrap.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.System#IDisposable#Dispose">
-      <summary>
-            Reduces the reference count on the underlying disposable object.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.AddReference">
-      <summary>
-            Adds a reference count to this wrapper.
-            </summary>
-      <returns>A reference-counted wrapper around the same disposable object.</returns>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Value">
-      <summary>
-            Gets the underlying disposable object.
-            </summary>
-    </member>
-    <member name="T:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference">
-      <summary>
-            A reference-counted wrapper around a disposable object.
-            </summary>
-    </member>
-    <member name="F:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.disposable">
-      <summary>
-            A reference-counted child disposable object.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.#ctor(Nito.KitchenSink.ReferenceCountedDisposable{`0})">
-      <summary>
-            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference" /> class with the specified parent.
-            </summary>
-      <param name="parent">The parent, which shares this reference count.</param>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.System#IDisposable#Dispose">
-      <summary>
-            Reduces the reference count on the underlying disposable object.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
-    </member>
-    <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.Value">
-      <summary>
-            Gets the underlying disposable object.
-            </summary>
+      <param name="dispose">The action to take when the disposable object is disposed.</param>
+      <returns>An <see cref="T:Nito.KitchenSink.AnonymousDisposable" />.</returns>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.SafeInternetHandle">
       <summary>
@@ -2570,6 +2691,175 @@
       <param name="offset">The offset in the buffer at which to read the value.</param>
       <returns>The value read from the buffer.</returns>
     </member>
+    <member name="T:Nito.KitchenSink.Mathematics.Financial">
+      <summary>
+            Provides financial-related calculations with reasonable constraints and special cases.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.VerifyMoneyArgument(System.Decimal,System.String)">
+      <summary>
+            Verifies that a given argument represents a non-negative money value with no more than two decimal places.
+            </summary>
+      <param name="value">The money value to check.</param>
+      <param name="name">The name of the parameter.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.NumberOfPeriods(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the number of periods remaining on a loan.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This must be greater than or equal to zero.</param>
+      <param name="payment">The payment made each period. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="currentBalance">The current balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="futureBalance">The future balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The number of periods remaining on the loan.</returns>
+      <exception cref="T:System.InvalidOperationException">The number of periods could not be calculated.</exception>
+      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Payment(System.Decimal,System.UInt32,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the minimum payment for a loan.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This must be greater than or equal to zero.</param>
+      <param name="numberOfPeriods">The number of periods remaining on the loan.</param>
+      <param name="currentBalance">The current balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="futureBalance">The future balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The minimum payment made each period.</returns>
+      <exception cref="T:System.InvalidOperationException">The payment could not be calculated.</exception>
+      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.FutureBalance(System.Decimal,System.UInt32,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the future balance of a loan.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This must be greater than or equal to zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="payment">The payment made each period. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="currentBalance">The current balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The future balance of the loan.</returns>
+      <exception cref="T:System.InvalidOperationException">The future balance could not be calculated.</exception>
+      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.PrincipalPayment(System.Decimal,System.UInt32,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the principal portion of a specific payment on a loan.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This must be greater than or equal to zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="currentBalance">The current balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="period">The period for which to calculate the principal portion. This must be in the range <c>[1,<paramref name="numberOfPeriods" />]</c> and defaults to <c>1</c>.</param>
+      <param name="futureBalance">The future balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The principal portion of the specific payment.</returns>
+      <exception cref="T:System.InvalidOperationException">The principal portion of the payment could not be calculated.</exception>
+      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.InterestPayment(System.Decimal,System.UInt32,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the interest portion of a payment on a loan.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This must be greater than or equal to zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="currentBalance">The current balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="period">The period for which to calculate the principal portion. This must be in the range <c>[1,<paramref name="numberOfPeriods" />]</c> and defaults to <c>1</c>.</param>
+      <param name="futureBalance">The future balance of the loan. This must be greater than or equal to zero and not contain fractional pennies.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The interest portion of the specific payment.</returns>
+      <exception cref="T:System.InvalidOperationException">The interest portion of the payment could not be calculated.</exception>
+      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
+    </member>
+    <member name="T:Nito.KitchenSink.Mathematics.Financial.Exact">
+      <summary>
+            Provides financial-related calculations with exact definitions (no special cases).
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.NumberOfPeriods(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the total number of periods in an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="payment">The payment made each period. This should be a negative number if payments are being made on a loan.</param>
+      <param name="currentValue">The current value of the annuity.</param>
+      <param name="futureValue">The future value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The total number of periods in an annuity.</returns>
+      <exception cref="T:System.InvalidOperationException">The number of periods could not be calculated.</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.Payment(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the regular payment in an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="currentValue">The current value of the annuity.</param>
+      <param name="futureValue">The future value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The payment made each period in an annuity.</returns>
+      <exception cref="T:System.InvalidOperationException">The payment could not be calculated.</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.CurrentValue(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the current value of an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="payment">The payment made each period. This should be a negative number if payments are being made on a loan.</param>
+      <param name="futureValue">The future value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The current value of an annuity.</returns>
+      <exception cref="T:System.InvalidOperationException">The current value could not be calculated.</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.FutureValue(System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the future value of an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="payment">The payment made each period. This should be a negative number if payments are being made on a loan.</param>
+      <param name="currentValue">The current value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The future value of an annuity.</returns>
+      <exception cref="T:System.InvalidOperationException">The future value could not be calculated.</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.PrincipalPayment(System.Decimal,System.Decimal,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the principal portion of a specific payment in an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="currentValue">The current value of the annuity.</param>
+      <param name="period">The period for which to calculate the principal portion. This must be in the range <c>[1,<paramref name="numberOfPeriods" />]</c> and defaults to <c>1</c>.</param>
+      <param name="futureValue">The future value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The principal portion of the specific payment.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">Period must be in the range [1, numberOfPeriods].</exception>
+      <exception cref="T:System.InvalidOperationException">The principal portion of the payment could not be calculated.</exception>
+      <requires description="Period must be in the range [1, numberOfPeriods]." exception="T:System.ArgumentOutOfRangeException">period &gt;= 1 &amp;&amp; period &lt;= numberOfPeriods</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">period &lt; 1 || period &gt; numberOfPeriods</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.InterestPayment(System.Decimal,System.Decimal,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
+      <summary>
+            Calculates the interest portion of a payment in an annuity.
+            </summary>
+      <param name="rate">The periodic interest rate (applied every period). This may be zero.</param>
+      <param name="numberOfPeriods">The total number of periods.</param>
+      <param name="currentValue">The current value of the annuity.</param>
+      <param name="period">The period for which to calculate the interest portion. This must be in the range <c>[1,<paramref name="numberOfPeriods" />]</c> and defaults to <c>1</c>.</param>
+      <param name="futureValue">The future value of the annuity.</param>
+      <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
+      <returns>The interest portion of the specific payment.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">Period must be in the range [1, numberOfPeriods].</exception>
+      <exception cref="T:System.InvalidOperationException">The interest portion of the payment could not be calculated.</exception>
+      <requires description="Period must be in the range [1, numberOfPeriods]." exception="T:System.ArgumentOutOfRangeException">period &gt;= 1 &amp;&amp; period &lt;= numberOfPeriods</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">period &lt; 1 || period &gt; numberOfPeriods</exception>
+    </member>
     <member name="T:Nito.KitchenSink.Dynamic.RefOutArg">
       <summary>
             A wrapper around a "ref" or "out" argument invoked dynamically.
@@ -2611,19 +2901,6 @@
             Gets or sets the wrapped value.
             </summary>
     </member>
-    <member name="T:Nito.KitchenSink.DisposableExtensions">
-      <summary>
-            Provides extension methods for <see cref="T:System.IDisposable" /> types.
-            </summary>
-    </member>
-    <member name="M:Nito.KitchenSink.DisposableExtensions.ReferenceCounted``1(``0)">
-      <summary>
-            Wraps this disposable object in a reference-counted disposable wrapper.
-            </summary>
-      <typeparam name="T">The type of the underlying disposable object.</typeparam>
-      <param name="disposable">The underlying disposable object to wrap.</param>
-      <returns>A reference-counted disposable wrapper.</returns>
-    </member>
     <member name="T:Nito.KitchenSink.EncodingExtensions">
       <summary>
             Extension methods for the <see cref="T:System.Text.Encoding" /> class.
@@ -2637,6 +2914,110 @@
       <param name="stream">The stream to be read.</param>
       <param name="detectEncodingFromByteOrderMarks">Whether to look for byte order marks at the current position of the stream.</param>
       <returns>The data from the stream, interpreted as a string according to the specified encoding.</returns>
+    </member>
+    <member name="T:Nito.KitchenSink.DelimitedText.TokenType">
+      <summary>
+            The type of token read.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.TokenType.FieldData">
+      <summary>
+            Field data token, representing field data in the original file. Field data supports CSV-style quoting, which is unquoted during lexing.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.TokenType.FieldSeparator">
+      <summary>
+            A field separator.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.TokenType.EndOfRecord">
+      <summary>
+            An end of record indicator: '\r\n', '\n', or '\r'. An end of record indicator may not appear at the end of the file.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.DelimitedText.Token">
+      <summary>
+            A token read from the file.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.DelimitedText.Token.Type">
+      <summary>
+            Gets or sets the type of the token.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.DelimitedText.Token.Data">
+      <summary>
+            Gets or sets the field data of the token. This is <c>null</c> unless <see cref="P:Nito.KitchenSink.DelimitedText.Token.Type" /> is <see cref="F:Nito.KitchenSink.DelimitedText.TokenType.FieldData" />.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.CommaSeparatedValueParser">
+      <summary>
+            Parses RFC4180-compliant CSV streams.
+            </summary>
+      <remarks>
+            This class supports three ways to define the headers for a CSV stream:
+              1) Passed as a constructor parameter. If there is a header row in the data, the number of fields must match (but the names are not checked).
+              2) Dynamic, determined by the header row in the data.
+              3) Unknown. The number of fields must be the same for each record, but the names of the fields are unknown.
+            </remarks>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueParser.parser">
+      <summary>
+            The stream from which to read.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueParser.headerRow">
+      <summary>
+            Whether the stream has a header row that hasn't been read yet.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueParser.fieldNamesKnown">
+      <summary>
+            Whether the field names are known.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueParser.fieldCount">
+      <summary>
+            The number of fields per record.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueParser.headers">
+      <summary>
+            The defined headers, if any. This is only valid if <c>fieldNamesKnown</c> is <c>true</c>.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueParser.#ctor(System.String,System.Boolean,System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.CommaSeparatedValueParser" /> class.
+            </summary>
+      <param name="data">The CSV data to parse.</param>
+      <param name="headerRow">If set to <c>true</c>, the CSV data contains a header row.</param>
+      <param name="headers">The headers for the CSV data. This parameter may be <c>null</c>.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueParser.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.List{System.String}},System.Boolean,System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.CommaSeparatedValueParser" /> class.
+            </summary>
+      <param name="parser">The parser providing the CSV data.</param>
+      <param name="headerRow">If set to <c>true</c>, the CSV data contains a header row.</param>
+      <param name="headers">The headers for the CSV data. This parameter may be <c>null</c>.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueParser.Read">
+      <summary>
+            Reads the CSV records. Each record will contain the same number of fields.
+            </summary>
+      <returns>The CSV records.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueParser.ReadDynamic">
+      <summary>
+            Reads the CSV records. Each record will contain the same fields, exposed as properties on a dynamic object.
+            </summary>
+      <returns>The CSV records.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueParser.ReadHeaderRow(Nito.KitchenSink.EnumeratorWrapper{System.Collections.Generic.List{System.String}})">
+      <summary>
+            Reads the header row, either populating <see cref="F:Nito.KitchenSink.CommaSeparatedValueParser.headers" /> or comparing the actual headers with the user-provided <see cref="F:Nito.KitchenSink.CommaSeparatedValueParser.headers" />.
+            </summary>
     </member>
     <member name="T:Nito.KitchenSink.Communication.MultipleByteMultipleDelimiterFramer">
       <summary>
@@ -2729,6 +3110,33 @@
             </summary>
       <param name="delimiterIndex">The index of the matching begin/end delimiters for this message.</param>
       <param name="message">The message that has arrived. This may contain an alias of the data passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" /> in this call stack, but will not contain an alias to any data previously passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" />.</param>
+    </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.IExtension">
+      <summary>
+            Enables an object to extend any other object through aggregation.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.IExtension.Attach(System.Object)">
+      <summary>
+            Enables an extension object to find out when it has been aggregated. Called when the extension is added to the <see cref="P:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject.Extensions" /> property. This method may not raise an exception.
+            </summary>
+      <param name="owner">The extensible object that aggregates this extension. This object may implement <see cref="T:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject" />.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.IExtension.Detach(System.Object)">
+      <summary>
+            Enables an object to find out when it is no longer aggregated. Called when an extension is removed from the <see cref="P:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject.Extensions" /> property. This method may not raise an exception and may be called from any thread.
+            </summary>
+      <param name="owner">The extensible object that no longer aggregates this extension. This object may implement <see cref="T:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject" />.</param>
+    </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject">
+      <summary>
+            Enables an object to be extended through aggregation.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ExtensibleObjects.IExtensibleObject.Extensions">
+      <summary>
+            Gets the collection of extension objects aggregated by this extensible object.
+            </summary>
     </member>
     <member name="T:Nito.KitchenSink.BooleanExtensions">
       <summary>
@@ -2866,6 +3274,47 @@
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="T:Nito.KitchenSink.ReferenceEqualityComparer`1">
+      <summary>
+            An object comparer that always compares objects based on reference equality.
+            </summary>
+      <typeparam name="T">The type of objects being compared.</typeparam>
+    </member>
+    <member name="T:Nito.KitchenSink.CommaSeparatedValueFormatter">
+      <summary>
+            Provides RFC4180-compliant CSV formatting for a data stream.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueFormatter.data">
+      <summary>
+            The stream of data to format as CSV.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.CommaSeparatedValueFormatter.headers">
+      <summary>
+            The headers to write to the CSV, if any.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueFormatter.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.String}},System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.CommaSeparatedValueFormatter" /> class.
+            </summary>
+      <param name="data">The stream of data to format as CSV.</param>
+      <param name="headers">The headers to write to the CSV, if any. This parameter may be <c>null</c>.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueFormatter.Write(System.IO.TextWriter)">
+      <summary>
+            Writes the data as a CSV stream to the specified writer.
+            </summary>
+      <param name="writer">The writer to which to write the CSV stream.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.CommaSeparatedValueFormatter.EscapeFieldValue(System.String)">
+      <summary>
+            Escapes a field value.
+            </summary>
+      <param name="fieldValue">The field value to escape.</param>
+      <returns>The escaped field value.</returns>
     </member>
     <member name="T:Nito.KitchenSink.SafeNativeMethods">
       <summary>
@@ -3180,6 +3629,78 @@
             Gets or sets a value indicating whether the final remainder is reversed/reflected at the end of the CRC calculation before it is XOR'ed with <see cref="P:Nito.KitchenSink.CRC16.Definition.FinalXorValue" />.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.NormalizeCrLfTextReader`1">
+      <summary>
+            A wrapper around a source <see cref="T:System.IO.TextReader" />, converting any <c>\r\n</c>, <c>\r</c>, or <c>\n</c> character sequences to just <c>\n</c>. This class does perform buffering.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.NormalizeCrLfTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.NormalizeCrLfTextReader`1" /> class wrapping the specified <see cref="T:System.IO.TextReader" />.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" /> to wrap. This <see cref="T:System.IO.TextReader" /> is wrapped by a <see cref="T:Nito.KitchenSink.PeekableTextReader`1" /> before being wrapped by this class.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.NormalizeCrLfTextReader`1.Peek">
+      <summary>
+            Reads the next character without changing the state of the reader or the character source. Returns the next available character without actually reading it from the input stream.
+            </summary>
+      <returns>An integer representing the next character to be read, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="M:Nito.KitchenSink.NormalizeCrLfTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="T:Nito.KitchenSink.LineMappingTextReader`1">
+      <summary>
+            A wrapper around a source <see cref="T:System.IO.TextReader" />, counting lines and columns. This class does not perform any buffering.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.LineMappingTextReader`1.lineEndings">
+      <summary>
+            The offset of each '\n' line ending seen in the source stream.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.LineMappingTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.LineMappingTextReader`1" /> class, wrapping the specified <see cref="T:System.IO.TextReader" />.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" /> to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.LineMappingTextReader`1.GetLineNumberAndLineOffset(System.Int64)">
+      <summary>
+            Gets the line number and line offset for a speicified position in the stream.
+            </summary>
+      <param name="position">The position in the stream for which to get the line number and line offset. This should not be negative or larger than the number of characters read.</param>
+      <returns>The line number and line offset for the specified position in the stream.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.LineMappingTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="T:Nito.KitchenSink.Reflection.TypeExtensions">
+      <summary>
+            Extension methods for the <see cref="T:System.Type" /> type.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Reflection.TypeExtensions.IsReferenceEquatable(System.Type)">
+      <summary>
+            Returns <c>true</c> if this type uses reference equality (i.e., does not override <see cref="M:System.Object.Equals(System.Object)" />); returns <c>false</c> if this type or any of its base types override <see cref="M:System.Object.Equals(System.Object)" />. This method returns <c>false</c> for any interface type, and returns <c>true</c> for any reference-equatable base class even if a derived class is not reference-equatable; the best way to determine if an object uses reference equality is to pass the exact type of that object.
+            </summary>
+      <param name="type">The type to test for reference equality.</param>
+      <returns>Returns <c>true</c> if this type uses reference equality (i.e., does not override <see cref="M:System.Object.Equals(System.Object)" />); returns <c>false</c> if this type or any of its base types override <see cref="M:System.Object.Equals(System.Object)" />.</returns>
+    </member>
     <member name="T:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer">
       <summary>
             Provides message framing for multiple-byte-delimiter-based protocols. Does not perform any unescaping of the message data.
@@ -3290,6 +3811,26 @@
             Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.MultipleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" />, and may leave the framer instance in an invalid state.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.BackgroundWorkerExtensions">
+      <summary>
+            Provides extension methods for the <see cref="T:System.ComponentModel.BackgroundWorker" /> class.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.BackgroundWorkerExtensions.ToTask(System.ComponentModel.BackgroundWorker)">
+      <summary>
+            Provides a <see cref="T:System.Threading.Tasks.Task" /> interface for <see cref="T:System.ComponentModel.BackgroundWorker" />. This wrapper supports successful results, exceptions, and BGW-style cancellation.
+            </summary>
+      <param name="this">The <see cref="T:System.ComponentModel.BackgroundWorker" /> to wrap.</param>
+      <returns>A <see cref="T:System.Threading.Tasks.Task" /> interface for the <see cref="T:System.ComponentModel.BackgroundWorker" />.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.BackgroundWorkerExtensions.ToTask(System.ComponentModel.BackgroundWorker,System.Threading.CancellationToken)">
+      <summary>
+            Provides a <see cref="T:System.Threading.Tasks.Task" /> interface for <see cref="T:System.ComponentModel.BackgroundWorker" />. This wrapper supports successful results, exceptions, BGW-style cancellation, and Task-style cancellation.
+            </summary>
+      <param name="this">The <see cref="T:System.ComponentModel.BackgroundWorker" /> to wrap.</param>
+      <param name="cancellationToken">The cancellation token used for Task-style cancellation. When this token is signalled, <see cref="M:System.ComponentModel.BackgroundWorker.CancelAsync" /> is invoked, and the BGW may use BGW-style or Task-style cancellation.</param>
+      <returns>A <see cref="T:System.Threading.Tasks.Task" /> interface for the <see cref="T:System.ComponentModel.BackgroundWorker" />.</returns>
+    </member>
     <member name="T:Nito.KitchenSink.Reflection.ObjectExtensions">
       <summary>
             Defines extension methods useful when doing reflection.
@@ -3317,6 +3858,15 @@
       <exception cref="T:System.Collections.Generic.KeyNotFoundException">The object <paramref name="this" /> does not have a property named <paramref name="name" />.</exception>
       <exception cref="T:System.InvalidCastException">The property was found, but is not of type <typeparamref name="T" />.</exception>
     </member>
+    <member name="M:Nito.KitchenSink.RxExtensions.Subscribe``1(System.IObservable{``0},System.Collections.Concurrent.BlockingCollection{``0})">
+      <summary>
+            Subscribes a blocking collection to an observable sequence. Values from the observable sequence are added to the blocking collection. Exceptions from the observable sequence are ignored. Generally, a materialized observable sequence is stored in a collection.
+            </summary>
+      <typeparam name="T">The type of the items in the observable sequence. This is normally a <see cref="T:System.Collections.Generic.Notification`1" /> type.</typeparam>
+      <param name="this">The observable sequence to which to subscribe.</param>
+      <param name="collection">The blocking collection that receives values from the observable sequence.</param>
+      <returns>The subscription, as a disposable object.</returns>
+    </member>
     <member name="T:Nito.KitchenSink.ObjectExtensions">
       <summary>
             Provides extension methods applicable to all objects.
@@ -3331,6 +3881,107 @@
       <param name="this">The object containing the property.</param>
       <param name="expression">A lambda expression selecting the property from the containing object.</param>
       <returns>The name of the property referenced by <paramref name="expression" />.</returns>
+    </member>
+    <member name="T:Nito.KitchenSink.ProgressReporter">
+      <summary>
+            A class used by Tasks to report progress or completion updates back to the UI.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ProgressReporter.scheduler">
+      <summary>
+            The underlying scheduler for the UI's synchronization context.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ProgressReporter" /> class. This should be run on a UI thread.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.ReportProgressAsync(System.Action)">
+      <summary>
+            Reports the progress to the UI thread. This method should be called from the task. Note that the progress update is asynchronous with respect to the reporting Task. For a synchronous progress update, wait on the returned <see cref="T:System.Threading.Tasks.Task" />.
+            </summary>
+      <param name="action">The action to perform in the context of the UI thread. Note that this action is run asynchronously on the UI thread.</param>
+      <returns>The task queued to the UI thread.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.ReportProgress(System.Action)">
+      <summary>
+            Reports the progress to the UI thread, and waits for the UI thread to process the update before returning. This method should be called from the task.
+            </summary>
+      <param name="action">The action to perform in the context of the UI thread.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterContinuation(System.Threading.Tasks.Task,System.Action)">
+      <summary>
+            Registers a UI thread handler for when the specified task finishes execution, whether it finishes with success, failiure, or cancellation.
+            </summary>
+      <param name="task">The task to monitor for completion.</param>
+      <param name="action">The action to take when the task has completed, in the context of the UI thread.</param>
+      <returns>The continuation created to handle completion. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterContinuation``1(System.Threading.Tasks.Task{``0},System.Action)">
+      <summary>
+            Registers a UI thread handler for when the specified task finishes execution, whether it finishes with success, failiure, or cancellation.
+            </summary>
+      <typeparam name="TResult">The type of the task result.</typeparam>
+      <param name="task">The task to monitor for completion.</param>
+      <param name="action">The action to take when the task has completed, in the context of the UI thread.</param>
+      <returns>The continuation created to handle completion. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterSucceededHandler(System.Threading.Tasks.Task,System.Action)">
+      <summary>
+            Registers a UI thread handler for when the specified task successfully finishes execution.
+            </summary>
+      <param name="task">The task to monitor for successful completion.</param>
+      <param name="action">The action to take when the task has successfully completed, in the context of the UI thread.</param>
+      <returns>The continuation created to handle successful completion. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterSucceededHandler``1(System.Threading.Tasks.Task{``0},System.Action{``0})">
+      <summary>
+            Registers a UI thread handler for when the specified task successfully finishes execution and returns a result.
+            </summary>
+      <typeparam name="TResult">The type of the task result.</typeparam>
+      <param name="task">The task to monitor for successful completion.</param>
+      <param name="action">The action to take when the task has successfully completed, in the context of the UI thread. The argument to the action is the return value of the task.</param>
+      <returns>The continuation created to handle successful completion. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterFaultedHandler(System.Threading.Tasks.Task,System.Action{System.Exception})">
+      <summary>
+            Registers a UI thread handler for when the specified task becomes faulted.
+            </summary>
+      <param name="task">The task to monitor for faulting.</param>
+      <param name="action">The action to take when the task has faulted, in the context of the UI thread.</param>
+      <returns>The continuation created to handle faulting. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterFaultedHandler``1(System.Threading.Tasks.Task{``0},System.Action{System.Exception})">
+      <summary>
+            Registers a UI thread handler for when the specified task becomes faulted.
+            </summary>
+      <typeparam name="TResult">The type of the task result.</typeparam>
+      <param name="task">The task to monitor for faulting.</param>
+      <param name="action">The action to take when the task has faulted, in the context of the UI thread.</param>
+      <returns>The continuation created to handle faulting. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterCancelledHandler(System.Threading.Tasks.Task,System.Action)">
+      <summary>
+            Registers a UI thread handler for when the specified task is cancelled.
+            </summary>
+      <param name="task">The task to monitor for cancellation.</param>
+      <param name="action">The action to take when the task is cancelled, in the context of the UI thread.</param>
+      <returns>The continuation created to handle cancellation. This is normally ignored.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ProgressReporter.RegisterCancelledHandler``1(System.Threading.Tasks.Task{``0},System.Action)">
+      <summary>
+            Registers a UI thread handler for when the specified task is cancelled.
+            </summary>
+      <typeparam name="TResult">The type of the task result.</typeparam>
+      <param name="task">The task to monitor for cancellation.</param>
+      <param name="action">The action to take when the task is cancelled, in the context of the UI thread.</param>
+      <returns>The continuation created to handle cancellation. This is normally ignored.</returns>
+    </member>
+    <member name="P:Nito.KitchenSink.ProgressReporter.Scheduler">
+      <summary>
+            Gets the task scheduler which executes tasks on the UI thread.
+            </summary>
     </member>
     <member name="T:Nito.KitchenSink.INotifyPropertyChangedExtensions">
       <summary>
@@ -3347,6 +3998,87 @@
       <param name="expression">The lambda expression selecting the property.</param>
       <param name="handler">The handler that is invoked when the property changes.</param>
       <returns>The actual delegate subscribed to <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" />.</returns>
+    </member>
+    <member name="T:Nito.KitchenSink.EnumerableExtensions">
+      <summary>
+            Extension methods for <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.EnumerableExtensions.CreateEnumeratorWrapper``1(System.Collections.Generic.IEnumerable{``0})">
+      <summary>
+            Creates a wrapper for the <see cref="T:System.Collections.Generic.IEnumerator`1" /> returned from <see cref="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" />.
+            </summary>
+      <typeparam name="T">The type of objects being enumerated.</typeparam>
+      <param name="source">The source enumeration.</param>
+      <returns>An enumerator wrapper.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.EnumerableExtensions.TryGetCount``1(System.Collections.Generic.IEnumerable{``0},System.Int32@)">
+      <summary>
+            Attempts to determine the count of an enumeration without enumerating it. Returns <c>true</c> if the count was successfully determined.
+            </summary>
+      <typeparam name="T">The type of objects in the enumeration.</typeparam>
+      <param name="source">The source enumeration.</param>
+      <param name="result">On return, contains the count of the enumeration if the return value was <c>true</c>. If the return value was <c>false</c>, this value is undefined.</param>
+      <returns>
+        <c>true</c> if the count was successfully determined; otherwise, <c>false</c>.</returns>
+    </member>
+    <member name="T:Nito.KitchenSink.DelimitedText.Parser">
+      <summary>
+            Parses a token stream into records.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.Parser.Tracer">
+      <summary>
+            The trace source to which messages are written during parsing.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.DelimitedText.Parser.lexer">
+      <summary>
+            The underlying lexer.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.#ctor(System.Collections.Generic.IEnumerable{Nito.KitchenSink.DelimitedText.Token})">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.DelimitedText.Parser" /> class using a specified lexer.
+            </summary>
+      <param name="lexer">The lexer used to produce tokens.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.#ctor(System.Collections.Generic.IEnumerable{System.Char},System.Char)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.DelimitedText.Parser" /> class with the default lexer.
+            </summary>
+      <param name="data">The delimited text data.</param>
+      <param name="fieldSeparator">The field separator character.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.System#Collections#IEnumerable#GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+      <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            </returns>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.Information(System.String)">
+      <summary>
+            Traces the specified informational message.
+            </summary>
+      <param name="message">The informational message to trace.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.DelimitedText.Parser.Warning(System.String)">
+      <summary>
+            Traces the specified warning message.
+            </summary>
+      <param name="message">The warning message to trace.</param>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.FtpConnection">
       <summary>
@@ -3533,6 +4265,35 @@
       <summary>
             When used with CciSharp, turns an auto-property into a property that supports DependencyProperty. This can only be applied to non-virtual instance properties.
             See http://ccisamples.codeplex.com/wikipage?title=CciSharp.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.SafeDisposable`1">
+      <summary>
+            Provides a non-throwing implementation of <see cref="M:System.IDisposable.Dispose" /> for a wrapped disposable object.
+            </summary>
+      <typeparam name="T">The type of object to wrap.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeDisposable`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SafeDisposable`1" /> class, wrapping the specified disposable object.
+            </summary>
+      <param name="value">The disposable object to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeDisposable`1.System#IDisposable#Dispose">
+      <summary>
+            Disposes the underlying disposable object, swallowing all exceptions.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeDisposable`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.SafeDisposable`1.Value">
+      <summary>
+            Gets the underlying disposable object.
             </summary>
     </member>
     <member name="T:Nito.KitchenSink.GuidVariant">
@@ -3905,6 +4666,101 @@
       <param name="progress">A callback method invoked with the number of bytes transferred so far. May be null.</param>
       <param name="cancellationToken">A cancellation token which may be used to cancel the stream copy. May be null.</param>
     </member>
+    <member name="T:Nito.KitchenSink.PositionTrackingTextReader`1">
+      <summary>
+            A wrapper around a source <see cref="T:System.IO.TextReader" />, providing stream position. This class does not perform buffering.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.PositionTrackingTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.PositionTrackingTextReader`1" /> class wrapping the specified <see cref="T:System.IO.TextReader" />.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" /> to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.PositionTrackingTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="P:Nito.KitchenSink.PositionTrackingTextReader`1.Position">
+      <summary>
+            Gets the position in the stream (the number of characters that have been read).
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.PeekableTextReader`1">
+      <summary>
+            A wrapper around a source <see cref="T:System.IO.TextReader" />, providing a single-character buffer. <see cref="M:Nito.KitchenSink.PeekableTextReader`1.Peek" /> only returns <c>-1</c> if the end of the stream is reached. This class does perform buffering.
+            </summary>
+      <typeparam name="T">The type of <see cref="T:System.IO.TextReader" /> being wrapped.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.PeekableTextReader`1.buffer">
+      <summary>
+            The single-character buffer, holding the next character that has been "peeked." If the source <see cref="T:System.IO.TextReader" /> supports peeking, then this member is always <c>null</c>.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.PeekableTextReader`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.PeekableTextReader`1" /> class wrapping the specified <see cref="T:System.IO.TextReader" />.
+            </summary>
+      <param name="source">The source <see cref="T:System.IO.TextReader" /> to wrap.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.PeekableTextReader`1.Peek">
+      <summary>
+            Reads the next character without changing the state of the reader or the character source. Returns the next available character without actually reading it from the input stream.
+            </summary>
+      <returns>An integer representing the next character to be read, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="M:Nito.KitchenSink.PeekableTextReader`1.Read">
+      <summary>
+            Reads the next character from the input stream and advances the character position by one character.
+            </summary>
+      <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+      <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
+      <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+    </member>
+    <member name="P:Nito.KitchenSink.PeekableTextReader`1.BufferCount">
+      <summary>
+            Gets the buffer count.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.Mathematics.Numeric">
+      <summary>
+            Provides numerical functions.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Numeric.TruncateAwayFromZero(System.Decimal)">
+      <summary>
+            Removes the fractional part of a number, rounding it to the nearest integer, moving away from zero.
+            </summary>
+      <param name="value">The value to truncate.</param>
+      <returns>The truncated value.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Numeric.TruncateAwayFromZero(System.Double)">
+      <summary>
+            Removes the fractional part of a number, rounding it to the nearest integer, moving away from zero.
+            </summary>
+      <param name="value">The value to truncate.</param>
+      <returns>The truncated value.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Mathematics.Numeric.Bisect(System.Decimal@,System.Decimal@,System.Decimal,System.Func{System.Decimal,System.Int32})">
+      <summary>
+            Determines a root of a function by using the bisection method.
+            </summary>
+      <param name="low">The initial low-end guess. This value must have a positive fitness function result.</param>
+      <param name="high">The initial high-end guess. This value must have a negative fitness function result.</param>
+      <param name="accuracy">The required accuracy, if an exact solution isn't found. This may be zero to determine the root to the maximum accuracy supported by the <see cref="T:System.Decimal" /> type. This parameter may not be less than zero.</param>
+      <param name="function">The fitness function. Given a guess, this function must return a negative number ("move lower") if the guess is too large; a positive number ("move higher") if the guess is too small; and zero if the guess is just right. It is acceptable to </param>
+      <returns>Returns <c>true</c> if the root of the function was found; in this case, <paramref name="low" /> and <paramref name="high" /> are both equal to the root. Returns <c>false</c> if the root was not found; in this case, <paramref name="low" /> and <paramref name="high" /> bracket the root, and the difference between them is less than <c>2*<paramref name="accuracy" /></c></returns>
+      <exception cref="T:System.InvalidOperationException">The fitness function <paramref name="function" /> does not converge within the range [<paramref name="low" />, <paramref name="high" />].</exception>
+      <requires description="Accuracy cannot be negative." exception="T:System.ArgumentOutOfRangeException">accuracy &gt;= 0</requires>
+      <exception cref="T:System.ArgumentOutOfRangeException">accuracy &lt; 0</exception>
+    </member>
     <member name="T:Nito.KitchenSink.PropertyChangedEventHandlerExtensions">
       <summary>
             Provides extension methods for <see cref="T:System.ComponentModel.PropertyChangedEventHandler" /> delegates.
@@ -3933,6 +4789,33 @@
             </summary>
       <param name="handler">The delegate to raise. If this parameter is null, then no action is taken.</param>
       <param name="sender">The object raising this event.</param>
+    </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1">
+      <summary>
+            Combines an object with a collection of extensions.
+            </summary>
+      <typeparam name="T">The type of object to wrap.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1" /> class with a default value for <see cref="P:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.Object" />.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1" /> class with the specified value for <see cref="P:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.Object" />.
+            </summary>
+      <param name="object">The object to wrap.</param>
+    </member>
+    <member name="P:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.Object">
+      <summary>
+            Gets or sets the object that is made extensible by this wrapper.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ExtensibleObjects.ExtensibleWrapper`1.Extensions">
+      <summary>
+            Gets or the extensions applied to this object.
+            </summary>
     </member>
     <member name="T:Nito.KitchenSink.Communication.SingleByteDelimiterFramer">
       <summary>
@@ -4011,6 +4894,27 @@
             Occurs when a message has arrived. Exceptions thrown from this method propogate through <see cref="M:Nito.KitchenSink.Communication.SingleByteDelimiterFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" />, and may leave the framer instance in an invalid state.
             </summary>
     </member>
+    <member name="T:Nito.KitchenSink.DisposableExtensions">
+      <summary>
+            Provides extension methods for <see cref="T:System.IDisposable" /> types.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.DisposableExtensions.ReferenceCounted``1(``0)">
+      <summary>
+            Wraps this disposable object in a reference-counted disposable wrapper.
+            </summary>
+      <typeparam name="T">The type of the underlying disposable object.</typeparam>
+      <param name="disposable">The underlying disposable object to wrap.</param>
+      <returns>A reference-counted disposable wrapper.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.DisposableExtensions.IgnoreDisposeExceptions``1(``0)">
+      <summary>
+            Wraps this disposable object in a wrapper which swallows any exceptions thrown from <see cref="M:System.IDisposable.Dispose" />.
+            </summary>
+      <typeparam name="T">The type of the underlying disposable object.</typeparam>
+      <param name="disposable">The underlying disposable object to wrap.</param>
+      <returns>A safe disposable wrapper.</returns>
+    </member>
     <member name="T:Nito.KitchenSink.StringExtensions">
       <summary>
             Provides useful extension methods for string operations.
@@ -4076,14 +4980,543 @@
       <param name="source">The sequence of strings.</param>
       <returns>The concatenated string.</returns>
     </member>
+    <member name="T:Nito.KitchenSink.ExtensibleObjects.ExtensionCollectionExtensions">
+      <summary>
+            Extension methods for extension collections.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollectionExtensions.AddRange(Nito.KitchenSink.ExtensibleObjects.IExtensionCollection,System.Collections.Generic.IEnumerable{Nito.KitchenSink.ExtensibleObjects.IExtension})">
+      <summary>
+            Adds a sequence of extension objects to an extension collection.
+            </summary>
+      <param name="this">The extension collection to which to add the extensions.</param>
+      <param name="extensions">The sequence of extension objects to add to the extension collection.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollectionExtensions.MoveAllExtensionsTo(Nito.KitchenSink.ExtensibleObjects.IExtensionCollection,Nito.KitchenSink.ExtensibleObjects.IExtensionCollection)">
+      <summary>
+            Removes all extension objects from this collection and moves them to a new collection.
+            </summary>
+      <param name="from">The extension collection from which to remove the extensions.</param>
+      <param name="to">The extension collection to which to add the extensions.</param>
+    </member>
     <member name="T:Nito.KitchenSink.Communication.MessageArrivedEventHandler">
       <summary>
             Receives notification that a message has arrived.
             </summary>
       <param name="message">The message that has arrived. This may contain an alias of the data passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" /> in this call stack, but will not contain an alias to any data previously passed to <see cref="M:Nito.KitchenSink.Communication.IFramer.DataReceived(System.Collections.Generic.IList{System.Byte})" />.</param>
     </member>
+    <member name="T:Nito.KitchenSink.WeakReference`1">
+      <summary>
+            Represents a weak reference, which references an object while still allowing that object to be reclaimed by garbage collection.
+            </summary>
+      <remarks>
+        <para>We define our own type, unrelated to <see cref="T:System.WeakReference" /> both to provide type safety and because <see cref="T:System.WeakReference" /> is an incorrect implementation (it does not implement <see cref="T:System.IDisposable" />).</para>
+      </remarks>
+      <typeparam name="T">The type of object to reference.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.WeakReference`1.safeHandle">
+      <summary>
+            The contained <see cref="T:Nito.KitchenSink.SafeGCHandle" />.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakReference`1.#ctor(`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakReference`1" /> class, referencing the specified object.
+            </summary>
+      <param name="target">The object to track. May not be null.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakReference`1.Dispose">
+      <summary>
+            Frees the weak reference.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakReference`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakReference`1.Target">
+      <summary>
+            Gets the referenced object. Will return null if the object has been garbage collected.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakReference`1.IsAlive">
+      <summary>
+            Gets a value indicating whether the object is still alive (has not been garbage collected).
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.IWeakCollection`1">
+      <summary>
+            A collection of weak references to objects of type <typeparamref name="T" />.
+            </summary>
+      <typeparam name="T">The type of objects to hold weak references to.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.IWeakCollection`1.Purge">
+      <summary>
+            Removes all dead objects from the collection.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveList">
+      <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteList">
+      <summary>
+            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.CompleteCount">
+      <summary>
+            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.DeadCount">
+      <summary>
+            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCount">
+      <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.IWeakCollection`1.LiveCountWithoutPurge">
+      <summary>
+            Gets the number of live entries in the collection without causing a purge. O(n).
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.WeakCollection`1">
+      <summary>
+            A collection of weak references to objects. Weak references are purged by iteration/count operations, not by add/remove operations.
+            </summary>
+      <typeparam name="T">The type of object to hold weak references to.</typeparam>
+      <remarks>
+        <para>Since the collection holds weak references to the actual objects, the collection is comprised of both living and dead references. Living references refer to objects that have not been garbage collected, and may be used as normal references. Dead references refer to objects that have been garbage collected.</para>
+        <para>Dead references do consume resources; each dead reference is a garbage collection handle.</para>
+        <para>Dead references may be cleaned up by a <see cref="M:Nito.KitchenSink.WeakCollection`1.Purge" /> operation. Some properties and methods cause a purge as a side effect; the member documentation specifies whether a purge takes place.</para>
+      </remarks>
+    </member>
+    <member name="F:Nito.KitchenSink.WeakCollection`1.list">
+      <summary>
+            The actual collection of strongly-typed weak references.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.WeakCollection`1" /> class that is empty.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.Add(`0)">
+      <summary>
+            Adds a weak reference to an object to the collection. Does not cause a purge.
+            </summary>
+      <param name="item">The object to add a weak reference to.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.Remove(`0)">
+      <summary>
+            Removes a weak reference to an object from the collection. Does not cause a purge.
+            </summary>
+      <param name="item">The object to remove a weak reference to.</param>
+      <returns>True if the object was found and removed; false if the object was not found.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.Purge">
+      <summary>
+            Removes all dead objects from the collection.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.Dispose">
+      <summary>
+            Frees all resources held by the collection.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.Clear">
+      <summary>
+            Empties the collection.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Contains(`0)">
+      <summary>
+            Determines whether the collection contains a specific value.
+            </summary>
+      <param name="item">The object to locate.</param>
+      <returns>True if the collection contains a specific value; false if it does not.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#CopyTo(`0[],System.Int32)">
+      <summary>
+            Copies all live objects to an array.
+            </summary>
+      <param name="array">The destination array.</param>
+      <param name="arrayIndex">The index to begin writing into the array.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#IEnumerable{T}#GetEnumerator">
+      <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+      <returns>The sequence of live objects.</returns>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#IEnumerable#GetEnumerator">
+      <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+      <returns>The sequence of live objects.</returns>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.WeakCollection`1.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveList">
+      <summary>
+            Gets a sequence of live objects from the collection, causing a purge.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteList">
+      <summary>
+            Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.CompleteCount">
+      <summary>
+            Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.DeadCount">
+      <summary>
+            Gets the number of dead entries in the collection. Does not cause a purge. O(n).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCount">
+      <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.LiveCountWithoutPurge">
+      <summary>
+            Gets the number of live entries in the collection without causing a purge. O(n).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#Count">
+      <summary>
+            Gets the number of live entries in the collection, causing a purge. O(n).
+            </summary>
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.get_Count" inheritedFromTypeName="ICollection">Contract.Result&lt;int&gt;() &gt;= 0</ensures>
+      </getter>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#IsReadOnly">
+      <summary>
+            Gets a value indicating whether the collection is read only. Always returns false.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.WeakCollection`1.UnsafeLiveList">
+      <summary>
+            Gets a sequence of live objects from the collection, causing a purge. The entire sequence MUST always be enumerated!
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ObjectTracking.ObjectTracker">
+      <summary>
+            An object that tracks the lifetimes of other objects. This class is fully thread-safe.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.lookup">
+      <summary>
+            The structure that keeps track of all tracked objects. There are two tiers (exact type and hash code) to mitigate contention. Once constructed, these collection objects are never GC'ed.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.gcDetectionThread">
+      <summary>
+            The GC detection thread. This thread periodically scans all tracked objects, searching for those which have been GC'ed.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.gcDetectionWakeup">
+      <summary>
+            The signal sent to the GC detection thread to tell it to use the updated <see cref="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.gcDetectionWaitTimeInMilliseconds" />.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.gcDetectionWaitTimeInMilliseconds">
+      <summary>
+            The amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectTracker.defaultObjectTracker">
+      <summary>
+            The single global instance.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectTracker.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectTracker" /> class.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectTracker.GCDetectionThreadProc">
+      <summary>
+            The main thread procedure for the GC detection thread. This thread does not exit until its AppDomain is unloaded.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectTracker.TrackObject(System.Object)">
+      <summary>
+            Tracks a target object. Creates an <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> if one doesn't already exist for the target, and returns that object id.
+            </summary>
+      <param name="target">The target object to track.</param>
+      <returns>A unique <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> that identifies and tracks the target object.</returns>
+      <exception cref="T:System.InvalidOperationException">The target object is not reference-equatable.</exception>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectTracker.Track``1(``0)">
+      <summary>
+            Tracks a target object. Creates an <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> if one doesn't already exist for the target, and returns a strongly-typed reference to that object id.
+            </summary>
+      <param name="target">The target object to track.</param>
+      <returns>A strongly-typed reference to the unique <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> that identifies and tracks the target object.</returns>
+      <exception cref="T:System.InvalidOperationException">The target object is not reference-equatable.</exception>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectTracker.Default">
+      <summary>
+            Gets the default instance of <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectTracker" /> for this <see cref="T:System.AppDomain" />.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectTracker.GCDetectionWaitTimeInMilliseconds">
+      <summary>
+            Gets or sets the amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds. Setting this value "resets" the wait time, causing the GC Detection thread to begin waiting with the new timeout value.
+            </summary>
+      <remarks>
+        <para>This may be set to <see cref="F:System.Threading.Timeout.Infinite" /> to disable GC detection.</para>
+      </remarks>
+    </member>
+    <member name="T:Nito.KitchenSink.ObjectTracking.ObjectId">
+      <summary>
+            A unique identifier for a tracked object (target). Uses reference equality. Also acts as a weakly-typed weak reference for the tracked object.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectId.registeredActions">
+      <summary>
+            The list of registered actions to invoke when the target is GC'ed. This member must be locked when accessed unless the target has been GC'ed.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectId.reference">
+      <summary>
+            The underlying weak reference to the target object. This may be <c>null</c> if the GC Detection Thread has already detected that the tracked object has been GC'ed. Code that accesses this member must lock <see cref="F:Nito.KitchenSink.ObjectTracking.ObjectId.referenceLock" />.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.ObjectTracking.ObjectId.referenceLock">
+      <summary>
+            The lock protecting <see cref="F:Nito.KitchenSink.ObjectTracking.ObjectId.reference" />.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectId.#ctor(System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> class, identifying the specified target object.
+            </summary>
+      <param name="target">The target object identified by this object id instance.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectId.TargetAs``1">
+      <summary>
+            Returns <see cref="P:Nito.KitchenSink.ObjectTracking.ObjectId.Target" />, cast to <typeparamref name="T" />.
+            </summary>
+      <typeparam name="T">The type to which to cast <see cref="P:Nito.KitchenSink.ObjectTracking.ObjectId.Target" />.</typeparam>
+      <returns>
+        <see cref="P:Nito.KitchenSink.ObjectTracking.ObjectId.Target" />, cast to <typeparamref name="T" />.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectId.Register(System.Action)">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectId.Register(System.Action{Nito.KitchenSink.ObjectTracking.ObjectId})">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: this <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" />.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectId.TargetCollected">
+      <summary>
+            Notifies the <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" /> that its target has been GC'ed. This can ONLY be called from the ObjectTracker GC Detection Thread. No locks may be held when this method is called. The target must already be GC'ed when this method is called.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectId.IsAlive">
+      <summary>
+            Gets a value indicating whether the target is still alive (has not been garbage collected).
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectId.Target">
+      <summary>
+            Gets the target object. Will return null if the object has been garbage collected.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1">
+      <summary>
+            A strongly-typed wrapper around <see cref="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.ObjectId" />. Derived types use value equality, and are considered equal if they both refer to the same <see cref="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.ObjectId" />, even if the type parameter <typeparamref name="T" /> is different. All members are fully threadsafe.
+            </summary>
+      <typeparam name="T">A type of the target object. This does not have to be the exact type of the target object.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.Register(System.Action)">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.Register(System.Action{Nito.KitchenSink.ObjectTracking.ObjectId})">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: <see cref="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.ObjectId" />.</param>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.ObjectId">
+      <summary>
+            The object id that is wrapped by this instance. This value never changes.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.IsAlive">
+      <summary>
+            Gets a value indicating whether the target is still alive (has not been garbage collected). This must be the same as <c>ObjectId.IsAlive</c>.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.IObjectIdReference`1.Target">
+      <summary>
+            Gets the target object. Will return null if the object has been garbage collected. This must be the same as <c>(T)ObjectId.Target</c>.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase">
+      <summary>
+            The abstract base class for object id references.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.#ctor(Nito.KitchenSink.ObjectTracking.ObjectId)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase" /> class referring to the specified object id.
+            </summary>
+      <param name="objectId">The object id that this object id reference refers to.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.Register(System.Action)">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.Register(System.Action{Nito.KitchenSink.ObjectTracking.ObjectId})">
+      <summary>
+            Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
+            </summary>
+      <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: <see cref="P:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.ObjectId" />.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.Equals(System.Object)">
+      <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current object id reference.
+            </summary>
+      <returns>
+            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+            </returns>
+      <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.Equals(Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase)">
+      <summary>
+            Indicates whether the current object id reference is equal to another object id reference (i.e., they both refer to the same object id).
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object id reference to compare with this object.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.GetHashCode">
+      <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+      <returns>
+            A hash code for the current <see cref="T:System.Object" />.
+            </returns>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.ObjectId">
+      <summary>
+            The object id that is wrapped by this instance. This value never changes.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase.IsAlive">
+      <summary>
+            Gets a value indicating whether the target is still alive (has not been garbage collected). This must be the same as <c>ObjectId.IsAlive</c>.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.ObjectTracking.ObjectIdReference`1">
+      <summary>
+            A strongly-typed wrapper around <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" />. Uses value equality; two instances are considered equal if they both refer to the same <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectId" />, even if the type parameter <typeparamref name="T" /> is different. All members are fully threadsafe.
+            </summary>
+      <typeparam name="T">A type of the target object. This does not have to be the exact type of the target object.</typeparam>
+    </member>
+    <member name="M:Nito.KitchenSink.ObjectTracking.ObjectIdReference`1.#ctor(Nito.KitchenSink.ObjectTracking.ObjectId)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.ObjectTracking.ObjectIdReferenceBase" /> class referring to the specified object id.
+            </summary>
+      <param name="objectId">The object id that this object id reference refers to.</param>
+    </member>
+    <member name="P:Nito.KitchenSink.ObjectTracking.ObjectIdReference`1.Target">
+      <summary>
+            Gets the target object. Will return null if the object has been garbage collected. This must be the same as <c>(T)ObjectId.Target</c>.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.SafeGCHandle">
+      <summary>
+            Helper class to help with managing <see cref="T:System.Runtime.InteropServices.GCHandle" /> resources.
+            </summary>
+      <remarks>
+        <para>The only reason this isn't <c>public</c> is to prevent misuse by end users.</para>
+        <para>Note that this class can only be used to represent <see cref="T:System.Runtime.InteropServices.GCHandle" /> objects that should be freed when garbage collected (or disposed). This class cannot be used in several interop situations, such as passing ownership of an object to a callback function.</para>
+      </remarks>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeGCHandle.#ctor(System.Object,System.Runtime.InteropServices.GCHandleType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SafeGCHandle" /> class referring to the target in the given way.
+            </summary>
+      <param name="target">The object to reference.</param>
+      <param name="type">The way to reference the object.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeGCHandle.ReleaseHandle">
+      <summary>
+            Frees the garbage collection handle.
+            </summary>
+      <returns>Whether the handle was released successfully.</returns>
+    </member>
+    <member name="M:Nito.KitchenSink.SafeGCHandle.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.SafeGCHandle.Handle">
+      <summary>
+            Gets the underlying allocated garbage collection handle.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.SafeGCHandle.IsInvalid">
+      <summary>
+            Gets a value indicating whether the handle value is invalid.
+            </summary>
+    </member>
     <member name="M:Nito.KitchenSink.WeakCollection`1.System#Collections#Generic#ICollection{T}#get_Count">
       <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.get_Count" inheritedFromTypeName="ICollection">Contract.Result&lt;int&gt;() &gt;= 0</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.System#Collections#Generic#ICollection{Nito#KitchenSink#ExtensibleObjects#IExtension}#get_Count">
+      <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.get_Count" inheritedFromTypeName="ICollection">Contract.Result&lt;int&gt;() &gt;= 0</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.System#Collections#Generic#IEnumerable{Nito#KitchenSink#ExtensibleObjects#IExtension}#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.System#Collections#Generic#ICollection{Nito#KitchenSink#ExtensibleObjects#IExtension}#Count">
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.Generic.ICollection`1.get_Count" inheritedFromTypeName="ICollection">Contract.Result&lt;int&gt;() &gt;= 0</ensures>
+      </getter>
+    </member>
+    <member name="M:Nito.KitchenSink.ExtensibleObjects.ExtensionCollection.System#Collections#IEnumerable#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.SubjectWithSubscriptionNotification`1.OnError(System.Exception)">
+      <requires inheritedFrom="M:System.IObserver`1.OnError(System.Exception)" inheritedFromTypeName="IObserver">error != null</requires>
     </member>
   </members>
 </doc>
