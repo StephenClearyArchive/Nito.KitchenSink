@@ -10,11 +10,11 @@
     public static class TypeExtensions
     {
         /// <summary>
-        /// Returns <c>true</c> if this type uses reference equality; returns <c>false</c> if this type or a base type overrides <see cref="object.Equals(object)"/>.
+        /// Returns <c>true</c> if this type uses reference equality (i.e., does not override <see cref="object.Equals(object)"/>); returns <c>false</c> if this type or any of its base types override <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="type">The type to test for reference equality.</param>
-        /// <returns>Returns <c>true</c> if this type uses reference equality; returns <c>false</c> if this type or a base type overrides <see cref="object.Equals(object)"/>.</returns>
-        public static bool UsesReferenceEquality(this Type type)
+        /// <returns>Returns <c>true</c> if this type uses reference equality (i.e., does not override <see cref="object.Equals(object)"/>); returns <c>false</c> if this type or any of its base types override <see cref="object.Equals(object)"/>.</returns>
+        public static bool IsReferenceEquatable(this Type type)
         {
             // Only reference types can use reference equality.
             if (!type.IsClass || type.IsPointer)

@@ -156,7 +156,7 @@
             if (!this.lookup.TryGetValue(type, out dictionary))
             {
                 // The type is not already present in the first tier, so check it.
-                if (!type.UsesReferenceEquality())
+                if (!type.IsReferenceEquatable())
                 {
                     throw new InvalidOperationException("Cannot track an object unless it uses reference equality.");
                 }

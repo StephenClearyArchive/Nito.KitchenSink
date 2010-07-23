@@ -14,12 +14,12 @@ namespace Tests.Unit_Tests
         [TestMethod]
         public void UsesReferenceEquality_ReturnsExpectedValueForBCLTypes()
         {
-            Assert.IsTrue(typeof(object).UsesReferenceEquality());
+            Assert.IsTrue(typeof(object).IsReferenceEquatable());
 
-            Assert.IsFalse(typeof(Enum).UsesReferenceEquality());
-            Assert.IsFalse(typeof(ValueType).UsesReferenceEquality());
-            Assert.IsFalse(typeof(Delegate).UsesReferenceEquality());
-            Assert.IsFalse(typeof(MulticastDelegate).UsesReferenceEquality());
+            Assert.IsFalse(typeof(Enum).IsReferenceEquatable());
+            Assert.IsFalse(typeof(ValueType).IsReferenceEquatable());
+            Assert.IsFalse(typeof(Delegate).IsReferenceEquatable());
+            Assert.IsFalse(typeof(MulticastDelegate).IsReferenceEquatable());
         }
 
         struct ValueTypeWithoutExplicitEquals { }
@@ -27,10 +27,10 @@ namespace Tests.Unit_Tests
         [TestMethod]
         public void ValueType_DoesNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(int).UsesReferenceEquality());
-            Assert.IsFalse(typeof(Tuple<int>).UsesReferenceEquality());
-            Assert.IsFalse(typeof(Tuple<>).UsesReferenceEquality());
-            Assert.IsFalse(typeof(ValueTypeWithoutExplicitEquals).UsesReferenceEquality());
+            Assert.IsFalse(typeof(int).IsReferenceEquatable());
+            Assert.IsFalse(typeof(Tuple<int>).IsReferenceEquatable());
+            Assert.IsFalse(typeof(Tuple<>).IsReferenceEquatable());
+            Assert.IsFalse(typeof(ValueTypeWithoutExplicitEquals).IsReferenceEquatable());
         }
 
         class BaseClassDefiningEquality
@@ -51,47 +51,47 @@ namespace Tests.Unit_Tests
         [TestMethod]
         public void ReferenceType_WithValueComparision_DoesNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(string).UsesReferenceEquality());
-            Assert.IsFalse(typeof(DerivedClassNotDefiningEquality).UsesReferenceEquality());
+            Assert.IsFalse(typeof(string).IsReferenceEquatable());
+            Assert.IsFalse(typeof(DerivedClassNotDefiningEquality).IsReferenceEquatable());
         }
 
         [TestMethod]
         public void ReferenceType_WithoutValueComparision_UsesReferenceEquality()
         {
-            Assert.IsTrue(typeof(Exception).UsesReferenceEquality());
-            Assert.IsTrue(typeof(List<int>).UsesReferenceEquality());
-            Assert.IsTrue(typeof(List<>).UsesReferenceEquality());
-            Assert.IsTrue(typeof(ReflectionUnitTests).UsesReferenceEquality());
+            Assert.IsTrue(typeof(Exception).IsReferenceEquatable());
+            Assert.IsTrue(typeof(List<int>).IsReferenceEquatable());
+            Assert.IsTrue(typeof(List<>).IsReferenceEquatable());
+            Assert.IsTrue(typeof(ReflectionUnitTests).IsReferenceEquatable());
         }
         
         [TestMethod]
         public void Arrays_UseReferenceEquality()
         {
-            Assert.IsTrue(typeof(Array).UsesReferenceEquality());
+            Assert.IsTrue(typeof(Array).IsReferenceEquatable());
         }
 
         [TestMethod]
         public void Interfaces_DoNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(IEquatable<int>).UsesReferenceEquality());
+            Assert.IsFalse(typeof(IEquatable<int>).IsReferenceEquatable());
         }
 
         [TestMethod]
         public void Pointers_DoNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(int).MakePointerType().UsesReferenceEquality());
+            Assert.IsFalse(typeof(int).MakePointerType().IsReferenceEquatable());
         }
 
         [TestMethod]
         public void Enumerations_DoNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(AttributeTargets).UsesReferenceEquality());
+            Assert.IsFalse(typeof(AttributeTargets).IsReferenceEquatable());
         }
 
         [TestMethod]
         public void Delegates_DoNotUseReferenceEquality()
         {
-            Assert.IsFalse(typeof(Action).UsesReferenceEquality());
+            Assert.IsFalse(typeof(Action).IsReferenceEquatable());
         }
     }
 }
