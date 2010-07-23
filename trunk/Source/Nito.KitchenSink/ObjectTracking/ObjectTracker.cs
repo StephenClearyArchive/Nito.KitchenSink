@@ -147,6 +147,7 @@
         /// </summary>
         /// <param name="target">The target object to track.</param>
         /// <returns>A unique <see cref="ObjectId"/> that identifies and tracks the target object.</returns>
+        /// <exception cref="InvalidOperationException">The target object is not reference-equatable.</exception>
         public ObjectId TrackObject(object target)
         {
             var type = target.GetType();
@@ -158,7 +159,7 @@
                 // The type is not already present in the first tier, so check it.
                 if (!type.IsReferenceEquatable())
                 {
-                    throw new InvalidOperationException("Cannot track an object unless it uses reference equality.");
+                    throw new InvalidOperationException("The target object is not reference-equatable.");
                 }
 
                 // Add the type to the first tier.
@@ -191,6 +192,7 @@
         /// </summary>
         /// <param name="target">The target object to track.</param>
         /// <returns>A strongly-typed reference to the unique <see cref="ObjectId"/> that identifies and tracks the target object.</returns>
+        /// <exception cref="InvalidOperationException">The target object is not reference-equatable.</exception>
         public IObjectIdReference<T> Track<T>(T target) where T : class
         {
             return new ObjectIdReference<T>((ObjectId)TrackObject(target));
