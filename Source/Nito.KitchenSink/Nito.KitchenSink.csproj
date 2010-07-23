@@ -231,6 +231,7 @@
     <Compile Include="TextReaderExtensions.cs" />
     <Compile Include="Weakness\WeakCollection.cs" />
     <Compile Include="Weakness\WeakReference.cs" />
+    <Compile Include="Weakness\WeakValueDictionary.cs" />
     <Compile Include="Weakness\_internal\SafeGCHandle.cs" />
   </ItemGroup>
   <ItemGroup>

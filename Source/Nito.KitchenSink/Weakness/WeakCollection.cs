@@ -12,7 +12,7 @@ namespace Nito.KitchenSink
     /// A collection of weak references to objects of type <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The type of objects to hold weak references to.</typeparam>
-    public interface IWeakCollection<T> : ICollection<T>, IDisposable where T : class
+    public interface IWeakCollection<T> : ICollection<T>, IDisposable
     {
         /// <summary>
         /// Gets a sequence of live objects from the collection, causing a purge.
