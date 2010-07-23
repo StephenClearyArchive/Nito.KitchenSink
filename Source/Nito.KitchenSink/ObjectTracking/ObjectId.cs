@@ -8,6 +8,11 @@
     /// </summary>
     public sealed class ObjectId
     {
+        // Design note: this type extends the WeakReference<T> concept so that the GCHandle can be free'd and then the weak reference always returns
+        //  false/null for IsAlive/Target. It would be slightly more efficient to push this concept into the WeakReference<T> class (removing the
+        //  need for referenceLock, since we could lock on reference directly). However, this concept does not belong on the WeakReference<T> class;
+        //  WeakReference<T> supports the situation where an end-user may free the weak reference before the target is GC'ed.
+
         /// <summary>
         /// The list of registered actions to invoke when the target is GC'ed. This member must be locked when accessed unless the target has been GC'ed.
         /// </summary>
