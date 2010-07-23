@@ -161,13 +161,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="ObjectTracking\ObjectId.cs">
+    <Compile Include="Weakness\ObjectTracking\ObjectId.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ObjectTracking\ObjectIdReference.cs">
+    <Compile Include="Weakness\ObjectTracking\ObjectIdReference.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ObjectTracking\ObjectTracker.cs">
+    <Compile Include="Weakness\ObjectTracking\ObjectTracker.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObservablePipeline.cs" />
@@ -229,9 +229,9 @@
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="TextReaders\SourceTextReader.cs" />
     <Compile Include="TextReaderExtensions.cs" />
-    <Compile Include="WeakCollection.cs" />
-    <Compile Include="WeakReference.cs" />
-    <Compile Include="_internal\SafeGCHandle.cs" />
+    <Compile Include="Weakness\WeakCollection.cs" />
+    <Compile Include="Weakness\WeakReference.cs" />
+    <Compile Include="Weakness\_internal\SafeGCHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
