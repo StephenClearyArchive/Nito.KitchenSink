@@ -26,13 +26,13 @@
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target.</param>
+        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
         void Register(Action action);
 
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
+        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
         void Register(Action<ObjectId> action);
     }
 
@@ -66,7 +66,7 @@
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions.</param>
+        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
         public void Register(Action action)
         {
             this.ObjectId.Register(action);
@@ -75,7 +75,7 @@
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
-        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
+        /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: <see cref="ObjectId"/>.</param>
         public void Register(Action<ObjectId> action)
         {
             this.ObjectId.Register(action);
