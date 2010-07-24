@@ -1,4 +1,4 @@
-﻿namespace Nito.KitchenSink.ObjectTracking
+﻿namespace Nito.Weakness.ObjectTracking
 {
     using System;
 

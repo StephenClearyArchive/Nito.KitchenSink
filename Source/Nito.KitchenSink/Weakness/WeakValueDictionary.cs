@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nito.KitchenSink.Weakness
+namespace Nito.Weakness
 {
     public interface IWeakValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IWeakCollection<KeyValuePair<TKey, TValue>>, IDisposable
     {
@@ -12,146 +12,155 @@ namespace Nito.KitchenSink.Weakness
 
     public sealed class WeakValueDictionary<TKey, TValue> : IWeakValueDictionary<TKey, TValue> where TValue : class
     {
-        private readonly Dictionary<TKey, WeakReference<TValue>> dictionary = new Dictionary<TKey, WeakReference<TValue>>();
+        // TODO: dispose on Remove/Clear
+        private readonly ISourceDictionary<TKey, TKey, TValue, EquatableWeakReference<TValue>> dictionary;
+
+        private WeakValueDictionary(IDictionary<TKey, EquatableWeakReference<TValue>> dictionary)
+        {
+            this.dictionary = dictionary.SelectValue(x => x.Target, x => new EquatableWeakReference<TValue>(x));
+        }
 
         public void Add(TKey key, TValue value)
         {
-            this.dictionary.Add(key, new WeakReference<TValue>(value));
+            this.dictionary.Add(key, value);
         }
 
         // Note: makes no guarantees that the value is alive
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey(key);
+            return this.dictionary.Source.ContainsKey(key);
         }
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys
         {
-            get { return this.dictionary.Keys; }
+            get { return this.dictionary.Source.Keys; }
         }
 
         public bool Remove(TKey key)
         {
-            return this.dictionary.Remove(key);
+            EquatableWeakReference<TValue> value;
+            if (this.dictionary.Source.TryGetValue(key, out value))
+            {
+                value.Dispose();
+                return this.dictionary.Source.Remove(key);
+            }
+
+            return false;
         }
 
         // Note: may return true and set value to null if the value is dead
         public bool TryGetValue(TKey key, out TValue value)
         {
-            WeakReference<TValue> weakValue;
-            if (!this.dictionary.TryGetValue(key, out weakValue))
-            {
-                value = default(TValue);
-                return false;
-            }
-
-            value = weakValue.Target;
-            return true;
+            return this.dictionary.TryGetValue(key, out value);
         }
 
         ICollection<TValue> IDictionary<TKey, TValue>.Values
         {
-            get { return this.dictionary.Values.Select(weakValue => weakValue.Target).ToList(); }
+            get { return this.dictionary.Values; }
         }
 
         public TValue this[TKey key]
         {
             get
             {
-                WeakReference<TValue> ret = this.dictionary[key];
-                return ret.Target;
+                return this.dictionary[key];
             }
 
             set
             {
-
-                throw new NotImplementedException();
+                this.dictionary[key] = value;
             }
         }
 
-        public void Add(KeyValuePair<TKey, TValue> item)
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            this.dictionary.Add(item);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            foreach (var kvp in this.dictionary.Source)
+            {
+                kvp.Value.Dispose();
+            }
+
+            this.dictionary.Source.Clear();
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            return this.dictionary.Contains(item);
         }
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            this.dictionary.CopyTo(array, arrayIndex);
         }
 
         public int Count
         {
-            get { throw new NotImplementedException(); }
+            get { return this.dictionary.Source.Count; }
         }
 
-        public bool IsReadOnly
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            get { return this.dictionary.Source.IsReadOnly; }
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            return this.dictionary.Remove(item);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.dictionary.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
+        }
+
+        private IEnumerable<KeyValuePair<TKey, TValue>> PurgingEnumeration()
+        {
+            var purgedValues = new List<TKey>();
+
+            foreach (var kvp in this.dictionary.Source)
+            {
+                var ret = new KeyValuePair<TKey, TValue>(kvp.Key, kvp.Value.Target);
+                if (ret.Value == null)
+                {
+                    purgedValues.Add(kvp.Key);
+                }
+
+                yield return ret;
+            }
+
+            foreach (var key in purgedValues)
+            {
+                this.Remove(key);
+            }
         }
 
         public IEnumerable<KeyValuePair<TKey, TValue>> LiveList
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IEnumerable<KeyValuePair<TKey, TValue>> CompleteList
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int CompleteCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int DeadCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int LiveCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public int LiveCountWithoutPurge
-        {
-            get { throw new NotImplementedException(); }
+            get { return this.PurgingEnumeration(); }
         }
 
         public void Purge()
         {
-            throw new NotImplementedException();
+            var purgedValues = (from kvp in this.dictionary.Source where !kvp.Value.IsAlive select kvp.Key).ToList();
+
+            foreach (var key in purgedValues)
+            {
+                this.Remove(key);
+            }
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            this.Clear();
         }
     }
 }
