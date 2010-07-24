@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="ReadOnlyCollection.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal sealed class ReadOnlyCollection<T> : ICollection<T>
     {
         private readonly IEnumerable<T> source;

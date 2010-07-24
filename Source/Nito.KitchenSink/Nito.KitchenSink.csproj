@@ -187,6 +187,7 @@
     <Compile Include="Dynamic\DynamicStaticTypeMembers.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Weakness\WeakKeyDictionary.cs" />
     <Compile Include="Weakness\_internal\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
