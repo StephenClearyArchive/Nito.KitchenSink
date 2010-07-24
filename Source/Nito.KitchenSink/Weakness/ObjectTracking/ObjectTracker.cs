@@ -1,4 +1,8 @@
-﻿namespace Nito.Weakness.ObjectTracking
+﻿// <copyright file="WeakReference.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
+
+namespace Nito.Weakness.ObjectTracking
 {
     using System;
     using System.Collections.Concurrent;

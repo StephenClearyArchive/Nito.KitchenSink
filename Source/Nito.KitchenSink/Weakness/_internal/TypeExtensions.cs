@@ -1,4 +1,8 @@
-﻿namespace Nito.Weakness
+﻿// <copyright file="WeakReference.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
+
+namespace Nito.Weakness
 {
     using System;
     using System.Linq;
