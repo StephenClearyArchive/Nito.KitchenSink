@@ -2,47 +2,22 @@
 //     Copyright (c) 2009-2010 Nito Programs.
 // </copyright>
 
-namespace Nito.KitchenSink
+namespace Nito.Weakness
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// A collection of weak references to objects of type <typeparamref name="T"/>.
+    /// A collection of weak references to objects of type <typeparamref name="T"/>. The <see cref="ICollection{T}"/> implementations are understood to work on all the objects of the collection (both dead and alive), and do not implicitly cause purges.
     /// </summary>
     /// <typeparam name="T">The type of objects to hold weak references to.</typeparam>
     public interface IWeakCollection<T> : ICollection<T>, IDisposable
     {
         /// <summary>
-        /// Gets a sequence of live objects from the collection, causing a purge.
+        /// Gets a sequence of live objects from the collection, causing a purge. The purge may occur at the beginning of the enumeration, at the end of the enumeration, or progressively as the sequence is enumerated.
         /// </summary>
         IEnumerable<T> LiveList { get; }
-
-        /// <summary>
-        /// Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
-        /// </summary>
-        IEnumerable<T> CompleteList { get; }
-
-        /// <summary>
-        /// Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
-        /// </summary>
-        int CompleteCount { get; }
-
-        /// <summary>
-        /// Gets the number of dead entries in the collection. Does not cause a purge. O(n).
-        /// </summary>
-        int DeadCount { get; }
-
-        /// <summary>
-        /// Gets the number of live entries in the collection, causing a purge. O(n).
-        /// </summary>
-        int LiveCount { get; }
-
-        /// <summary>
-        /// Gets the number of live entries in the collection without causing a purge. O(n).
-        /// </summary>
-        int LiveCountWithoutPurge { get; }
 
         /// <summary>
         /// Removes all dead objects from the collection.
@@ -88,68 +63,11 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets a complete sequence of objects from the collection. Does not cause a purge. Null entries represent dead objects.
+        /// Gets the number of live and dead entries in the collection, without causing a purge. O(1).
         /// </summary>
-        public IEnumerable<T> CompleteList
+        public int Count
         {
-            get
-            {
-                return this.list.Select(x => x.Target);
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of live and dead entries in the collection. Does not cause a purge. O(1).
-        /// </summary>
-        public int CompleteCount
-        {
-            get
-            {
-                return this.list.Count;
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of dead entries in the collection. Does not cause a purge. O(n).
-        /// </summary>
-        public int DeadCount
-        {
-            get
-            {
-                return this.CompleteList.Count(x => x == null);
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of live entries in the collection, causing a purge. O(n).
-        /// </summary>
-        public int LiveCount
-        {
-            get
-            {
-                return this.UnsafeLiveList.Count();
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of live entries in the collection without causing a purge. O(n).
-        /// </summary>
-        public int LiveCountWithoutPurge
-        {
-            get
-            {
-                return this.CompleteList.Count(x => x != null);
-            }
-        }
-
-        #region ICollection<T> Properties
-
-        /// <summary>
-        /// Gets the number of live entries in the collection, causing a purge. O(n).
-        /// </summary>
-        int ICollection<T>.Count
-        {
-            get { return this.LiveCount; }
+            get { return this.list.Count; }
         }
 
         /// <summary>
@@ -159,8 +77,6 @@ namespace Nito.KitchenSink
         {
             get { return false; }
         }
-
-        #endregion
 
         /// <summary>
         /// Gets a sequence of live objects from the collection, causing a purge. The entire sequence MUST always be enumerated!
@@ -235,10 +151,7 @@ namespace Nito.KitchenSink
         public void Purge()
         {
             // We cannot simply use List<T>.RemoveAll, because the predicate "x => !x.IsAlive" is not stable.
-            IEnumerator<T> enumerator = this.UnsafeLiveList.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-            }
+            this.UnsafeLiveList.Run();
         }
 
         /// <summary>
@@ -262,57 +175,43 @@ namespace Nito.KitchenSink
             this.list.Clear();
         }
 
-        #region ICollection<T> Methods
-
         /// <summary>
-        /// Determines whether the collection contains a specific value.
+        /// Determines whether the collection contains a specific value. Does not cause a purge.
         /// </summary>
         /// <param name="item">The object to locate.</param>
         /// <returns>True if the collection contains a specific value; false if it does not.</returns>
         bool ICollection<T>.Contains(T item)
         {
-            return this.LiveList.Where(x => x != null).Contains(item);
+            return this.Where(x => x != null).Contains(item);
         }
 
         /// <summary>
-        /// Copies all live objects to an array.
+        /// Copies all live and dead objects to an array. Does not cause a purge.
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index to begin writing into the array.</param>
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            List<T> ret = new List<T>(this.list.Count);
-            ret.AddRange(this.UnsafeLiveList);
-            ret.CopyTo(array, arrayIndex);
+            this.CopyToImpl(array, arrayIndex);
         }
 
-        #endregion
-
-        #region IEnumerable<T> Members
-
         /// <summary>
-        /// Gets a sequence of live objects from the collection, causing a purge.
+        /// Gets a sequence of live and dead objects from the collection. Does not cause a purge.
         /// </summary>
-        /// <returns>The sequence of live objects.</returns>
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        /// <returns>The sequence of live and dead objects.</returns>
+        public IEnumerator<T> GetEnumerator()
         {
-            return this.LiveList.GetEnumerator();
+            return this.list.Select(x => x.Target).GetEnumerator();
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         /// <summary>
-        /// Gets a sequence of live objects from the collection, causing a purge.
+        /// Gets a sequence of live and dead objects from the collection. Does not cause a purge.
         /// </summary>
-        /// <returns>The sequence of live objects.</returns>
+        /// <returns>The sequence of live and dead objects.</returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return this.GetEnumerator();
         }
-
-        #endregion
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
@@ -320,7 +219,7 @@ namespace Nito.KitchenSink
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
         public override string ToString()
         {
-            return "WeakCollection<" + typeof(T).Name + "> (" + this.CompleteCount + ")";
+            return "WeakCollection<" + typeof(T).Name + "> (" + this.Count + ")";
         }
     }
 }

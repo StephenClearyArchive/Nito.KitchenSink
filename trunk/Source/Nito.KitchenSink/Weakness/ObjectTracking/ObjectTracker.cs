@@ -1,11 +1,10 @@
-﻿namespace Nito.KitchenSink.ObjectTracking
+﻿namespace Nito.Weakness.ObjectTracking
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Reflection;
 
     /// <summary>
     /// An object that tracks the lifetimes of other objects. This class is fully thread-safe.

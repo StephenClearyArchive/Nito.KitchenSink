@@ -2,7 +2,7 @@
 //     Copyright (c) 2009-2010 Nito Programs.
 // </copyright>
 
-namespace Nito.KitchenSink
+namespace Nito.Weakness
 {
     using System;
     using System.Runtime.InteropServices;
