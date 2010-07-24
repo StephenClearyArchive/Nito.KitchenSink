@@ -1,4 +1,4 @@
-﻿// <copyright file="WeakReference.cs" company="Nito Programs">
+﻿// <copyright file="ObjectId.cs" company="Nito Programs">
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 

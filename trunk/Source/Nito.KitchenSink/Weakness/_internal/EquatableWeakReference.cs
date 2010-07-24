@@ -1,12 +1,14 @@
-﻿using System;
+﻿// <copyright file="EquatableWeakReference.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Nito.Weakness
 {
     /// <summary>
-    /// A strongly-typed weak reference that can be compared for equality. Note that "equivalence" (and the hash code) may change as objects are GC'ed, so this class cannot be used as any kind of key. It is unpredictably mutable.
+    /// A strongly-typed weak reference that can be compared for equality. Note that "equivalence" (and the hash code) may change as objects are GC'ed, so this class may NOT be used as any kind of key (it is unpredictably mutable).
     /// Because of these restrictions, this type is not exposed.
     /// </summary>
     internal sealed class EquatableWeakReference<T> : IEquatable<EquatableWeakReference<T>>, IDisposable where T : class
