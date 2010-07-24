@@ -1,31 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="WeakReference.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
-    public interface IWeakValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IWeakCollection<KeyValuePair<TKey, TValue>>, IDisposable
-    {
+    using System.Collections.Generic;
+    using System.Linq;
 
+    /// <summary>
+    /// A dictionary that has weak references to its values.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    public interface IWeakValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IWeakCollection<KeyValuePair<TKey, TValue>>
+    {
     }
 
+    /// <summary>
+    /// A dictionary that has weak references to its values.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value. This must be a reference type.</typeparam>
     public sealed class WeakValueDictionary<TKey, TValue> : IWeakValueDictionary<TKey, TValue> where TValue : class
     {
-        // TODO: dispose on Remove/Clear
+        /// <summary>
+        /// The storage dictionary, which handles most of the weak reference wrapping.
+        /// </summary>
         private readonly ISourceDictionary<TKey, TKey, TValue, EquatableWeakReference<TValue>> dictionary;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeakValueDictionary&lt;TKey, TValue&gt;"/> class with the specified storage dictionary.
+        /// </summary>
+        /// <param name="dictionary">The storage dictionary.</param>
         private WeakValueDictionary(IDictionary<TKey, EquatableWeakReference<TValue>> dictionary)
         {
             this.dictionary = dictionary.SelectValue(x => x.Target, x => new EquatableWeakReference<TValue>(x));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeakValueDictionary&lt;TKey, TValue&gt;"/> class with the specified capacity and equality comparer.
+        /// </summary>
+        /// <param name="capacity">The capacity to use for this instance.</param>
+        /// <param name="comparer">The equality comparer.</param>
+        public WeakValueDictionary(int capacity, IEqualityComparer<TKey> comparer = null)
+            : this(new Dictionary<TKey, EquatableWeakReference<TValue>>(capacity, comparer))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeakValueDictionary&lt;TKey, TValue&gt;"/> class with the specified equality comparer.
+        /// </summary>
+        /// <param name="comparer">The equality comparer.</param>
+        public WeakValueDictionary(IEqualityComparer<TKey> comparer = null)
+            : this(new Dictionary<TKey, EquatableWeakReference<TValue>>(comparer))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeakValueDictionary&lt;TKey, TValue&gt;"/> class with the specified initial elements and equality comparer.
+        /// </summary>
+        /// <param name="dictionary">The dictionary whose elements are added to this instance.</param>
+        /// <param name="comparer">The equality comparer.</param>
+        public WeakValueDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+            : this(new Dictionary<TKey, EquatableWeakReference<TValue>>(dictionary.Count, comparer))
+        {
+            foreach (var kvp in dictionary)
+            {
+                this.dictionary.Add(kvp.Key, kvp.Value);
+            }
+        }
+
+        /// <summary>
+        /// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+        /// </summary>
+        /// <param name="key">The object to use as the key of the element to add.</param><param name="value">The object to use as the value of the element to add.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
         public void Add(TKey key, TValue value)
         {
             this.dictionary.Add(key, value);
         }
 
-        // Note: makes no guarantees that the value is alive
+        /// <summary>
+        /// Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key. Does not indicate whether the value is dead or alive.
+        /// </summary>
+        /// <returns>
+        /// true if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the key; otherwise, false.
+        /// </returns>
+        /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(TKey key)
         {
             return this.dictionary.Source.ContainsKey(key);
@@ -36,6 +96,13 @@ namespace Nito.Weakness
             get { return this.dictionary.Source.Keys; }
         }
 
+        /// <summary>
+        /// Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+        /// </returns>
+        /// <param name="key">The key of the element to remove.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
         public bool Remove(TKey key)
         {
             EquatableWeakReference<TValue> value;
@@ -48,7 +115,13 @@ namespace Nito.Weakness
             return false;
         }
 
-        // Note: may return true and set value to null if the value is dead
+        /// <summary>
+        /// Gets the value associated with the specified key. If the value is dead, then <paramref name="value"/> is set to <c>null</c> and this method returns <c>true</c>.
+        /// </summary>
+        /// <returns>
+        /// true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, false.
+        /// </returns>
+        /// <param name="key">The key whose value to get.</param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool TryGetValue(TKey key, out TValue value)
         {
             return this.dictionary.TryGetValue(key, out value);
@@ -59,6 +132,13 @@ namespace Nito.Weakness
             get { return this.dictionary.Values; }
         }
 
+        /// <summary>
+        /// Gets or sets the element with the specified key.
+        /// </summary>
+        /// <returns>
+        /// The element with the specified key.
+        /// </returns>
+        /// <param name="key">The key of the element to get or set.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key"/> is not found.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
         public TValue this[TKey key]
         {
             get
@@ -77,6 +157,10 @@ namespace Nito.Weakness
             this.dictionary.Add(item);
         }
 
+        /// <summary>
+        /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// </summary>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
         public void Clear()
         {
             foreach (var kvp in this.dictionary.Source)
@@ -97,6 +181,12 @@ namespace Nito.Weakness
             this.dictionary.CopyTo(array, arrayIndex);
         }
 
+        /// <summary>
+        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// </summary>
+        /// <returns>
+        /// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// </returns>
         public int Count
         {
             get { return this.dictionary.Source.Count; }
@@ -112,6 +202,13 @@ namespace Nito.Weakness
             return this.dictionary.Remove(item);
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+        /// </returns>
+        /// <filterpriority>1</filterpriority>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             return this.dictionary.GetEnumerator();
@@ -122,6 +219,10 @@ namespace Nito.Weakness
             return this.GetEnumerator();
         }
 
+        /// <summary>
+        /// Constructs an enumerable that purges when it is finished enumerating.
+        /// </summary>
+        /// <returns>An enumerable that purges when it is finished enumerating.</returns>
         private IEnumerable<KeyValuePair<TKey, TValue>> PurgingEnumeration()
         {
             var purgedValues = new List<TKey>();
@@ -143,11 +244,17 @@ namespace Nito.Weakness
             }
         }
 
+        /// <summary>
+        /// Gets a sequence of live objects from the collection, causing a purge. The purge occurs at the end of the enumeration.
+        /// </summary>
         public IEnumerable<KeyValuePair<TKey, TValue>> LiveList
         {
             get { return this.PurgingEnumeration(); }
         }
 
+        /// <summary>
+        /// Removes all dead objects from the collection.
+        /// </summary>
         public void Purge()
         {
             var purgedValues = (from kvp in this.dictionary.Source where !kvp.Value.IsAlive select kvp.Key).ToList();
@@ -158,6 +265,9 @@ namespace Nito.Weakness
             }
         }
 
+        /// <summary>
+        /// Releases all weak reference handles.
+        /// </summary>
         public void Dispose()
         {
             this.Clear();
