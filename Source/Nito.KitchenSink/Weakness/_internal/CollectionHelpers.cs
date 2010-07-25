@@ -38,5 +38,15 @@ namespace Nito.Weakness
         {
             return new ReadOnlyCollection<T>(source, count, contains);
         }
+
+        public static ICollection<T> AsCollection<T>(this ICollection<T> collection)
+        {
+            return collection;
+        }
+
+        public static IDictionary<TKey, TValue> AsDictionary<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+        {
+            return dictionary;
+        }
     }
 }

@@ -8,12 +8,7 @@ namespace Nito.Weakness
     using System.Collections.Generic;
     using System.Linq;
 
-    internal interface ISourceDictionary<TExposedKey, TStoredKey, TExposedValue, TStoredValue> : IDictionary<TExposedKey, TExposedValue>
-    {
-        IDictionary<TStoredKey, TStoredValue> Source { get; }
-    }
-
-    internal sealed class ProjectedDictionary<TExposedKey, TStoredKey, TExposedValue, TStoredValue> : ISourceDictionary<TExposedKey, TStoredKey, TExposedValue, TStoredValue>
+    internal sealed class ProjectedDictionary<TSource, TExposedKey, TStoredKey, TExposedValue, TStoredValue> : IDictionary<TExposedKey, TExposedValue> where TSource : IDictionary<TStoredKey, TStoredValue>
     {
         private readonly Func<TStoredValue, TExposedValue> mapStoredValueToExposedValue;
 
@@ -24,7 +19,7 @@ namespace Nito.Weakness
         private readonly Func<TExposedKey, TStoredKey> mapExposedKeyToStoredKey;
 
         public ProjectedDictionary(
-            IDictionary<TStoredKey, TStoredValue> source,
+            TSource source,
             Func<TStoredValue, TExposedValue> mapValueStoredToExposed,
             Func<TExposedValue, TStoredValue> mapValueExposedToStored,
             Func<TStoredKey, TExposedKey> mapKeyStoredToExposed,
@@ -37,7 +32,7 @@ namespace Nito.Weakness
             this.mapExposedKeyToStoredKey = mapKeyExposedToStored;
         }
 
-        public IDictionary<TStoredKey, TStoredValue> Source { get; private set; }
+        public TSource Source { get; private set; }
 
         public void Add(TExposedKey key, TExposedValue value)
         {
@@ -49,7 +44,7 @@ namespace Nito.Weakness
             return this.Source.ContainsKey(this.KeyMapExposedToStored(key));
         }
 
-        ICollection<TExposedKey> IDictionary<TExposedKey, TExposedValue>.Keys
+        public ICollection<TExposedKey> Keys
         {
             get { return this.Source.Keys.Select(this.KeyMapStoredToExposed).ToReadOnlyCollection(() => this.Source.Count, this.ContainsKey); }
         }
@@ -72,7 +67,7 @@ namespace Nito.Weakness
             return true;
         }
 
-        ICollection<TExposedValue> IDictionary<TExposedKey, TExposedValue>.Values
+        public ICollection<TExposedValue> Values
         {
             get
             {
@@ -93,7 +88,7 @@ namespace Nito.Weakness
             }
         }
 
-        void ICollection<KeyValuePair<TExposedKey, TExposedValue>>.Add(KeyValuePair<TExposedKey, TExposedValue> item)
+        public void Add(KeyValuePair<TExposedKey, TExposedValue> item)
         {
             this.Source.Add(this.KeyMapExposedToStored(item.Key), this.ValueMapExposedToStored(item.Value));
         }
@@ -103,12 +98,12 @@ namespace Nito.Weakness
             this.Source.Clear();
         }
 
-        bool ICollection<KeyValuePair<TExposedKey, TExposedValue>>.Contains(KeyValuePair<TExposedKey, TExposedValue> item)
+        public bool Contains(KeyValuePair<TExposedKey, TExposedValue> item)
         {
             return this.Source.Contains(this.MapExposedToStored(item));
         }
 
-        void ICollection<KeyValuePair<TExposedKey, TExposedValue>>.CopyTo(KeyValuePair<TExposedKey, TExposedValue>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<TExposedKey, TExposedValue>[] array, int arrayIndex)
         {
             this.CopyToImpl(array, arrayIndex);
         }
@@ -123,7 +118,7 @@ namespace Nito.Weakness
             get { return this.Source.IsReadOnly; }
         }
 
-        bool ICollection<KeyValuePair<TExposedKey, TExposedValue>>.Remove(KeyValuePair<TExposedKey, TExposedValue> item)
+        public bool Remove(KeyValuePair<TExposedKey, TExposedValue> item)
         {
             return this.Source.Remove(this.MapExposedToStored(item));
         }
