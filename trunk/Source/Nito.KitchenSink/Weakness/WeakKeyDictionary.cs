@@ -18,15 +18,15 @@ namespace Nito.Weakness
         /// <summary>
         /// The storage dictionary, which handles most of the weak reference wrapping.
         /// </summary>
-        private readonly ISourceDictionary<TKey, ObjectId, TValue, TValue> dictionary;
+        private readonly ProjectedDictionary<Dictionary<ObjectId, TValue>, TKey, ObjectId, TValue, TValue> dictionary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakKeyDictionary&lt;TKey, TValue&gt;"/> class with the specified storage dictionary.
         /// </summary>
         /// <param name="dictionary">The storage dictionary.</param>
-        private WeakKeyDictionary(IDictionary<ObjectId, TValue> dictionary)
+        private WeakKeyDictionary(Dictionary<ObjectId, TValue> dictionary)
         {
-            this.dictionary = new ProjectedDictionary<TKey, ObjectId, TValue, TValue>(
+            this.dictionary = new ProjectedDictionary<Dictionary<ObjectId, TValue>, TKey, ObjectId, TValue, TValue>(
                 dictionary,
                 x => x,
                 x => x,
@@ -168,7 +168,7 @@ namespace Nito.Weakness
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.IsReadOnly; }
+            get { return this.dictionary.Source.AsCollection().IsReadOnly; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
