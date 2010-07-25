@@ -38,21 +38,5 @@ namespace Nito.Weakness
         {
             return new ReadOnlyCollection<T>(source, count, contains);
         }
-
-        public static ISourceDictionary<TKey, TKey, TNewValue, TOldValue> SelectValue<TKey, TOldValue, TNewValue>(
-            this IDictionary<TKey, TOldValue> source,
-            Func<TOldValue, TNewValue> selector,
-            Func<TNewValue, TOldValue> reverseSelector)
-        {
-            return new ProjectedDictionary<TKey, TKey, TNewValue, TOldValue>(source, selector, reverseSelector, x => x, x => x);
-        }
-
-        public static ISourceDictionary<TNewKey, TOldKey, TValue, TValue> SelectKey<TOldKey, TNewKey, TValue>(
-            this IDictionary<TOldKey, TValue> source,
-            Func<TOldKey, TNewKey> selector,
-            Func<TNewKey, TOldKey> reverseSelector)
-        {
-            return new ProjectedDictionary<TNewKey, TOldKey, TValue, TValue>(source, x => x, x => x, selector, reverseSelector);
-        }
     }
 }

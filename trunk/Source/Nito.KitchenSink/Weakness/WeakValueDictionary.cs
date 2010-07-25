@@ -11,17 +11,8 @@ namespace Nito.Weakness
     /// A dictionary that has weak references to its values.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    public interface IWeakValueDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IWeakCollection<KeyValuePair<TKey, TValue>>
-    {
-    }
-
-    /// <summary>
-    /// A dictionary that has weak references to its values.
-    /// </summary>
-    /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value. This must be a reference type.</typeparam>
-    public sealed class WeakValueDictionary<TKey, TValue> : IWeakValueDictionary<TKey, TValue> where TValue : class
+    public sealed class WeakValueDictionary<TKey, TValue> : IWeakDictionary<TKey, TValue> where TValue : class
     {
         /// <summary>
         /// The storage dictionary, which handles most of the weak reference wrapping.
@@ -34,7 +25,12 @@ namespace Nito.Weakness
         /// <param name="dictionary">The storage dictionary.</param>
         private WeakValueDictionary(IDictionary<TKey, EquatableWeakReference<TValue>> dictionary)
         {
-            this.dictionary = dictionary.SelectValue(x => x.Target, x => new EquatableWeakReference<TValue>(x));
+            this.dictionary = new ProjectedDictionary<TKey, TKey, TValue, EquatableWeakReference<TValue>>(
+                dictionary,
+                x => x.Target,
+                x => new EquatableWeakReference<TValue>(x),
+                x => x,
+                x => x);
         }
 
         /// <summary>
@@ -133,7 +129,7 @@ namespace Nito.Weakness
         }
 
         /// <summary>
-        /// Gets or sets the element with the specified key.
+        /// Gets or sets the element with the specified key. The returned value will be <c>null</c> if it is no longer alive.
         /// </summary>
         /// <returns>
         /// The element with the specified key.
@@ -148,7 +144,8 @@ namespace Nito.Weakness
 
             set
             {
-                this.dictionary[key] = value;
+                this.Remove(key);
+                this.Add(key, value);
             }
         }
 
