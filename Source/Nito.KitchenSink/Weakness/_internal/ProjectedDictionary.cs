@@ -133,32 +133,32 @@ namespace Nito.Weakness
             return this.GetEnumerator();
         }
 
-        private KeyValuePair<TExposedKey, TExposedValue> MapStoredToExposed(KeyValuePair<TStoredKey, TStoredValue> value)
+        public KeyValuePair<TExposedKey, TExposedValue> MapStoredToExposed(KeyValuePair<TStoredKey, TStoredValue> value)
         {
             return new KeyValuePair<TExposedKey, TExposedValue>(this.KeyMapStoredToExposed(value.Key), this.ValueMapStoredToExposed(value.Value));
         }
 
-        private KeyValuePair<TStoredKey, TStoredValue> MapExposedToStored(KeyValuePair<TExposedKey, TExposedValue> value)
+        public KeyValuePair<TStoredKey, TStoredValue> MapExposedToStored(KeyValuePair<TExposedKey, TExposedValue> value)
         {
             return new KeyValuePair<TStoredKey, TStoredValue>(this.KeyMapExposedToStored(value.Key), this.ValueMapExposedToStored(value.Value));
         }
 
-        private TExposedValue ValueMapStoredToExposed(TStoredValue value)
+        public TExposedValue ValueMapStoredToExposed(TStoredValue value)
         {
             return this.mapStoredValueToExposedValue(value);
         }
 
-        private TStoredValue ValueMapExposedToStored(TExposedValue value)
+        public TStoredValue ValueMapExposedToStored(TExposedValue value)
         {
             return this.mapExposedValueToStoredValue(value);
         }
 
-        private TExposedKey KeyMapStoredToExposed(TStoredKey key)
+        public TExposedKey KeyMapStoredToExposed(TStoredKey key)
         {
             return this.mapStoredKeyToExposedKey(key);
         }
 
-        private TStoredKey KeyMapExposedToStored(TExposedKey key)
+        public TStoredKey KeyMapExposedToStored(TExposedKey key)
         {
             return this.mapExposedKeyToStoredKey(key);
         }
