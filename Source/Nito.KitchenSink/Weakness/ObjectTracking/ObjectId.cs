@@ -95,16 +95,18 @@ namespace Nito.Weakness.ObjectTracking
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
         /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks.</param>
-        public void Register(Action action)
+        /// <returns>The registered action delegate, or <c>null</c> if the target was already dead, the action was invoked, and the action was not registered.</returns>
+        public Action<ObjectId> Register(Action action)
         {
-            this.Register(_ => action());
+            return this.Register(_ => action());
         }
 
         /// <summary>
         /// Registers a callback that is called sometime after the target is garbage collected. If the target is already garbage collected, the callback is invoked immediately. It is possible that the callback may never be called, if the target is garbage collected shortly before the application domain is unloaded.
         /// </summary>
         /// <param name="action">The callback to invoke some time after the target is garbage collected. The callback must be callable from any thread (including this one). The callback cannot raise exceptions. The callback should not keep a reference to the target. The callback may run concurrently with the target's finalizer and/or other callbacks. The callback takes a single parameter: this <see cref="ObjectId"/>.</param>
-        public void Register(Action<ObjectId> action)
+        /// <returns>The registered action delegate, or <c>null</c> if the target was already dead, the action was invoked, and the action was not registered.</returns>
+        public Action<ObjectId> Register(Action<ObjectId> action)
         {
             // First, determine if the target is alive.
             // If it is alive, we want to keep it alive until the end of this method (see comments at the end of this method).
@@ -113,7 +115,7 @@ namespace Nito.Weakness.ObjectTracking
             {
                 // The target is already GC'ed, so just invoke the action and return.
                 action(this);
-                return;
+                return action;
             }
 
             // At this point, we know the target is alive (and we keep it alive until the end of the method).
@@ -134,6 +136,25 @@ namespace Nito.Weakness.ObjectTracking
             //   5) Register continues and adds the action to the registeredActions list.
             //   Result: user's registered action is lost.
             GC.KeepAlive(target);
+            return action;
+        }
+
+        /// <summary>
+        /// Unregisters a callback.
+        /// </summary>
+        /// <param name="action">The callback to unregister. This may be <c>null</c>, in which case this method returns <c>true</c> without performing any action.</param>
+        public bool Unregister(Action<ObjectId> action)
+        {
+            if (action == null)
+            {
+                return true;
+            }
+
+            // Prevent race conditions with registering/unregistering threads and the GC detection thread.
+            lock (this.registeredActions)
+            {
+                return this.registeredActions.Remove(action);
+            }
         }
 
         /// <summary>

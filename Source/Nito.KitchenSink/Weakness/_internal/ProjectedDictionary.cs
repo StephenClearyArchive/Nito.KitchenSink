@@ -100,7 +100,7 @@ namespace Nito.Weakness
 
         public bool Contains(KeyValuePair<TExposedKey, TExposedValue> item)
         {
-            return this.Source.Contains(this.MapExposedToStored(item));
+            return this.Source.Contains(this.PairMapExposedToStored(item));
         }
 
         public void CopyTo(KeyValuePair<TExposedKey, TExposedValue>[] array, int arrayIndex)
@@ -120,12 +120,12 @@ namespace Nito.Weakness
 
         public bool Remove(KeyValuePair<TExposedKey, TExposedValue> item)
         {
-            return this.Source.Remove(this.MapExposedToStored(item));
+            return this.Source.Remove(this.PairMapExposedToStored(item));
         }
 
         public IEnumerator<KeyValuePair<TExposedKey, TExposedValue>> GetEnumerator()
         {
-            return this.Source.Select(this.MapStoredToExposed).GetEnumerator();
+            return this.Source.Select(this.PairMapStoredToExposed).GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -133,12 +133,12 @@ namespace Nito.Weakness
             return this.GetEnumerator();
         }
 
-        public KeyValuePair<TExposedKey, TExposedValue> MapStoredToExposed(KeyValuePair<TStoredKey, TStoredValue> value)
+        public KeyValuePair<TExposedKey, TExposedValue> PairMapStoredToExposed(KeyValuePair<TStoredKey, TStoredValue> value)
         {
             return new KeyValuePair<TExposedKey, TExposedValue>(this.KeyMapStoredToExposed(value.Key), this.ValueMapStoredToExposed(value.Value));
         }
 
-        public KeyValuePair<TStoredKey, TStoredValue> MapExposedToStored(KeyValuePair<TExposedKey, TExposedValue> value)
+        public KeyValuePair<TStoredKey, TStoredValue> PairMapExposedToStored(KeyValuePair<TExposedKey, TExposedValue> value)
         {
             return new KeyValuePair<TStoredKey, TStoredValue>(this.KeyMapExposedToStored(value.Key), this.ValueMapExposedToStored(value.Value));
         }
