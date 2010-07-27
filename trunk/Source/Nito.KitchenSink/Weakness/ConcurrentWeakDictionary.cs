@@ -6,11 +6,11 @@ using System.Text;
 namespace Nito.Weakness
 {
     /// <summary>
-    /// A concurrent dictionary that has weak references to its keys, its values, or both keys and values.
+    /// A concurrent dictionary.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    public interface IConcurrentWeakDictionary<TKey, TValue> : IWeakDictionary<TKey, TValue>
+    public interface IConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         /// <summary>
         /// Adds or updates the value for a key.
@@ -70,5 +70,14 @@ namespace Nito.Weakness
         /// <param name="comparisonValue">The value to compare against the existing value of <paramref name="key"/>.</param>
         /// <returns><c>true</c> if the existing value for the key was equal to <paramref name="comparisonValue"/> and was replaced with <paramref name="newValue"/>; otherwise, <c>false</c>.</returns>
         bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue);
+    }
+
+    /// <summary>
+    /// A concurrent dictionary that has weak references to its keys, its values, or both keys and values.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    public interface IConcurrentWeakDictionary<TKey, TValue> : IWeakDictionary<TKey, TValue>, IConcurrentDictionary<TKey, TValue>
+    {
     }
 }

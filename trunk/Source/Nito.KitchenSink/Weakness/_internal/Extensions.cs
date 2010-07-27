@@ -5,6 +5,7 @@
 namespace Nito.Weakness
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Reflection;
 
@@ -47,6 +48,63 @@ namespace Nito.Weakness
         public static MutableDisposable<T> MutableWrapper<T>(this T value) where T : class, IDisposable
         {
             return new MutableDisposable<T> { Value = value };
+        }
+
+        /// <summary>
+        /// Wraps a concurrent dictionary with a concurrent dictionary that does a best effort to dispose any values as they are removed from the dictionary. The only methods that cannot do this are <see cref="TrackedConcurrentDictionary{TKey, TValue}.Clear"/> and <see cref="TrackedConcurrentDictionary{TKey, TValue}.TryUpdate"/>.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value. This must be a disposable type.</typeparam>
+        /// <param name="dictionary">The underlying concurrent dictionary used for storage.</param>
+        /// <returns>A concurrent dictionary wrapper that attempts to dispose values as they are removed from the dictionary.</returns>
+        public static TrackedConcurrentDictionary<TKey, TValue> DisposableValues<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary) where TValue : IDisposable
+        {
+            return new TrackedConcurrentDictionary<TKey, TValue>(
+                dictionary,
+                (key, value) => { },
+                (key, value) => value.Dispose(),
+                (key, oldValue, newValue) => oldValue.Dispose(),
+                (key, equivalentOldValue, newValue) => { });
+        }
+
+        /// <summary>
+        /// Wraps a concurrent dictionary with a concurrent dictionary that does a best effort to dispose any keys as they are removed from the dictionary. The only method that cannot do this is <see cref="TrackedConcurrentDictionary{TKey, TValue}.Clear"/>.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key. This must be a disposable type.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dictionary">The underlying concurrent dictionary used for storage.</param>
+        /// <returns>A concurrent dictionary wrapper that attempts to dispose keys as they are removed from the dictionary.</returns>
+        public static TrackedConcurrentDictionary<TKey, TValue> DisposableKeys<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary) where TKey : IDisposable
+        {
+            return new TrackedConcurrentDictionary<TKey, TValue>(
+                dictionary,
+                (key, value) => { },
+                (key, value) => key.Dispose(),
+                (key, oldValue, newValue) => { },
+                (key, equivalentOldValue, newValue) => { });
+        }
+
+        /// <summary>
+        /// Wraps a concurrent dictionary with a concurrent dictionary that does a best effort to dispose any keys and values as they are removed from the dictionary. The only methods that cannot do this are <see cref="TrackedConcurrentDictionary{TKey, TValue}.Clear"/> and <see cref="TrackedConcurrentDictionary{TKey, TValue}.TryUpdate"/>.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key. This must be a disposable type.</typeparam>
+        /// <typeparam name="TValue">The type of the value. This must be a disposable type.</typeparam>
+        /// <param name="dictionary">The underlying concurrent dictionary used for storage.</param>
+        /// <returns>A concurrent dictionary wrapper that attempts to dispose keys and values as they are removed from the dictionary.</returns>
+        public static TrackedConcurrentDictionary<TKey, TValue> DisposableKeysAndValues<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary)
+            where TKey : IDisposable
+            where TValue : IDisposable
+        {
+            return new TrackedConcurrentDictionary<TKey, TValue>(
+                dictionary,
+                (key, value) => { },
+                (key, value) =>
+                {
+                    key.Dispose();
+                    value.Dispose();
+                },
+                (key, oldValue, newValue) => oldValue.Dispose(),
+                (key, equivalentOldValue, newValue) => { });
         }
     }
 }
