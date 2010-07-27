@@ -133,6 +133,8 @@
     <Compile Include="AsyncOperationExtensions.cs" />
     <Compile Include="BackgroundWorkerExtensions.cs" />
     <Compile Include="BooleanExtensions.cs" />
+    <Compile Include="Character Streams\EncodingObservables.cs" />
+    <Compile Include="Character Streams\Token.cs" />
     <Compile Include="CommaSeparatedValueFormatter.cs" />
     <Compile Include="CommaSeparatedValueParser.cs" />
     <Compile Include="Communication\IFramer.cs" />
@@ -161,6 +163,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Weakness\ConcurrentWeakDictionary.cs" />
     <Compile Include="Weakness\ConcurrentWeakValueDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,7 +195,9 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Weakness\WeakDictionary.cs" />
     <Compile Include="Weakness\WeakKeyDictionary.cs" />
-    <Compile Include="Weakness\_internal\TypeExtensions.cs" />
+    <Compile Include="Weakness\_internal\MutableDisposable.cs" />
+    <Compile Include="Weakness\_internal\RegisteredObjectId.cs" />
+    <Compile Include="Weakness\_internal\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anonymous\A.cs" />
@@ -261,9 +266,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Character Streams\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

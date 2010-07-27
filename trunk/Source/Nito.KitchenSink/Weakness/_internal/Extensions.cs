@@ -1,4 +1,4 @@
-﻿// <copyright file="TypeExtensions.cs" company="Nito Programs">
+﻿// <copyright file="Extensions.cs" company="Nito Programs">
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 
@@ -9,9 +9,9 @@ namespace Nito.Weakness
     using System.Reflection;
 
     /// <summary>
-    /// Extension methods for the <see cref="Type"/> type.
+    /// Various extension methods, only used internally.
     /// </summary>
-    internal static class TypeExtensions
+    internal static class Extensions
     {
         /// <summary>
         /// Returns <c>true</c> if this type uses reference equality (i.e., does not override <see cref="object.Equals(object)"/>); returns <c>false</c> if this type or any of its base types override <see cref="object.Equals(object)"/>. This method returns <c>false</c> for any interface type, and returns <c>true</c> for any reference-equatable base class even if a derived class is not reference-equatable; the best way to determine if an object uses reference equality is to pass the exact type of that object.
@@ -36,6 +36,17 @@ namespace Nito.Weakness
             var objectEqualsMethod = equalsMethods.Any(method => method.DeclaringType == typeof(object));
 
             return !objectEqualsMethod;
+        }
+
+        /// <summary>
+        /// Returns a mutable disposable wrapper around the source disposable.
+        /// </summary>
+        /// <typeparam name="T">The type of the source disposable.</typeparam>
+        /// <param name="value">The source disposable.</param>
+        /// <returns>A mutable disposable wrapper around the source disposable.</returns>
+        public static MutableDisposable<T> MutableWrapper<T>(this T value) where T : class, IDisposable
+        {
+            return new MutableDisposable<T> { Value = value };
         }
     }
 }
