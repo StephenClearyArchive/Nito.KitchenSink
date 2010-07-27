@@ -8,7 +8,7 @@ namespace Nito.Weakness
     using System.Collections.Concurrent;
 
     /// <summary>
-    /// Makes a best effort to track keys and values as they leave a concurrent dictionary. The only methods that cannot do this are <see cref="Clear"/> and <see cref="TryUpdate"/>.
+    /// Makes a best effort to track keys and values as they leave a concurrent dictionary. The only methods that cannot do this are <see cref="Clear"/>, <see cref="TryUpdate"/>, and <see cref="Remove(KeyValuePair{TKey, TValue})"/>.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -43,6 +43,14 @@ namespace Nito.Weakness
             this.dictionary = dictionary;
             this.kvpRemoved = kvpRemoved;
             this.kvpUpdated = kvpUpdated;
+        }
+
+        /// <summary>
+        /// Gets the underlying concurrent dictionary.
+        /// </summary>
+        public ConcurrentDictionary<TKey, TValue> Source
+        {
+            get { return this.dictionary; }
         }
 
         /// <summary>
@@ -209,7 +217,7 @@ namespace Nito.Weakness
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>, and then invokes the removed delegate.
+        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>. Does not invoke the removed delegate.
         /// </summary>
         /// <returns>
         /// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
@@ -217,13 +225,7 @@ namespace Nito.Weakness
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (this.dictionary.AsDictionary().Remove(item))
-            {
-                this.kvpRemoved(item.Key, item.Value);
-                return true;
-            }
-
-            return false;
+            return this.dictionary.AsDictionary().Remove(item);
         }
 
         /// <summary>
