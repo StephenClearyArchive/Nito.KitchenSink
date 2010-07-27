@@ -61,10 +61,8 @@ namespace Nito.Weakness
         {
             return new TrackedConcurrentDictionary<TKey, TValue>(
                 dictionary,
-                (key, value) => { },
                 (key, value) => value.Dispose(),
-                (key, oldValue, newValue) => oldValue.Dispose(),
-                (key, equivalentOldValue, newValue) => { });
+                (key, oldValue, newValue) => oldValue.Dispose());
         }
 
         /// <summary>
@@ -78,10 +76,8 @@ namespace Nito.Weakness
         {
             return new TrackedConcurrentDictionary<TKey, TValue>(
                 dictionary,
-                (key, value) => { },
                 (key, value) => key.Dispose(),
-                (key, oldValue, newValue) => { },
-                (key, equivalentOldValue, newValue) => { });
+                (key, oldValue, newValue) => { });
         }
 
         /// <summary>
@@ -97,14 +93,12 @@ namespace Nito.Weakness
         {
             return new TrackedConcurrentDictionary<TKey, TValue>(
                 dictionary,
-                (key, value) => { },
                 (key, value) =>
                 {
                     key.Dispose();
                     value.Dispose();
                 },
-                (key, oldValue, newValue) => oldValue.Dispose(),
-                (key, equivalentOldValue, newValue) => { });
+                (key, oldValue, newValue) => oldValue.Dispose());
         }
     }
 }
