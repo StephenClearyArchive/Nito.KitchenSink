@@ -102,8 +102,21 @@ namespace Nito.Weakness
 
             set
             {
-                this.dictionary[key] = value;
-                GC.KeepAlive(key);
+                using (var storedKey = this.StoreKey(key).MutableWrapper())
+                {
+                    // Exception -> dispose
+                    // Existing key -> dispose
+                    // New key -> do not dispose
+                    this.dictionary.WithoutProjection.AddOrUpdate(
+                        storedKey.Value,
+                        k =>
+                        {
+                            storedKey.Value = null;
+                            return value;
+                        },
+                        (k, oldValue) => value);
+                    GC.KeepAlive(key);
+                }
             }
         }
 
@@ -212,16 +225,14 @@ namespace Nito.Weakness
                 // Exception -> dispose
                 // Existing key -> dispose
                 // New key -> do not dispose
-                var ret = this.dictionary.WithoutProjection.AddOrUpdate(
+                return this.dictionary.WithoutProjection.AddOrUpdate(
                     storedKey.Value,
-                    k => addValueFactory(key),
-                    (k, oldValue) =>
+                    k =>
                     {
-                        storedKey.Dispose();
-                        return updateValueFactory(key, oldValue);
-                    });
-                storedKey.Value = null;
-                return ret;
+                        storedKey.Value = null;
+                        return addValueFactory(key);
+                    },
+                    (k, oldValue) => updateValueFactory(key, oldValue));
             }
         }
 
