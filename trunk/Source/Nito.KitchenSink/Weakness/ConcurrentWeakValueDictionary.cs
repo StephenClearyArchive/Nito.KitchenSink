@@ -109,12 +109,7 @@ namespace Nito.Weakness
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            using (var storedValue = this.StoreValue(item.Key, item.Value).MutableWrapper())
-            {
-                this.dictionary.WithoutProjection.Add(new KeyValuePair<TKey, RegisteredObjectId>(item.Key, storedValue.Value));
-                GC.KeepAlive(item.Value);
-                storedValue.Value = null;
-            }
+            this.AsDictionary().Add(item.Key, item.Value);
         }
 
         void ICollection<KeyValuePair<TKey, TValue>>.Clear()
@@ -207,7 +202,7 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the return value of <paramref name="updateValueFactory"/>; otherwise, this is the return value of <paramref name="addValueFactory"/>.</returns>
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            using (ObjectTracker.Default.PauseGCDetectionThread())
             {
                 return this.dictionary.ValueMapStoredToExposed(
                     this.dictionary.WithoutProjection.AddOrUpdate(
@@ -237,7 +232,7 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is the return value of <paramref name="valueFactory"/>.</returns>
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            using (ObjectTracker.Default.PauseGCDetectionThread())
             {
                 return this.dictionary.ValueMapStoredToExposed(
                     this.dictionary.WithoutProjection.GetOrAdd(
