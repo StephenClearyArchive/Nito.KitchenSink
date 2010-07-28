@@ -195,7 +195,7 @@ namespace Nito.Weakness
         /// </returns>
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.Source.AsCollection().IsReadOnly; }
+            get { return this.dictionary.Source.Source.AsDictionary().IsReadOnly; }
         }
 
         /// <summary>

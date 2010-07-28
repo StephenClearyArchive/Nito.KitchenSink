@@ -168,7 +168,7 @@ namespace Nito.Weakness
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.AsCollection().IsReadOnly; }
+            get { return this.dictionary.Source.AsDictionary().IsReadOnly; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
