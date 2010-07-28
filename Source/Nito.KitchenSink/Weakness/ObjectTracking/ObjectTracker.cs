@@ -97,7 +97,7 @@ namespace Nito.Weakness.ObjectTracking
         }
 
         /// <summary>
-        /// Pauses the GC detection thread. The returned disposable object must be disposed to unpause the GC detection thread. Multiple invokations of this method are valid; each returned object must be disposed to unpause the GC detection thread.
+        /// Pauses the GC detection thread. The returned disposable object must be disposed to unpause the GC detection thread. Multiple invokations of this method are valid; each returned object must be disposed to unpause the GC detection thread. The GC detection thread is paused before this method returns.
         /// </summary>
         /// <returns>A disposable which, when disposed, unpauses the GC detection thread.</returns>
         public IDisposable PauseGCDetectionThread()
