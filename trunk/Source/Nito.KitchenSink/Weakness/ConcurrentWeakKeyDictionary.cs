@@ -1,4 +1,4 @@
-﻿// <copyright file="ConcurrentWeakValueDictionary.cs" company="Nito Programs">
+﻿// <copyright file="ConcurrentWeakKeyDictionary.cs" company="Nito Programs">
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 
@@ -11,39 +11,39 @@ namespace Nito.Weakness
     using Nito.Weakness.ObjectTracking;
 
     /// <summary>
-    /// A concurrent dictionary that has weak references to its values. All value instances passed to the methods of this class must be reference-equatable instances. There is no need to periodically purge this collection; it will purge itself over time. The methods <see cref="Clear"/>, <see cref="TryUpdate"/>, and <see cref="Remove(KeyValuePair{TKey, TValue})"/> do not release resources immediately.
+    /// A concurrent dictionary that has weak references to its keys. All key instances passed to methods of this class must be reference-equatable instances. There is no need to periodically purge this collection; it will purge itself over time. The methods <see cref="Clear"/> and <see cref="Remove(KeyValuePair{TKey, TValue})"/> do not release resources immediately.
     /// </summary>
-    /// <typeparam name="TKey">The type of the key.</typeparam>
-    /// <typeparam name="TValue">The type of the value. This must be a reference type.</typeparam>
-    public sealed class ConcurrentWeakValueDictionary<TKey, TValue> : IConcurrentWeakDictionary<TKey, TValue> where TValue : class
+    /// <typeparam name="TKey">The type of the key. This must be a reference type.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    public sealed class ConcurrentWeakKeyDictionary<TKey, TValue> : IConcurrentWeakDictionary<TKey, TValue> where TKey : class
     {
         /// <summary>
         /// The storage dictionary, which handles the wrapping for read-only values, and disposing most of the weak references for values when they are removed.
         /// </summary>
-        private readonly ProjectedDictionary<TrackedConcurrentDictionary<TKey, RegisteredObjectId>, TKey, TKey, TValue, RegisteredObjectId> dictionary;
+        private readonly ProjectedDictionary<TrackedConcurrentDictionary<RegisteredObjectId, TValue>, TKey, RegisteredObjectId, TValue, TValue> dictionary;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConcurrentWeakValueDictionary&lt;TKey, TValue&gt;"/> class with the specified storage dictionary.
+        /// Initializes a new instance of the <see cref="ConcurrentWeakKeyDictionary&lt;TKey, TValue&gt;"/> class with the specified storage dictionary.
         /// </summary>
         /// <param name="dictionary">The storage dictionary.</param>
-        private ConcurrentWeakValueDictionary(ConcurrentDictionary<TKey, RegisteredObjectId> dictionary)
+        private ConcurrentWeakKeyDictionary(ConcurrentDictionary<RegisteredObjectId, TValue> dictionary)
         {
             this.dictionary =
-                new ProjectedDictionary<TrackedConcurrentDictionary<TKey, RegisteredObjectId>, TKey, TKey, TValue, RegisteredObjectId>(
-                    dictionary.DisposableValues(),
-                    x => x.Id.TargetAs<TValue>(),
-                    x => new RegisteredObjectId(ObjectTracker.Default.TrackObject(x)),
+                new ProjectedDictionary<TrackedConcurrentDictionary<RegisteredObjectId, TValue>, TKey, RegisteredObjectId, TValue, TValue>(
+                    dictionary.DisposableKeys(),
                     x => x,
-                    x => x);
+                    x => x,
+                    x => x.Id.TargetAs<TKey>(),
+                    x => new RegisteredObjectId(ObjectTracker.Default.TrackObject(x)));
         }
 
         void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
         {
-            using (var storedValue = this.StoreValue(key, value).MutableWrapper())
+            using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
-                this.dictionary.WithoutProjection.WithoutTracking.AsDictionary().Add(key, storedValue.Value);
-                GC.KeepAlive(value);
-                storedValue.Value = null;
+                this.dictionary.WithoutProjection.WithoutTracking.AsDictionary().Add(storedKey.Value, value);
+                GC.KeepAlive(key);
+                storedKey.Value = null;
             }
         }
 
@@ -56,17 +56,17 @@ namespace Nito.Weakness
         /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.WithoutProjection.WithoutTracking.ContainsKey(key);
+            return this.dictionary.ContainsKey(key);
         }
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys
         {
-            get { return this.dictionary.WithoutProjection.WithoutTracking.Keys; }
+            get { return this.dictionary.Keys; }
         }
 
         bool IDictionary<TKey, TValue>.Remove(TKey key)
         {
-            return this.dictionary.WithoutProjection.Remove(key);
+            return this.dictionary.Remove(key);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Nito.Weakness
 
         ICollection<TValue> IDictionary<TKey, TValue>.Values
         {
-            get { return this.dictionary.Values; }
+            get { return this.dictionary.WithoutProjection.WithoutTracking.Values; }
         }
 
         /// <summary>
@@ -102,18 +102,18 @@ namespace Nito.Weakness
 
             set
             {
-                this.dictionary.WithoutProjection[key] = this.StoreValue(key, value);
-                GC.KeepAlive(value);
+                this.dictionary[key] = value;
+                GC.KeepAlive(key);
             }
         }
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            using (var storedValue = this.StoreValue(item.Key, item.Value).MutableWrapper())
+            using (var storedKey = this.StoreKey(item.Key).MutableWrapper())
             {
-                this.dictionary.WithoutProjection.Add(new KeyValuePair<TKey, RegisteredObjectId>(item.Key, storedValue.Value));
-                GC.KeepAlive(item.Value);
-                storedValue.Value = null;
+                this.dictionary.WithoutProjection.Add(new KeyValuePair<RegisteredObjectId, TValue>(storedKey.Value, item.Value));
+                GC.KeepAlive(item.Key);
+                storedKey.Value = null;
             }
         }
 
@@ -180,7 +180,7 @@ namespace Nito.Weakness
         {
             get
             {
-                return this.Where(kvp => kvp.Value != null);
+                return this.Where(kvp => kvp.Key != null);
             }
         }
 
@@ -207,13 +207,21 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the return value of <paramref name="updateValueFactory"/>; otherwise, this is the return value of <paramref name="addValueFactory"/>.</returns>
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
-                return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.WithoutProjection.AddOrUpdate(
-                        key,
-                        k => this.StoreValue(k, addValueFactory(k)),
-                        (k, oldStoredValue) => this.StoreValue(k, updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
+                // Exception -> dispose
+                // Existing key -> dispose
+                // New key -> do not dispose
+                var ret = this.dictionary.WithoutProjection.AddOrUpdate(
+                    storedKey.Value,
+                    k => addValueFactory(key),
+                    (k, oldValue) =>
+                    {
+                        storedKey.Dispose();
+                        return updateValueFactory(key, oldValue);
+                    });
+                storedKey.Value = null;
+                return ret;
             }
         }
 
@@ -237,12 +245,18 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is the return value of <paramref name="valueFactory"/>.</returns>
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
-                return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.WithoutProjection.GetOrAdd(
-                        key,
-                        k => this.StoreValue(k, valueFactory(k))));
+                // Exception -> dispose
+                // Existing key -> dispose
+                // New key -> do not dispose
+                return this.dictionary.WithoutProjection.GetOrAdd(
+                    storedKey.Value,
+                    k =>
+                    {
+                        storedKey.Value = null;
+                        return valueFactory(key);
+                    });
             }
         }
 
@@ -315,14 +329,13 @@ namespace Nito.Weakness
         }
 
         /// <summary>
-        /// Maps an exposed value to a stored value, expecting to store the actual value.
+        /// Maps an exposed key to a stored key, expecting to store the actual value.
         /// </summary>
-        /// <param name="key">The key for the stored value.</param>
-        /// <param name="value">The exposed value to store.</param>
-        /// <returns>A stored value.</returns>
-        private RegisteredObjectId StoreValue(TKey key, TValue value)
+        /// <param name="key">The key to be stored.</param>
+        /// <returns>A stored key.</returns>
+        private RegisteredObjectId StoreKey(TKey key)
         {
-            return new RegisteredObjectId(ObjectTracker.Default.TrackObject(value), id => this.dictionary.WithoutProjection.AsDictionary().Remove(new KeyValuePair<TKey, RegisteredObjectId>(key, new RegisteredObjectId(id))));
+            return new RegisteredObjectId(ObjectTracker.Default.TrackObject(key), id => this.dictionary.WithoutProjection.WithoutTracking.AsDictionary().Remove(new RegisteredObjectId(id)));
         }
     }
 }
