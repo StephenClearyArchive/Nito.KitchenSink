@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="RegisteredObjectId.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
+    using System;
     using Nito.Weakness.ObjectTracking;
 
     internal sealed class RegisteredObjectId : IEquatable<RegisteredObjectId>, IDisposable

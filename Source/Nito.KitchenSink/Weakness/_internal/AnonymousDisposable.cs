@@ -9,7 +9,7 @@ namespace Nito.Weakness
     /// <summary>
     /// An object that implements <see cref="IDisposable"/> using a delegate.
     /// </summary>
-    public sealed class AnonymousDisposable : IDisposable
+    internal sealed class AnonymousDisposable : IDisposable
     {
         /// <summary>
         /// Gets or sets the Dispose delegate, which implements <see cref="IDisposable.Dispose"/>.

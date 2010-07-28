@@ -1,5 +1,5 @@
 ﻿// <copyright file="CollectionHelpers.cs" company="Nito Programs">
-//     Copyright (c) 2010 Nito Programs.
+//     Copyright (c) 2009-2010 Nito Programs.
 // </copyright>
 
 namespace Nito.Weakness

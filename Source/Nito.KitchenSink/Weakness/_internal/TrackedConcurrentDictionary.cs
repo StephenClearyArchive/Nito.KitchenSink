@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="TrackedConcurrentDictionary.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
+    using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Makes a best effort to track keys and values as they leave a concurrent dictionary. The only methods that cannot do this are <see cref="Clear"/>, <see cref="TryUpdate"/>, and <see cref="Remove(KeyValuePair{TKey, TValue})"/>.

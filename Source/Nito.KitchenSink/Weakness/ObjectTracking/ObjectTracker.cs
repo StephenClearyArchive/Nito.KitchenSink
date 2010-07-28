@@ -227,42 +227,75 @@ namespace Nito.Weakness.ObjectTracking
             return new ObjectIdReference<T>((ObjectId)TrackObject(target));
         }
 
+        /// <summary>
+        /// A command for the GC detection thread.
+        /// </summary>
         private abstract class Command
         {
+            /// <summary>
+            /// Marks this command as completed.
+            /// </summary>
             virtual public void Completed()
             {
             }
         }
 
+        /// <summary>
+        /// A GC detection thread command that can be waited on by the sender.
+        /// </summary>
         private abstract class WaitableCommand : Command
         {
+            /// <summary>
+            /// The MRE that is set when this command is completed.
+            /// </summary>
             private readonly ManualResetEventSlim mre;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="WaitableCommand"/> class.
+            /// </summary>
             protected WaitableCommand()
             {
                 this.mre = new ManualResetEventSlim(false);
             }
 
+            /// <summary>
+            /// Marks this command as completed.
+            /// </summary>
             public override void Completed()
             {
                 this.mre.Set();
             }
 
+            /// <summary>
+            /// Waits for the command to complete.
+            /// </summary>
             public void Wait()
             {
                 this.mre.Wait();
             }
         }
 
+        /// <summary>
+        /// Instructs the GC detection thread to update its wait poll time.
+        /// </summary>
         private sealed class UpdateGCDetectionWaitTimeCommand : WaitableCommand
         {
+            /// <summary>
+            /// Gets or sets the amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds.
+            /// </summary>
             public int GCDetectionWaitTimeInMilliseconds { get; set; }
         }
 
+        /// <summary>
+        /// Instructs the GC detection thread to increment its pause count, causing it to pause.
+        /// </summary>
         private sealed class IncrementPauseCountCommand : WaitableCommand
         {
         }
 
+        /// <summary>
+        /// Instructs the GC detection thread to decrement its pause count, possibly causing it to unpause.
+        /// </summary>
         private sealed class DecrementPauseCountCommand : Command
         {
         }
