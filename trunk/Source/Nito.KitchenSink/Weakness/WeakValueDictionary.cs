@@ -84,12 +84,12 @@ namespace Nito.Weakness
         /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.Source.ContainsKey(key);
+            return this.dictionary.WithoutProjection.ContainsKey(key);
         }
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys
         {
-            get { return this.dictionary.Source.Keys; }
+            get { return this.dictionary.WithoutProjection.Keys; }
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace Nito.Weakness
         public bool Remove(TKey key)
         {
             EquatableWeakReference<TValue> value;
-            if (this.dictionary.Source.TryGetValue(key, out value))
+            if (this.dictionary.WithoutProjection.TryGetValue(key, out value))
             {
                 value.Dispose();
-                return this.dictionary.Source.Remove(key);
+                return this.dictionary.WithoutProjection.Remove(key);
             }
 
             return false;
@@ -160,12 +160,12 @@ namespace Nito.Weakness
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
         public void Clear()
         {
-            foreach (var kvp in this.dictionary.Source)
+            foreach (var kvp in this.dictionary.WithoutProjection)
             {
                 kvp.Value.Dispose();
             }
 
-            this.dictionary.Source.Clear();
+            this.dictionary.WithoutProjection.Clear();
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
@@ -186,12 +186,12 @@ namespace Nito.Weakness
         /// </returns>
         public int Count
         {
-            get { return this.dictionary.Source.Count; }
+            get { return this.dictionary.WithoutProjection.Count; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.AsDictionary().IsReadOnly; }
+            get { return this.dictionary.WithoutProjection.AsDictionary().IsReadOnly; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
@@ -225,7 +225,7 @@ namespace Nito.Weakness
             {
                 var purgedValues = new List<TKey>();
 
-                foreach (var kvp in this.dictionary.Source)
+                foreach (var kvp in this.dictionary.WithoutProjection)
                 {
                     var ret = new KeyValuePair<TKey, TValue>(kvp.Key, kvp.Value.Target);
                     if (ret.Value == null)
@@ -248,7 +248,7 @@ namespace Nito.Weakness
         /// </summary>
         public void Purge()
         {
-            var purgedValues = (from kvp in this.dictionary.Source where !kvp.Value.IsAlive select kvp.Key).ToList();
+            var purgedValues = (from kvp in this.dictionary.WithoutProjection where !kvp.Value.IsAlive select kvp.Key).ToList();
 
             foreach (var key in purgedValues)
             {

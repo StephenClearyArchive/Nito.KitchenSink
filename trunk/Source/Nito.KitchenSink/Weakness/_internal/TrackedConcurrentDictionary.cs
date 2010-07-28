@@ -49,7 +49,7 @@ namespace Nito.Weakness
         /// <summary>
         /// Gets the underlying concurrent dictionary.
         /// </summary>
-        public ConcurrentDictionary<TKey, TValue> Source
+        public ConcurrentDictionary<TKey, TValue> WithoutTracking
         {
             get { return this.dictionary; }
         }
