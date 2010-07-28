@@ -167,6 +167,7 @@
     <Compile Include="Weakness\ConcurrentWeakValueDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Weakness\ConcurrentWeakKeyDictionary.cs" />
     <Compile Include="Weakness\ObjectTracking\ObjectId.cs">
       <SubType>Code</SubType>
     </Compile>
