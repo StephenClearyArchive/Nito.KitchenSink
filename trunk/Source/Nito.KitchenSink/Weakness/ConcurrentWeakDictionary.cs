@@ -299,22 +299,31 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the return value of <paramref name="updateValueFactory"/>; otherwise, this is the return value of <paramref name="addValueFactory"/>.</returns>
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            using (ObjectTracker.Default.PauseGCDetectionThread())
             using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
                 // Exception -> dispose key (value is never created)
                 // Existing key -> dispose key; do not dispose value
                 // New key -> do not dispose key or value
-                return this.dictionary.ValueMapStoredToExposed(
+                TValue value = null;
+                var ret = this.dictionary.ValueMapStoredToExposed(
                     this.dictionary.WithoutProjection.AddOrUpdate(
                         storedKey.Value,
                         k =>
                         {
-                            var ret = this.StoreValue(storedKey.Value, addValueFactory(key));
+                            value = addValueFactory(key);
+                            var storedValue = this.StoreValue(storedKey.Value, value);
                             storedKey.Value = null;
-                            return ret;
+                            return storedValue;
                         },
-                        (k, oldStoredValue) => this.StoreValue(storedKey.Value, updateValueFactory(key, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
+                        (k, oldStoredValue) =>
+                        {
+                            value = updateValueFactory(key, this.dictionary.ValueMapStoredToExposed(oldStoredValue));
+                            return this.StoreValue(storedKey.Value, value);
+                        }));
+
+                GC.KeepAlive(key);
+                GC.KeepAlive(value);
+                return ret;
             }
         }
 
@@ -338,24 +347,25 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is the return value of <paramref name="valueFactory"/>.</returns>
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            // TODO: all methods depending on PauseGCDetectionThread for synchronization are broken, for this reason:
-            //  Object may be GC'ed.
-            //  The registered action may therefore be invoked directly from within the atomic operation.
-
-            using (ObjectTracker.Default.PauseGCDetectionThread())
             using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
                 // Exception -> dispose key (value is never created)
                 // Existing key -> dispose key (value is never created)
                 // New key -> do not dispose key or value
-                return this.dictionary.ValueMapStoredToExposed(
+                TValue value = null;
+                var ret = this.dictionary.ValueMapStoredToExposed(
                     this.dictionary.WithoutProjection.GetOrAdd(
                         storedKey.Value,
                         k =>
                         {
                             storedKey.Value = null;
-                            return this.StoreValue(k, valueFactory(key));
+                            value = valueFactory(key);
+                            return this.StoreValue(k, value);
                         }));
+
+                GC.KeepAlive(key);
+                GC.KeepAlive(value);
+                return ret;
             }
         }
 

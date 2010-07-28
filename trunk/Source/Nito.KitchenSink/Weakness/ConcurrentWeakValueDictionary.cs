@@ -202,14 +202,24 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the return value of <paramref name="updateValueFactory"/>; otherwise, this is the return value of <paramref name="addValueFactory"/>.</returns>
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            using (ObjectTracker.Default.PauseGCDetectionThread())
-            {
-                return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.WithoutProjection.AddOrUpdate(
-                        key,
-                        k => this.StoreValue(k, addValueFactory(k)),
-                        (k, oldStoredValue) => this.StoreValue(k, updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
-            }
+            TValue value = null;
+            var ret = this.dictionary.ValueMapStoredToExposed(
+                this.dictionary.WithoutProjection.AddOrUpdate(
+                    key,
+                    k =>
+                    {
+                        value = addValueFactory(k);
+                        return this.StoreValue(k, value);
+                    },
+                    (k, oldStoredValue) =>
+                    {
+                        value = updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue));
+                        return this.StoreValue(k, value);
+                    }));
+
+            GC.KeepAlive(key);
+            GC.KeepAlive(value);
+            return ret;
         }
 
         /// <summary>
@@ -232,13 +242,18 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is the return value of <paramref name="valueFactory"/>.</returns>
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            using (ObjectTracker.Default.PauseGCDetectionThread())
-            {
-                return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.WithoutProjection.GetOrAdd(
-                        key,
-                        k => this.StoreValue(k, valueFactory(k))));
-            }
+            TValue value = null;
+            var ret = this.dictionary.ValueMapStoredToExposed(
+                this.dictionary.WithoutProjection.GetOrAdd(
+                    key,
+                    k =>
+                    {
+                        value = valueFactory(k);
+                        return this.StoreValue(k, value);
+                    }));
+
+            GC.KeepAlive(value);
+            return ret;
         }
 
         /// <summary>
