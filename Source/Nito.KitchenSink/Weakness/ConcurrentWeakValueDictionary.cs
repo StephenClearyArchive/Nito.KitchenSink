@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
+﻿// <copyright file="ConcurrentWeakValueDictionary.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
-    using ObjectTracking;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Nito.Weakness.ObjectTracking;
 
     /// <summary>
     /// A concurrent dictionary that has weak references to its values. There is no need to periodically purge this collection; it will purge itself over time. The methods <see cref="Clear"/>, <see cref="TryUpdate"/>, and <see cref="Remove(KeyValuePair{TKey, TValue})"/> do not release resources immediately.
@@ -317,6 +319,12 @@ namespace Nito.Weakness
             return this.GetOrAdd(key, _ => value);
         }
 
+        /// <summary>
+        /// Attempts to add a key and value.
+        /// </summary>
+        /// <param name="key">The key to add.</param>
+        /// <param name="value">The value to add.</param>
+        /// <returns><c>true</c> if the key and value were added; <c>false</c> if the key already existed.</returns>
         public bool TryAdd(TKey key, TValue value)
         {
             using (var storedValue = this.StoreValue(key, value).MutableWrapper())
@@ -332,6 +340,12 @@ namespace Nito.Weakness
             }
         }
 
+        /// <summary>
+        /// Attempts to atomically retrieve and remove the value for a specified key.
+        /// </summary>
+        /// <param name="key">The key whose value is removed and returned.</param>
+        /// <param name="value">On return, contains the value removed, or the default value if the key was not found.</param>
+        /// <returns><c>true</c> if the value was removed; <c>false</c> if the key was not found.</returns>
         public bool TryRemove(TKey key, out TValue value)
         {
             RegisteredObjectId storedValue;
@@ -345,7 +359,14 @@ namespace Nito.Weakness
             return false;
         }
 
-        public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
+        /// <summary>
+        /// Atomically looks up the existing value for the specified key, compares it with the specified value, and (if they are equal) updates the key with a third value.
+        /// </summary>
+        /// <param name="key">The key used to lookup the existing value.</param>
+        /// <param name="newValue">The new value for the key, if the old value is equal to <paramref name="comparisonValue"/>.</param>
+        /// <param name="comparisonValue">The value to compare against the existing value of <paramref name="key"/>.</param>
+        /// <returns><c>true</c> if the existing value for the key was equal to <paramref name="comparisonValue"/> and was replaced with <paramref name="newValue"/>; otherwise, <c>false</c>.</returns>
+        bool IConcurrentDictionary<TKey, TValue>.TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
         {
             using (var newStoredValue = this.StoreValue(key, newValue).MutableWrapper())
             {
@@ -362,6 +383,12 @@ namespace Nito.Weakness
             }
         }
 
+        /// <summary>
+        /// Maps an exposed value to a stored value, expecting to store the actual value.
+        /// </summary>
+        /// <param name="key">The key for the stored value.</param>
+        /// <param name="value">The exposed value to store.</param>
+        /// <returns>A stored value.</returns>
         private RegisteredObjectId StoreValue(TKey key, TValue value)
         {
             return new RegisteredObjectId(ObjectTracker.Default.TrackObject(value), id => this.dictionary.Source.AsDictionary().Remove(new KeyValuePair<TKey, RegisteredObjectId>(key, new RegisteredObjectId(id))));
