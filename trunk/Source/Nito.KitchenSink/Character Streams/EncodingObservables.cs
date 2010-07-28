@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Nito.KitchenSink
 {
+    /// <summary>
+    /// Observable extension methods that encode and decode streams.
+    /// </summary>
     public static class EncodingObservables
     {
         /// <summary>

@@ -87,7 +87,7 @@ namespace Nito.Weakness
     }
 
     /// <summary>
-    /// A concurrent dictionary that has weak references to its keys and values. All key and value instances passed to the methods of this class must be reference-equatable instances. There is no need to periodically purge this collection; it will purge itself over time. The methods <see cref="Clear"/>, <see cref="TryUpdate"/>, and <see cref="Remove(KeyValuePair{TKey, TValue})"/> do not release resources immediately.
+    /// A concurrent dictionary that has weak references to its keys and values. All key and value instances passed to the methods of this class must be reference-equatable instances. There is no need to periodically purge this collection; it will purge itself over time. The methods <see cref="ICollection{T}.Clear"/>, <see cref="IConcurrentDictionary{TKey, TValue}.TryUpdate"/>, and <see cref="ICollection{T}.Remove"/> do not release resources immediately.
     /// </summary>
     /// <typeparam name="TKey">The type of the key. This must be a reference type.</typeparam>
     /// <typeparam name="TValue">The type of the value. This must be a reference type.</typeparam>
