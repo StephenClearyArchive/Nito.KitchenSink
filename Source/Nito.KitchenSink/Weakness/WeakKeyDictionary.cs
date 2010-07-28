@@ -108,7 +108,7 @@ namespace Nito.Weakness
 
         ICollection<TValue> IDictionary<TKey, TValue>.Values
         {
-            get { return this.dictionary.Source.Values; }
+            get { return this.dictionary.WithoutProjection.Values; }
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Nito.Weakness
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
         public void Clear()
         {
-            this.dictionary.Source.Clear();
+            this.dictionary.WithoutProjection.Clear();
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
@@ -163,12 +163,12 @@ namespace Nito.Weakness
         /// </returns>
         public int Count
         {
-            get { return this.dictionary.Source.Count; }
+            get { return this.dictionary.WithoutProjection.Count; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.AsDictionary().IsReadOnly; }
+            get { return this.dictionary.WithoutProjection.AsDictionary().IsReadOnly; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
@@ -202,7 +202,7 @@ namespace Nito.Weakness
             {
                 var purgedKeys = new List<ObjectId>();
 
-                foreach (var kvp in this.dictionary.Source)
+                foreach (var kvp in this.dictionary.WithoutProjection)
                 {
                     var ret = new KeyValuePair<TKey, TValue>(kvp.Key.TargetAs<TKey>(), kvp.Value);
                     if (ret.Key == null)
@@ -215,7 +215,7 @@ namespace Nito.Weakness
 
                 foreach (var key in purgedKeys)
                 {
-                    this.dictionary.Source.Remove(key);
+                    this.dictionary.WithoutProjection.Remove(key);
                 }
             }
         }
@@ -225,11 +225,11 @@ namespace Nito.Weakness
         /// </summary>
         public void Purge()
         {
-            var purgedKeys = (from kvp in this.dictionary.Source where !kvp.Key.IsAlive select kvp.Key).ToList();
+            var purgedKeys = (from kvp in this.dictionary.WithoutProjection where !kvp.Key.IsAlive select kvp.Key).ToList();
 
             foreach (var key in purgedKeys)
             {
-                this.dictionary.Source.Remove(key);
+                this.dictionary.WithoutProjection.Remove(key);
             }
         }
 

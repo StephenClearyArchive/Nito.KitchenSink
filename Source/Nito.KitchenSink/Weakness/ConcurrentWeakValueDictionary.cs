@@ -45,7 +45,7 @@ namespace Nito.Weakness
         {
             using (var storedValue = this.StoreValue(key, value).MutableWrapper())
             {
-                this.dictionary.Source.Source.AsDictionary().Add(key, storedValue.Value);
+                this.dictionary.WithoutProjection.WithoutTracking.AsDictionary().Add(key, storedValue.Value);
                 GC.KeepAlive(value);
                 storedValue.Value = null;
             }
@@ -60,7 +60,7 @@ namespace Nito.Weakness
         /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.Source.Source.ContainsKey(key);
+            return this.dictionary.WithoutProjection.WithoutTracking.ContainsKey(key);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Nito.Weakness
         /// </returns>
         ICollection<TKey> IDictionary<TKey, TValue>.Keys
         {
-            get { return this.dictionary.Source.Source.Keys; }
+            get { return this.dictionary.WithoutProjection.WithoutTracking.Keys; }
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Nito.Weakness
         /// <param name="key">The key of the element to remove.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
         bool IDictionary<TKey, TValue>.Remove(TKey key)
         {
-            return this.dictionary.Source.Remove(key);
+            return this.dictionary.WithoutProjection.Remove(key);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Nito.Weakness
 
             set
             {
-                this.dictionary.Source[key] = this.StoreValue(key, value);
+                this.dictionary.WithoutProjection[key] = this.StoreValue(key, value);
                 GC.KeepAlive(value);
             }
         }
@@ -138,7 +138,7 @@ namespace Nito.Weakness
         {
             using (var storedValue = this.StoreValue(item.Key, item.Value).MutableWrapper())
             {
-                this.dictionary.Source.Add(new KeyValuePair<TKey, RegisteredObjectId>(item.Key, storedValue.Value));
+                this.dictionary.WithoutProjection.Add(new KeyValuePair<TKey, RegisteredObjectId>(item.Key, storedValue.Value));
                 GC.KeepAlive(item.Value);
                 storedValue.Value = null;
             }
@@ -152,7 +152,7 @@ namespace Nito.Weakness
         {
             // Simply clearing the underlying dictionary is not efficient in terms of unregistering the callbacks,
             // but failure to unregister is benign compared to the concurrency issues of handling Clear any other way.
-            this.dictionary.Source.Source.Clear();
+            this.dictionary.WithoutProjection.WithoutTracking.Clear();
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Nito.Weakness
         /// </returns>
         public int Count
         {
-            get { return this.dictionary.Source.Source.Count; }
+            get { return this.dictionary.WithoutProjection.WithoutTracking.Count; }
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Nito.Weakness
         /// </returns>
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
-            get { return this.dictionary.Source.Source.AsDictionary().IsReadOnly; }
+            get { return this.dictionary.WithoutProjection.WithoutTracking.AsDictionary().IsReadOnly; }
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Nito.Weakness
             using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
             {
                 return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.Source.AddOrUpdate(
+                    this.dictionary.WithoutProjection.AddOrUpdate(
                         key,
                         k => this.StoreValue(k, addValueFactory(k)),
                         (k, oldStoredValue) => this.StoreValue(k, updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
@@ -302,7 +302,7 @@ namespace Nito.Weakness
             using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
             {
                 return this.dictionary.ValueMapStoredToExposed(
-                    this.dictionary.Source.GetOrAdd(
+                    this.dictionary.WithoutProjection.GetOrAdd(
                         key,
                         k => this.StoreValue(k, valueFactory(k))));
             }
@@ -329,7 +329,7 @@ namespace Nito.Weakness
         {
             using (var storedValue = this.StoreValue(key, value).MutableWrapper())
             {
-                if (this.dictionary.Source.TryAdd(key, storedValue.Value))
+                if (this.dictionary.WithoutProjection.TryAdd(key, storedValue.Value))
                 {
                     storedValue.Value = null;
                     GC.KeepAlive(value);
@@ -349,7 +349,7 @@ namespace Nito.Weakness
         public bool TryRemove(TKey key, out TValue value)
         {
             RegisteredObjectId storedValue;
-            if (this.dictionary.Source.TryRemove(key, out storedValue))
+            if (this.dictionary.WithoutProjection.TryRemove(key, out storedValue))
             {
                 value = this.dictionary.ValueMapStoredToExposed(storedValue);
                 return true;
@@ -371,7 +371,7 @@ namespace Nito.Weakness
             using (var newStoredValue = this.StoreValue(key, newValue).MutableWrapper())
             {
                 var comparisonStoredValue = this.dictionary.ValueMapExposedToStored(comparisonValue);
-                if (this.dictionary.Source.TryUpdate(key, newStoredValue.Value, comparisonStoredValue))
+                if (this.dictionary.WithoutProjection.TryUpdate(key, newStoredValue.Value, comparisonStoredValue))
                 {
                     // This method does "leak" a registered callback action when it returns true.
                     GC.KeepAlive(newValue);
@@ -391,7 +391,7 @@ namespace Nito.Weakness
         /// <returns>A stored value.</returns>
         private RegisteredObjectId StoreValue(TKey key, TValue value)
         {
-            return new RegisteredObjectId(ObjectTracker.Default.TrackObject(value), id => this.dictionary.Source.AsDictionary().Remove(new KeyValuePair<TKey, RegisteredObjectId>(key, new RegisteredObjectId(id))));
+            return new RegisteredObjectId(ObjectTracker.Default.TrackObject(value), id => this.dictionary.WithoutProjection.AsDictionary().Remove(new KeyValuePair<TKey, RegisteredObjectId>(key, new RegisteredObjectId(id))));
         }
     }
 }
