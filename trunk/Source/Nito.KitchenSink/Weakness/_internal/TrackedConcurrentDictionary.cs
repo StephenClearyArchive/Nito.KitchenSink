@@ -16,11 +16,6 @@ namespace Nito.Weakness
     internal sealed class TrackedConcurrentDictionary<TKey, TValue> : IConcurrentDictionary<TKey, TValue>
     {
         /// <summary>
-        /// The underlying concurrent dictionary.
-        /// </summary>
-        private readonly ConcurrentDictionary<TKey, TValue> dictionary;
-
-        /// <summary>
         /// The action to take when a key/value pair is removed.
         /// </summary>
         private readonly Action<TKey, TValue> kvpRemoved;
@@ -41,7 +36,7 @@ namespace Nito.Weakness
             Action<TKey, TValue> kvpRemoved,
             Action<TKey, TValue, TValue> kvpUpdated)
         {
-            this.dictionary = dictionary;
+            this.WithoutTracking = dictionary;
             this.kvpRemoved = kvpRemoved;
             this.kvpUpdated = kvpUpdated;
         }
@@ -49,10 +44,7 @@ namespace Nito.Weakness
         /// <summary>
         /// Gets the underlying concurrent dictionary.
         /// </summary>
-        public ConcurrentDictionary<TKey, TValue> WithoutTracking
-        {
-            get { return this.dictionary; }
-        }
+        public ConcurrentDictionary<TKey, TValue> WithoutTracking { get; private set; }
 
         /// <summary>
         /// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
@@ -60,7 +52,7 @@ namespace Nito.Weakness
         /// <param name="key">The object to use as the key of the element to add.</param><param name="value">The object to use as the value of the element to add.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
         public void Add(TKey key, TValue value)
         {
-            this.dictionary.AsDictionary().Add(key, value);
+            this.WithoutTracking.AsDictionary().Add(key, value);
         }
 
         /// <summary>
@@ -72,7 +64,7 @@ namespace Nito.Weakness
         /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey(key);
+            return this.WithoutTracking.ContainsKey(key);
         }
 
         /// <summary>
@@ -83,7 +75,7 @@ namespace Nito.Weakness
         /// </returns>
         public ICollection<TKey> Keys
         {
-            get { return this.dictionary.Keys; }
+            get { return this.WithoutTracking.Keys; }
         }
 
         /// <summary>
@@ -96,7 +88,7 @@ namespace Nito.Weakness
         public bool Remove(TKey key)
         {
             TValue value;
-            if (this.dictionary.TryRemove(key, out value))
+            if (this.WithoutTracking.TryRemove(key, out value))
             {
                 this.kvpRemoved(key, value);
                 return true;
@@ -114,7 +106,7 @@ namespace Nito.Weakness
         /// <param name="key">The key whose value to get.</param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            return this.dictionary.TryGetValue(key, out value);
+            return this.WithoutTracking.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -125,7 +117,7 @@ namespace Nito.Weakness
         /// </returns>
         public ICollection<TValue> Values
         {
-            get { return this.dictionary.Values; }
+            get { return this.WithoutTracking.Values; }
         }
 
         /// <summary>
@@ -139,12 +131,12 @@ namespace Nito.Weakness
         {
             get
             {
-                return this.dictionary[key];
+                return this.WithoutTracking[key];
             }
 
             set
             {
-                this.dictionary.AddOrUpdate(
+                this.WithoutTracking.AddOrUpdate(
                     key,
                     value,
                     (k, oldValue) =>
@@ -161,7 +153,7 @@ namespace Nito.Weakness
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            this.dictionary.AsDictionary().Add(item);
+            this.WithoutTracking.AsDictionary().Add(item);
         }
 
         /// <summary>
@@ -171,7 +163,7 @@ namespace Nito.Weakness
         public void Clear()
         {
             // Note: does not notify of removal.
-            this.dictionary.Clear();
+            this.WithoutTracking.Clear();
         }
 
         /// <summary>
@@ -183,7 +175,7 @@ namespace Nito.Weakness
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            return this.dictionary.AsDictionary().Contains(item);
+            return this.WithoutTracking.AsDictionary().Contains(item);
         }
 
         /// <summary>
@@ -192,7 +184,7 @@ namespace Nito.Weakness
         /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            this.dictionary.AsDictionary().CopyTo(array, arrayIndex);
+            this.WithoutTracking.AsDictionary().CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -203,7 +195,7 @@ namespace Nito.Weakness
         /// </returns>
         public int Count
         {
-            get { return this.dictionary.Count; }
+            get { return this.WithoutTracking.Count; }
         }
 
         /// <summary>
@@ -214,7 +206,7 @@ namespace Nito.Weakness
         /// </returns>
         public bool IsReadOnly
         {
-            get { return this.dictionary.AsDictionary().IsReadOnly; }
+            get { return this.WithoutTracking.AsDictionary().IsReadOnly; }
         }
 
         /// <summary>
@@ -226,7 +218,7 @@ namespace Nito.Weakness
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            return this.dictionary.AsDictionary().Remove(item);
+            return this.WithoutTracking.AsDictionary().Remove(item);
         }
 
         /// <summary>
@@ -238,7 +230,7 @@ namespace Nito.Weakness
         /// <filterpriority>1</filterpriority>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this.dictionary.GetEnumerator();
+            return this.WithoutTracking.GetEnumerator();
         }
 
         /// <summary>
@@ -250,7 +242,7 @@ namespace Nito.Weakness
         /// <filterpriority>2</filterpriority>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.dictionary.GetEnumerator();
+            return this.WithoutTracking.GetEnumerator();
         }
 
         /// <summary>
@@ -262,7 +254,7 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the return value of <paramref name="updateValueFactory"/>; otherwise, this is the return value of <paramref name="addValueFactory"/>.</returns>
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            return this.dictionary.AddOrUpdate(
+            return this.WithoutTracking.AddOrUpdate(
                 key,
                 addValueFactory,
                 (k, oldValue) =>
@@ -293,7 +285,7 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is the return value of <paramref name="valueFactory"/>.</returns>
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            return this.dictionary.GetOrAdd(key, valueFactory);
+            return this.WithoutTracking.GetOrAdd(key, valueFactory);
         }
 
         /// <summary>
@@ -304,7 +296,7 @@ namespace Nito.Weakness
         /// <returns>The new value for the key. If the key already existed, this is the existing value; otherwise, this is <paramref name="value"/>.</returns>
         public TValue GetOrAdd(TKey key, TValue value)
         {
-            return this.dictionary.GetOrAdd(key, value);
+            return this.WithoutTracking.GetOrAdd(key, value);
         }
 
         /// <summary>
@@ -315,7 +307,7 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the key and value were added; <c>false</c> if the key already existed.</returns>
         public bool TryAdd(TKey key, TValue value)
         {
-            return this.dictionary.TryAdd(key, value);
+            return this.WithoutTracking.TryAdd(key, value);
         }
 
         /// <summary>
@@ -326,7 +318,7 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the value was removed; <c>false</c> if the key was not found.</returns>
         public bool TryRemove(TKey key, out TValue value)
         {
-            if (this.dictionary.TryRemove(key, out value))
+            if (this.WithoutTracking.TryRemove(key, out value))
             {
                 this.kvpRemoved(key, value);
                 return true;
@@ -344,7 +336,7 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the existing value for the key was equal to <paramref name="comparisonValue"/> and was replaced with <paramref name="newValue"/>; otherwise, <c>false</c>.</returns>
         public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
         {
-            return this.dictionary.TryUpdate(key, newValue, comparisonValue);
+            return this.WithoutTracking.TryUpdate(key, newValue, comparisonValue);
         }
     }
 }
