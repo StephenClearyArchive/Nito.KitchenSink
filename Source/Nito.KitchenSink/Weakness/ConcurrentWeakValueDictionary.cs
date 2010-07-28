@@ -148,34 +148,35 @@ namespace Nito.Weakness
 
         public TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            // TODO: unresolvable race condition between GC thread and value factories...
-            return this.dictionary.ValueMapStoredToExposed(
-                this.dictionary.Source.AddOrUpdate(
-                    key,
-                    k => this.StoreValue(k, addValueFactory(k)),
-                    (k, oldStoredValue) => this.StoreValue(k, updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
+            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            {
+                return this.dictionary.ValueMapStoredToExposed(
+                    this.dictionary.Source.AddOrUpdate(
+                        key,
+                        k => this.StoreValue(k, addValueFactory(k)),
+                        (k, oldStoredValue) => this.StoreValue(k, updateValueFactory(k, this.dictionary.ValueMapStoredToExposed(oldStoredValue)))));
+            }
         }
 
         public TValue AddOrUpdate(TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory)
         {
-            // TODO: unresolvable race condition between GC thread and value factories...
             return this.AddOrUpdate(key, _ => addValue, updateValueFactory);
         }
 
         public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
         {
-            // TODO: unresolvable race condition between GC thread and value factories...
-            return this.dictionary.ValueMapStoredToExposed(
-                this.dictionary.Source.GetOrAdd(
-                    key,
-                    k => this.StoreValue(k, valueFactory(k))));
+            using (var pause = ObjectTracker.Default.PauseGCDetectionThread())
+            {
+                return this.dictionary.ValueMapStoredToExposed(
+                    this.dictionary.Source.GetOrAdd(
+                        key,
+                        k => this.StoreValue(k, valueFactory(k))));
+            }
         }
 
         public TValue GetOrAdd(TKey key, TValue value)
         {
-            var ret = this.GetOrAdd(key, _ => value);
-            GC.KeepAlive(value);
-            return ret;
+            return this.GetOrAdd(key, _ => value);
         }
 
         public bool TryAdd(TKey key, TValue value)
