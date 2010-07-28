@@ -41,6 +41,11 @@ namespace Nito.Weakness.ObjectTracking
         private readonly ManualResetEvent gcDetectionWakeup;
 
         /// <summary>
+        /// The signal sent to the GC detection thread to tell it to proceed.
+        /// </summary>
+        private readonly CountdownSemaphore gcUnpausedSignal;
+
+        /// <summary>
         /// The amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds.
         /// </summary>
         private volatile int gcDetectionWaitTimeInMilliseconds = 3000;
@@ -56,6 +61,7 @@ namespace Nito.Weakness.ObjectTracking
         internal ObjectTracker()
         {
             this.gcDetectionWakeup = new ManualResetEvent(false);
+            this.gcUnpausedSignal = new CountdownSemaphore();
             this.gcDetectionThread = new Thread(this.GCDetectionThreadProc)
             {
                 Name = "Nito.ObjectTracking GC Detection",
@@ -76,9 +82,6 @@ namespace Nito.Weakness.ObjectTracking
         /// <summary>
         /// Gets or sets the amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds. Setting this value "resets" the wait time, causing the GC Detection thread to begin waiting with the new timeout value.
         /// </summary>
-        /// <remarks>
-        /// <para>This may be set to <see cref="Timeout.Infinite"/> to disable GC detection.</para>
-        /// </remarks>
         public int GCDetectionWaitTimeInMilliseconds
         {
             get
@@ -88,7 +91,7 @@ namespace Nito.Weakness.ObjectTracking
 
             set
             {
-                if (value < -1)
+                if (value < 0)
                 {
                     throw new InvalidOperationException("Invalid GC detection thread wait time value.");
                 }
@@ -96,6 +99,17 @@ namespace Nito.Weakness.ObjectTracking
                 this.gcDetectionWaitTimeInMilliseconds = value;
                 this.gcDetectionWakeup.Set();
             }
+        }
+
+        /// <summary>
+        /// Pauses the GC detection thread. The returned disposable object must be disposed to unpause the GC detection thread. Multiple invokations of this method are valid; each returned object must be disposed to unpause the GC detection thread.
+        /// </summary>
+        /// <returns>A disposable which, when disposed, unpauses the GC detection thread.</returns>
+        public IDisposable PauseGCDetectionThread()
+        {
+            var ret = this.gcUnpausedSignal.Increment();
+            this.gcDetectionWakeup.Set();
+            return ret;
         }
 
         /// <summary>
@@ -108,7 +122,10 @@ namespace Nito.Weakness.ObjectTracking
 
             while (true)
             {
-                // Pause for the specified time.
+                // Block until we're not paused.
+                this.gcUnpausedSignal.WaitHandle.WaitOne();
+
+                // Wait for the the specified time.
                 if (this.gcDetectionWakeup.WaitOne(this.gcDetectionWaitTimeInMilliseconds))
                 {
                     // The wakeup signal was given, so just update our wait time and wait again.
