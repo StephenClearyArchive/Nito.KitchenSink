@@ -122,12 +122,7 @@ namespace Nito.Weakness
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
-            using (var storedKey = this.StoreKey(item.Key).MutableWrapper())
-            {
-                this.dictionary.WithoutProjection.Add(new KeyValuePair<RegisteredObjectId, TValue>(storedKey.Value, item.Value));
-                GC.KeepAlive(item.Key);
-                storedKey.Value = null;
-            }
+            this.AsDictionary().Add(item.Key, item.Value);
         }
 
         void ICollection<KeyValuePair<TKey, TValue>>.Clear()
@@ -225,7 +220,7 @@ namespace Nito.Weakness
                 // Exception -> dispose
                 // Existing key -> dispose
                 // New key -> do not dispose
-                return this.dictionary.WithoutProjection.AddOrUpdate(
+                var ret = this.dictionary.WithoutProjection.AddOrUpdate(
                     storedKey.Value,
                     k =>
                     {
@@ -233,6 +228,8 @@ namespace Nito.Weakness
                         return addValueFactory(key);
                     },
                     (k, oldValue) => updateValueFactory(key, oldValue));
+                GC.KeepAlive(key);
+                return ret;
             }
         }
 
@@ -261,13 +258,15 @@ namespace Nito.Weakness
                 // Exception -> dispose
                 // Existing key -> dispose
                 // New key -> do not dispose
-                return this.dictionary.WithoutProjection.GetOrAdd(
+                var ret = this.dictionary.WithoutProjection.GetOrAdd(
                     storedKey.Value,
                     k =>
                     {
                         storedKey.Value = null;
                         return valueFactory(key);
                     });
+                GC.KeepAlive(key);
+                return ret;
             }
         }
 
@@ -323,9 +322,7 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the existing value for the key was equal to <paramref name="comparisonValue"/> and was replaced with <paramref name="newValue"/>; otherwise, <c>false</c>.</returns>
         public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
         {
-            var ret = this.dictionary.WithoutProjection.TryUpdate(this.dictionary.KeyMapExposedToStored(key), newValue, comparisonValue);
-            GC.KeepAlive(key);
-            return ret;
+            return this.dictionary.WithoutProjection.TryUpdate(this.dictionary.KeyMapExposedToStored(key), newValue, comparisonValue);
         }
 
         /// <summary>
