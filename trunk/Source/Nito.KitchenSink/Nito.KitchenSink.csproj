@@ -195,6 +195,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Weakness\WeakDictionary.cs" />
     <Compile Include="Weakness\WeakKeyDictionary.cs" />
+    <Compile Include="Weakness\_internal\AnonymousDisposable.cs" />
     <Compile Include="Weakness\_internal\ConcurrentDisposableValueDictionary.cs" />
     <Compile Include="Weakness\_internal\CountdownSemaphore.cs" />
     <Compile Include="Weakness\_internal\MutableDisposable.cs" />

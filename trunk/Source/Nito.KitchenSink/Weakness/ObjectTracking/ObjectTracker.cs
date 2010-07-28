@@ -36,14 +36,9 @@ namespace Nito.Weakness.ObjectTracking
         private readonly Thread gcDetectionThread;
 
         /// <summary>
-        /// The signal sent to the GC detection thread to tell it to use the updated <see cref="gcDetectionWaitTimeInMilliseconds"/>.
+        /// The 
         /// </summary>
-        private readonly ManualResetEvent gcDetectionWakeup;
-
-        /// <summary>
-        /// The signal sent to the GC detection thread to tell it to proceed.
-        /// </summary>
-        private readonly CountdownSemaphore gcUnpausedSignal;
+        private readonly BlockingCollection<Command> gcThreadCommands;
 
         /// <summary>
         /// The amount of time for the GC detection thread to wait in-between each scan of all tracked objects, in milliseconds.
@@ -60,8 +55,7 @@ namespace Nito.Weakness.ObjectTracking
         /// </summary>
         internal ObjectTracker()
         {
-            this.gcDetectionWakeup = new ManualResetEvent(false);
-            this.gcUnpausedSignal = new CountdownSemaphore();
+            this.gcThreadCommands = new BlockingCollection<Command>();
             this.gcDetectionThread = new Thread(this.GCDetectionThreadProc)
             {
                 Name = "Nito.ObjectTracking GC Detection",
@@ -96,8 +90,9 @@ namespace Nito.Weakness.ObjectTracking
                     throw new InvalidOperationException("Invalid GC detection thread wait time value.");
                 }
 
-                this.gcDetectionWaitTimeInMilliseconds = value;
-                this.gcDetectionWakeup.Set();
+                var command = new UpdateGCDetectionWaitTimeCommand { GCDetectionWaitTimeInMilliseconds = value };
+                this.gcThreadCommands.Add(command);
+                command.Wait();
             }
         }
 
@@ -107,9 +102,11 @@ namespace Nito.Weakness.ObjectTracking
         /// <returns>A disposable which, when disposed, unpauses the GC detection thread.</returns>
         public IDisposable PauseGCDetectionThread()
         {
-            var ret = this.gcUnpausedSignal.Increment();
-            this.gcDetectionWakeup.Set();
-            return ret;
+            var command = new IncrementPauseCountCommand();
+            this.gcThreadCommands.Add(command);
+            command.Wait();
+
+            return new AnonymousDisposable { Dispose = () => this.gcThreadCommands.Add(new DecrementPauseCountCommand()) };
         }
 
         /// <summary>
@@ -119,17 +116,29 @@ namespace Nito.Weakness.ObjectTracking
         {
             // The list of object references whose targets have been collected.
             var collected = new List<ObjectId>();
+            int pauseCount = 0;
 
             while (true)
             {
-                // Block until we're not paused.
-                this.gcUnpausedSignal.WaitHandle.WaitOne();
-
-                // Wait for the the specified time.
-                if (this.gcDetectionWakeup.WaitOne(this.gcDetectionWaitTimeInMilliseconds))
+                // Wait for the specified time or until a command arrives.
+                Command command;
+                if (this.gcThreadCommands.TryTake(out command, pauseCount == 0 ? this.gcDetectionWaitTimeInMilliseconds : Timeout.Infinite))
                 {
-                    // The wakeup signal was given, so just update our wait time and wait again.
-                    this.gcDetectionWakeup.Reset();
+                    if (command is IncrementPauseCountCommand)
+                    {
+                        ++pauseCount;
+                    }
+                    else if (command is DecrementPauseCountCommand)
+                    {
+                        --pauseCount;
+                    }
+                    else
+                    {
+                        var cmd = command as UpdateGCDetectionWaitTimeCommand;
+                        this.gcDetectionWaitTimeInMilliseconds = cmd.GCDetectionWaitTimeInMilliseconds;
+                    }
+
+                    command.Completed();
                     continue;
                 }
 
@@ -216,6 +225,46 @@ namespace Nito.Weakness.ObjectTracking
         public IObjectIdReference<T> Track<T>(T target) where T : class
         {
             return new ObjectIdReference<T>((ObjectId)TrackObject(target));
+        }
+
+        private abstract class Command
+        {
+            virtual public void Completed()
+            {
+            }
+        }
+
+        private abstract class WaitableCommand : Command
+        {
+            private readonly ManualResetEventSlim mre;
+
+            protected WaitableCommand()
+            {
+                this.mre = new ManualResetEventSlim(false);
+            }
+
+            public override void Completed()
+            {
+                this.mre.Set();
+            }
+
+            public void Wait()
+            {
+                this.mre.Wait();
+            }
+        }
+
+        private sealed class UpdateGCDetectionWaitTimeCommand : WaitableCommand
+        {
+            public int GCDetectionWaitTimeInMilliseconds { get; set; }
+        }
+
+        private sealed class IncrementPauseCountCommand : WaitableCommand
+        {
+        }
+
+        private sealed class DecrementPauseCountCommand : Command
+        {
         }
     }
 }
