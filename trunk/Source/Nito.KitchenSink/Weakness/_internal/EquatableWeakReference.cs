@@ -2,11 +2,11 @@
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-
 namespace Nito.Weakness
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// A strongly-typed weak reference that can be compared for equality. Note that "equivalence" (and the hash code) may change as objects are GC'ed, so this class may NOT be used as any kind of key (it is unpredictably mutable).
     /// Because of these restrictions, this type is not exposed.

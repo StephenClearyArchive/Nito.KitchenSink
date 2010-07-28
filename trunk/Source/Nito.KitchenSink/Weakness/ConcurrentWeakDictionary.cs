@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="ConcurrentWeakDictionary.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.Weakness
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// A concurrent dictionary.
     /// </summary>
