@@ -196,6 +196,7 @@
     <Compile Include="Weakness\WeakDictionary.cs" />
     <Compile Include="Weakness\WeakKeyDictionary.cs" />
     <Compile Include="Weakness\_internal\ConcurrentDisposableValueDictionary.cs" />
+    <Compile Include="Weakness\_internal\CountdownSemaphore.cs" />
     <Compile Include="Weakness\_internal\MutableDisposable.cs" />
     <Compile Include="Weakness\_internal\RegisteredObjectId.cs" />
     <Compile Include="Weakness\_internal\Extensions.cs" />
