@@ -279,12 +279,12 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the key and value were added; <c>false</c> if the key already existed.</returns>
         public bool TryAdd(TKey key, TValue value)
         {
-            using (var storedValue = this.StoreValue(key, value).MutableWrapper())
+            using (var storedKey = this.StoreKey(key).MutableWrapper())
             {
-                if (this.dictionary.WithoutProjection.TryAdd(key, storedValue.Value))
+                if (this.dictionary.WithoutProjection.TryAdd(storedKey.Value, value))
                 {
-                    storedValue.Value = null;
-                    GC.KeepAlive(value);
+                    storedKey.Value = null;
+                    GC.KeepAlive(key);
                     return true;
                 }
 
@@ -300,32 +300,21 @@ namespace Nito.Weakness
         /// <returns><c>true</c> if the value was removed; <c>false</c> if the key was not found.</returns>
         public bool TryRemove(TKey key, out TValue value)
         {
-            RegisteredObjectId storedValue;
-            if (this.dictionary.WithoutProjection.TryRemove(key, out storedValue))
-            {
-                value = this.dictionary.ValueMapStoredToExposed(storedValue);
-                return true;
-            }
-
-            value = null;
-            return false;
+            return this.dictionary.WithoutProjection.TryRemove(this.dictionary.KeyMapExposedToStored(key), out value);
         }
 
-        bool IConcurrentDictionary<TKey, TValue>.TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
+        /// <summary>
+        /// Atomically looks up the existing value for the specified key, compares it with the specified value, and (if they are equal) updates the key with a third value.
+        /// </summary>
+        /// <param name="key">The key used to lookup the existing value.</param>
+        /// <param name="newValue">The new value for the key, if the old value is equal to <paramref name="comparisonValue"/>.</param>
+        /// <param name="comparisonValue">The value to compare against the existing value of <paramref name="key"/>.</param>
+        /// <returns><c>true</c> if the existing value for the key was equal to <paramref name="comparisonValue"/> and was replaced with <paramref name="newValue"/>; otherwise, <c>false</c>.</returns>
+        public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
         {
-            using (var newStoredValue = this.StoreValue(key, newValue).MutableWrapper())
-            {
-                var comparisonStoredValue = this.dictionary.ValueMapExposedToStored(comparisonValue);
-                if (this.dictionary.WithoutProjection.TryUpdate(key, newStoredValue.Value, comparisonStoredValue))
-                {
-                    // This method does "leak" a registered callback action when it returns true.
-                    GC.KeepAlive(newValue);
-                    newStoredValue.Value = null;
-                    return true;
-                }
-
-                return false;
-            }
+            var ret = this.dictionary.WithoutProjection.TryUpdate(this.dictionary.KeyMapExposedToStored(key), newValue, comparisonValue);
+            GC.KeepAlive(key);
+            return ret;
         }
 
         /// <summary>
