@@ -29,7 +29,7 @@ namespace Nito.KitchenSink.ExtensibleObjects
     public interface IExtensibleObject
     {
         /// <summary>
-        /// Gets the collection of extension objects aggregated by this extensible object.
+        /// Gets the collection of extension objects aggregated by this extensible object. Note that the collection may not be threadsafe.
         /// </summary>
         IExtensionCollection Extensions { get; }
     }

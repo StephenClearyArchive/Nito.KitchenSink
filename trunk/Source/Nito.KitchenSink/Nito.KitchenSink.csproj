@@ -150,6 +150,7 @@
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="ExpandoObjectExtensions.cs" />
     <Compile Include="ExtensibleObjects\ExtensibleObject.cs" />
+    <Compile Include="ExtensibleObjects\ExtensibleWrapper.cs" />
     <Compile Include="ExtensibleObjects\ExtensionCollection.cs" />
     <Compile Include="ExtensibleObjects\ExtensionCollectionExtensions.cs" />
     <Compile Include="ExtensibleObjects\Interfaces.cs" />
