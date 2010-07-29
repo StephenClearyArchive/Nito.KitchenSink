@@ -2,6 +2,8 @@
 //     Copyright (c) 2009-2010 Nito Programs.
 // </copyright>
 
+// TODO: P/Invoke for GetShortPathName / GetLongPathName
+
 namespace Nito.KitchenSink
 {
     using System;
