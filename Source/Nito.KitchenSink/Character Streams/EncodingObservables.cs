@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="EncodingObservables.cs" company="Nito Programs">
+//     Copyright (c) 2010 Nito Programs.
+// </copyright>
 
 namespace Nito.KitchenSink
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Observable extension methods that encode and decode streams.
     /// </summary>
