@@ -46,7 +46,10 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.CoreEx, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Interactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Reactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +57,7 @@
     <Compile Include="Unit Tests\CircularBufferUnitTests.cs" />
     <Compile Include="Unit Tests\CommaSeparatedValueReaderUnitTests.cs" />
     <Compile Include="Unit Tests\DynamicUnitTests.cs" />
+    <Compile Include="Unit Tests\EncodingObservablesUnitTests.cs" />
     <Compile Include="Unit Tests\EnumExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\CRC16UnitTests.cs" />
     <Compile Include="Unit Tests\CRC32UnitTests.cs" />
