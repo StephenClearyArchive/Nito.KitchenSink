@@ -10,4 +10,5 @@
 </Value></Property><Property><Name>svn:externals</Name><Value>-r 54571 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/35.Rx Nito.Linq/35.Rx
 -r 54571 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
 </Value></Property><Property><Name>svn:externals</Name><Value>-r 54571 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
+</Value></Property><Property><Name>svn:externals</Name><Value>-r 58251 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
 </Value></Property></Properties></ItemProperties>
