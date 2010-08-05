@@ -14,27 +14,28 @@ namespace Nito.KitchenSink
     public static class EncodingObservables
     {
         /// <summary>
-        /// Takes a "chunked" sequence of characters and converts it to a "chunked" sequence of bytes using the specified encoding.
+        /// Takes a "chunked" sequence of characters and converts it to a "chunked" sequence of bytes using the specified encoding, optionally including the encoding preamble.
         /// </summary>
         /// <param name="source">The "chunked" sequence of characters.</param>
         /// <param name="encoding">The encoding used to translate the sequence of characters to a sequence of bytes.</param>
+        /// <param name="includePreamble">If set to <c>true</c>, the preamble of the encoding is produced before the encoded characters.</param>
         /// <returns>The "chunked" sequence of bytes.</returns>
-        public static IObservable<byte[]> Encode(this IObservable<char[]> source, Encoding encoding)
+        public static IObservable<byte[]> Encode(this IObservable<char[]> source, Encoding encoding, bool includePreamble = false)
         {
-            return Observable.CreateWithDisposable<byte[]>(observer =>
+            IObservable<byte[]> ret = Observable.CreateWithDisposable<byte[]>(observer =>
             {
                 var encoder = encoding.GetEncoder();
 
                 return source.Subscribe(
-                    data =>
+                    charData =>
                     {
                         try
                         {
-                            var ret = new byte[encoder.GetByteCount(data, 0, data.Length, false)];
-                            encoder.GetBytes(data, 0, data.Length, ret, 0, false);
-                            if (ret.Length != 0)
+                            var byteData = new byte[encoder.GetByteCount(charData, 0, charData.Length, false)];
+                            encoder.GetBytes(charData, 0, charData.Length, byteData, 0, false);
+                            if (byteData.Length != 0)
                             {
-                                observer.OnNext(ret);
+                                observer.OnNext(byteData);
                             }
                         }
                         catch (EncoderFallbackException ex)
@@ -47,11 +48,11 @@ namespace Nito.KitchenSink
                     {
                         try
                         {
-                            var ret = new byte[encoder.GetByteCount(new char[0], 0, 0, true)];
-                            encoder.GetBytes(new char[0], 0, 0, ret, 0, true);
-                            if (ret.Length != 0)
+                            var byteData = new byte[encoder.GetByteCount(new char[0], 0, 0, true)];
+                            encoder.GetBytes(new char[0], 0, 0, byteData, 0, true);
+                            if (byteData.Length != 0)
                             {
-                                observer.OnNext(ret);
+                                observer.OnNext(byteData);
                             }
 
                             observer.OnCompleted();
@@ -62,6 +63,8 @@ namespace Nito.KitchenSink
                         }
                     });
             });
+
+            return includePreamble ? ret.StartWith(encoding.GetPreamble()) : ret;
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Nito.KitchenSink
         /// <returns>The "chunked" sequence of characters.</returns>
         public static IObservable<char[]> Decode(this IObservable<byte[]> source, Encoding encoding)
         {
+            // TODO: (bool allowPreamble), then IObservable<Tuple<Encoding, IObservable<char[]>>> Decode() - for autodetection.
             return Observable.CreateWithDisposable<char[]>(observer =>
             {
                 var decoder = encoding.GetDecoder();
