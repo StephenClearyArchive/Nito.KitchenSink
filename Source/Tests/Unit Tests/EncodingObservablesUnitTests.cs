@@ -143,5 +143,48 @@ namespace Tests.Unit_Tests
 
             Assert.IsTrue(result.SequenceEqual(new byte[] { 0x20, 0x23, 0xe2, 0x98, 0xa3 }));
         }
+
+        [TestMethod]
+        public void MSDNDecoderSampleEncodedWithPreamble()
+        {
+            var chars = new[]
+            {
+                new[] { '\u0020' },
+                new[] { '\u0023' },
+                new[] { '\u2623' },
+            };
+
+            var result = chars.ToObservable(Scheduler.ThreadPool)
+                              .Encode(new UTF8Encoding(true, true), true)
+                              .ToEnumerable()
+                              .SelectMany(x => x)
+                              .ToArray();
+
+            Assert.IsTrue(result.SequenceEqual(new byte[] { 0xEF, 0xBB, 0xBF, 0x20, 0x23, 0xe2, 0x98, 0xa3 }));
+        }
+
+        [TestMethod]
+        public void MSDNDecoderSampleWithPreamble()
+        {
+            var bytes = new[]
+            {
+                new byte[] { 0xEF },
+                new byte[] { 0xBB },
+                new byte[] { 0xBF },
+                new byte[] { 0x20 },
+                new byte[] { 0x23 },
+                new byte[] { 0xe2 },
+                new byte[] { 0x98 },
+                new byte[] { 0xa3 },
+            };
+
+            var result = bytes.ToObservable(Scheduler.ThreadPool)
+                              .Decode(new UTF8Encoding(true, true))
+                              .ToEnumerable()
+                              .SelectMany(x => x)
+                              .ToArray();
+
+            Assert.IsTrue(result.SequenceEqual(new[] { '\u0020', '\u0023', '\u2623' }));
+        }
     }
 }
