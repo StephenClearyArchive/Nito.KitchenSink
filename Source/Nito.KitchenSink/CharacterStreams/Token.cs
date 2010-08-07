@@ -2,7 +2,7 @@
 //     Copyright (c) 2010 Nito Programs.
 // </copyright>
 
-namespace Nito.KitchenSink
+namespace Nito.KitchenSink.CharacterStreams
 {
     using ExtensibleObjects;
 

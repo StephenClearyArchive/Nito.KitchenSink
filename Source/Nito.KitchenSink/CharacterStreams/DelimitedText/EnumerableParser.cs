@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nito.KitchenSink.DelimitedText
+namespace Nito.KitchenSink.CharacterStreams.DelimitedText
 {
     using System.Diagnostics;
 
     /// <summary>
     /// Parses a token stream into records.
     /// </summary>
-    public sealed class Parser : IEnumerable<List<string>>
+    public sealed class EnumerableParser : IEnumerable<List<string>>
     {
         /// <summary>
         /// The trace source to which messages are written during parsing.
         /// </summary>
-        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.DelimitedText.Parser");
+        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.CharacterStreams.DelimitedText.EnumerableParser");
 
         /// <summary>
         /// The underlying lexer.
@@ -23,22 +23,22 @@ namespace Nito.KitchenSink.DelimitedText
         private readonly IEnumerable<Token> lexer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Parser"/> class using a specified lexer.
+        /// Initializes a new instance of the <see cref="EnumerableParser"/> class using a specified lexer.
         /// </summary>
         /// <param name="lexer">The lexer used to produce tokens.</param>
-        public Parser(IEnumerable<Token> lexer)
+        public EnumerableParser(IEnumerable<Token> lexer)
         {
             this.lexer = lexer;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Parser"/> class with the default lexer.
+        /// Initializes a new instance of the <see cref="EnumerableParser"/> class with the default lexer.
         /// </summary>
         /// <param name="data">The delimited text data.</param>
         /// <param name="fieldSeparator">The field separator character.</param>
-        public Parser(IEnumerable<char> data, char fieldSeparator = ',')
+        public EnumerableParser(IEnumerable<char> data, char fieldSeparator = ',')
         {
-            this.lexer = new Lexer(data, fieldSeparator);
+            this.lexer = new EnumerableLexer(data, fieldSeparator);
         }
 
         /// <summary>
@@ -51,23 +51,25 @@ namespace Nito.KitchenSink.DelimitedText
         {
             var record = new List<string>();
 
-            // The last token that was read; this stays set to EndOfRecord until a FieldData or FieldSeparator is read. It never gets set back to EndOfRecord.
-            TokenType lastTokenType = TokenType.EndOfRecord;
+            // The last token that was read; this is null until after the first token is read.
+            Token lastToken = null;
 
             // Read the tokens until there are no more.
             foreach (var token in this.lexer)
             {
-                if (token.Type == TokenType.EndOfRecord)
+                var fieldDataToken = token as Tokens.FieldData;
+
+                if (token is Tokens.EndOfRecord)
                 {
                     // An EndOfRecord may indicate the completion of an actual record of data, or just an empty line.
 
-                    if (lastTokenType == TokenType.EndOfRecord)
+                    if (lastToken is Tokens.EndOfRecord)
                     {
                         // Ignore but warn about empty lines.
                         //  record.Count returns 0 at this point.
                         Warning("Parser: Empty line detected in file.");
                     }
-                    else if (lastTokenType == TokenType.FieldSeparator)
+                    else if (lastToken is Tokens.FieldSeparator)
                     {
                         // A FieldSeparator followed by an EndOfRecord implies an empty field at the end of the record.
                         record.Add(string.Empty);
@@ -81,11 +83,11 @@ namespace Nito.KitchenSink.DelimitedText
                         record.Clear();
                     }
                 }
-                else if (token.Type == TokenType.FieldSeparator)
+                else if (token is Tokens.FieldSeparator)
                 {
                     // A FieldSeparator following FieldData just separates fields; a FieldSeparator following a FieldSeparator or EndOfRecord implies an empty FieldData.
 
-                    if (lastTokenType == TokenType.FieldData)
+                    if (lastToken is Tokens.FieldData)
                     {
                         // Since this FieldSepartor is following FieldData, it should just be ignored.
                         Information("Parser: Ignoring FieldSeparator following FieldData.");
@@ -97,28 +99,28 @@ namespace Nito.KitchenSink.DelimitedText
                         record.Add(string.Empty);
                     }
                 }
-                else // (token.Type == TokenType.FieldData)
+                else if (fieldDataToken != null)
                 {
                     // Two FieldData tokens in a row is possible if there is data (even just whitespace) outside the quotes of a quoted FieldData.
 
-                    if (lastTokenType == TokenType.FieldData)
+                    if (lastToken is Tokens.FieldData)
                     {
                         // Just ignore extraneous data.
-                        Warning("Parser: Extra data in field. Ignoring \"" + token.Data + "\".");
+                        Warning("Parser: Extra data in field. Ignoring \"" + fieldDataToken.Data + "\".");
                     }
                     else
                     {
                         // Add FieldData to the record.
                         Information("Parser: Appending field data.");
-                        record.Add(token.Data);
+                        record.Add(fieldDataToken.Data);
                     }
                 }
 
-                lastTokenType = token.Type;
+                lastToken = token;
             }
 
             // The end of the file has been reached. There is a record to return only if a FieldData or FieldSeparator has been read.
-            if (lastTokenType != TokenType.EndOfRecord)
+            if (!(lastToken is Tokens.EndOfRecord))
             {
                 yield return record;
             }

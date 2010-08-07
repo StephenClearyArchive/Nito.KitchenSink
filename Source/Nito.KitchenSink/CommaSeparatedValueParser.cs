@@ -52,7 +52,7 @@ namespace Nito.KitchenSink
         /// <param name="headerRow">If set to <c>true</c>, the CSV data contains a header row.</param>
         /// <param name="headers">The headers for the CSV data. This parameter may be <c>null</c>.</param>
         public CommaSeparatedValueParser(string data, bool headerRow = true, IEnumerable<string> headers = null)
-            :this(new DelimitedText.Parser(data), headerRow, headers)
+            :this(new CharacterStreams.DelimitedText.EnumerableParser(data), headerRow, headers)
         {
         }
 

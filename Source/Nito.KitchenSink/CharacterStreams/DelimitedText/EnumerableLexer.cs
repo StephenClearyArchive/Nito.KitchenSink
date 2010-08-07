@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace Nito.KitchenSink.DelimitedText
+namespace Nito.KitchenSink.CharacterStreams.DelimitedText
 {
     /// <summary>
     /// Parses an input stream into tokens.
     /// </summary>
-    public sealed class Lexer : IEnumerable<Token>
+    public sealed class EnumerableLexer : IEnumerable<Token>
     {
         /// <summary>
         /// The trace source to which messages are written during lexing.
         /// </summary>
-        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.DelimitedText.Lexer");
+        private readonly static TraceSource Tracer = new TraceSource("Nito.KitchenSink.CharacterStreams.DelimitedText.EnumerableLexer");
 
         /// <summary>
         /// The character used as a field separator.
@@ -27,11 +27,11 @@ namespace Nito.KitchenSink.DelimitedText
         private readonly IEnumerable<char> data;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Lexer"/> class.
+        /// Initializes a new instance of the <see cref="EnumerableLexer"/> class.
         /// </summary>
         /// <param name="data">The delimited text data.</param>
         /// <param name="fieldSeparator">The field separator character.</param>
-        public Lexer(IEnumerable<char> data, char fieldSeparator = ',')
+        public EnumerableLexer(IEnumerable<char> data, char fieldSeparator = ',')
         {
             this.fieldSeparator = fieldSeparator;
             this.data = data;
@@ -45,8 +45,6 @@ namespace Nito.KitchenSink.DelimitedText
         /// </returns>
         public IEnumerator<Token> GetEnumerator()
         {
-            var token = new Token();
-
             // Wrapping the source enumerator allows us to cache the return value of the IEnumerator.MoveNext method.
             using (var source = this.data.CreateEnumeratorWrapper())
             {
@@ -58,9 +56,8 @@ namespace Nito.KitchenSink.DelimitedText
                     {
                         // Consume the field separator character and publish a FieldSeparator token.
                         source.MoveNext();
-                        token.Type = TokenType.FieldSeparator;
                         Information("Lexer: field separator.");
-                        yield return token;
+                        yield return new Tokens.FieldSeparator();
                     }
                     else if (ch == '\r')
                     {
@@ -74,36 +71,31 @@ namespace Nito.KitchenSink.DelimitedText
                         }
 
                         // Publish an EndOfRecord token.
-                        token.Type = TokenType.EndOfRecord;
                         Information("Lexer: end of record.");
-                        yield return token;
+                        yield return new Tokens.EndOfRecord();
                     }
                     else if (ch == '\n')
                     {
                         // Consume the '\n' character and publish an EndOfRecord token.
                         source.MoveNext();
-                        token.Type = TokenType.EndOfRecord;
                         Information("Lexer: end of record.");
-                        yield return token;
+                        yield return new Tokens.EndOfRecord();
                     }
                     else
                     {
-                        // At this point, the token must be FieldData, so prepare to read in the field data, one character at a time.
-                        token.Type = TokenType.FieldData;
+                        // At this point, the token must be FieldData, so read in the field data, one character at a time.
 
                         if (ch != '\"')
                         {
                             // The field data is not escaped.
-                            token.Data = this.ReadUnescapedFieldValue(source);
                             Information("Lexer: unescaped field data.");
-                            yield return token;
+                            yield return new Tokens.FieldData { Data = this.ReadUnescapedFieldValue(source) };
                         }
                         else
                         {
                             // The field data is escaped.
-                            token.Data = this.ReadEscapedFieldValue(source);
                             Information("Lexer: escaped field data.");
-                            yield return token;
+                            yield return new Tokens.FieldData { Data = this.ReadEscapedFieldValue(source) };
                         }
                     }
                 }
