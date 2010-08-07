@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Concurrency;
-using Nito.KitchenSink;
+using Nito.KitchenSink.CharacterStreams;
 
 namespace Tests.Unit_Tests
 {
