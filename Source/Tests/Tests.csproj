@@ -88,6 +88,7 @@
     <Compile Include="Unit Tests\SingleByteDelimiterFramerUnitTests.cs" />
     <Compile Include="Unit Tests\StreamExtensionsUnitTests.cs" />
     <Compile Include="Unit Tests\StringExtensionsUnitTests.cs" />
+    <Compile Include="Unit Tests\StringsUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nito.KitchenSink\Nito.KitchenSink.csproj">
