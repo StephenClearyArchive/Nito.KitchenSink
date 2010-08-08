@@ -5,8 +5,9 @@
 namespace Nito.KitchenSink
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-using System.Threading;
+    using System.Threading;
 
     /// <summary>
     /// Provides methods useful when dealing with streams.
@@ -85,6 +86,38 @@ using System.Threading;
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Synchronously reads the contents of this stream as a sequence of byte buffers, enabling cancellation.
+        /// </summary>
+        /// <param name="source">The source stream.</param>
+        /// <param name="buffer">The buffer used by the copy. The size of this buffer determines the sizes of reads made to the source stream.</param>
+        /// <param name="cancellationToken">A cancellation token which may be used to cancel the stream copy.</param>
+        public static IEnumerable<byte[]> GetConsumingEnumerable(this Stream source, byte[] buffer, CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                int bytesRead = source.Read(buffer, 0, buffer.Length);
+                if (bytesRead == 0)
+                {
+                    break;
+                }
+
+                yield return buffer;
+
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+        }
+
+        /// <summary>
+        /// Synchronously reads the contents of this stream as a sequence of byte buffers.
+        /// </summary>
+        /// <param name="source">The source stream.</param>
+        /// <param name="buffer">The buffer used by the copy. The size of this buffer determines the sizes of reads made to the source stream.</param>
+        public static IEnumerable<byte[]> GetConsumingEnumerable(this Stream source, byte[] buffer)
+        {
+            return source.GetConsumingEnumerable(buffer, CancellationToken.None);
         }
     }
 }
