@@ -128,6 +128,7 @@
     <Compile Include="BackgroundWorkerExtensions.cs" />
     <Compile Include="BooleanExtensions.cs" />
     <Compile Include="CharacterStreams\DelimitedText\Extensions.cs" />
+    <Compile Include="CharacterStreams\DelimitedText\ObservableLexer.cs" />
     <Compile Include="CharacterStreams\DelimitedText\Tokens.cs" />
     <Compile Include="CharacterStreams\EncodingObservables.cs" />
     <Compile Include="CharacterStreams\StringToken.cs" />

@@ -41,5 +41,16 @@ namespace Nito.KitchenSink.CharacterStreams.DelimitedText
         {
             return new EnumerableParser(source, fieldSeparator);
         }
+
+        /// <summary>
+        /// Lexes a sequence of characters, producing a sequence of tokens.
+        /// </summary>
+        /// <param name="source">The source stream of characters.</param>
+        /// <param name="fieldSeparator">The field separator to use. The default value is <c>,</c>.</param>
+        /// <returns>An observable sequence of tokens.</returns>
+        public static IObservable<Token> LexDelimitedText(this IObservable<char> source, char fieldSeparator = ',')
+        {
+            return Observable.Iterate<Token>(observer => new ObservableLexer(observer, source, fieldSeparator));
+        }
     }
 }
