@@ -69,13 +69,14 @@ namespace Nito.KitchenSink.CharacterStreams.DelimitedText
                         //  record.Count returns 0 at this point.
                         Warning("Parser: Empty line detected in file.");
                     }
-                    else if (lastToken is Tokens.FieldSeparator)
-                    {
-                        // A FieldSeparator followed by an EndOfRecord implies an empty field at the end of the record.
-                        record.Add(string.Empty);
-                    }
                     else
                     {
+                        if (lastToken is Tokens.FieldSeparator)
+                        {
+                            // A FieldSeparator followed by an EndOfRecord implies an empty field at the end of the record.
+                            record.Add(string.Empty);
+                        }
+
                         // The record has ended, so we return it to the caller.
                         //  record.Count is > 0 at this point.
                         Information("Parser: End of record (with data).");
