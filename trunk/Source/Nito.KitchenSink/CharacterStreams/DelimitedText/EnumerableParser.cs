@@ -121,7 +121,7 @@ namespace Nito.KitchenSink.CharacterStreams.DelimitedText
             }
 
             // The end of the file has been reached. There is a record to return only if a FieldData or FieldSeparator has been read.
-            if (!(lastToken is Tokens.EndOfRecord))
+            if (lastToken != null && !(lastToken is Tokens.EndOfRecord))
             {
                 yield return record;
             }
