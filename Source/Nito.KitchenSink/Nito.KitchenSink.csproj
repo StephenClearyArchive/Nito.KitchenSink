@@ -168,20 +168,6 @@
     <Compile Include="Text\Strings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Weakness\ConcurrentWeakDictionary.cs" />
-    <Compile Include="Weakness\ConcurrentWeakValueDictionary.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Weakness\ConcurrentWeakKeyDictionary.cs" />
-    <Compile Include="Weakness\ObjectTracking\ObjectId.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Weakness\ObjectTracking\ObjectIdReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Weakness\ObjectTracking\ObjectTracker.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ProgressReporter.cs" />
     <Compile Include="ReferenceEqualityComparer.cs" />
     <Compile Include="Reflection\TypeExtensions.cs">
@@ -198,13 +184,6 @@
     <Compile Include="Dynamic\DynamicStaticTypeMembers.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Weakness\WeakDictionary.cs" />
-    <Compile Include="Weakness\WeakKeyDictionary.cs" />
-    <Compile Include="Weakness\_internal\AnonymousDisposable.cs" />
-    <Compile Include="Weakness\_internal\MutableDisposable.cs" />
-    <Compile Include="Weakness\_internal\RegisteredObjectId.cs" />
-    <Compile Include="Weakness\_internal\Extensions.cs" />
-    <Compile Include="Weakness\_internal\TrackedConcurrentDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anonymous\A.cs" />
@@ -247,14 +226,6 @@
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="TextReaders\SourceTextReader.cs" />
     <Compile Include="TextReaderExtensions.cs" />
-    <Compile Include="Weakness\WeakCollection.cs" />
-    <Compile Include="Weakness\WeakReference.cs" />
-    <Compile Include="Weakness\WeakValueDictionary.cs" />
-    <Compile Include="Weakness\_internal\CollectionHelpers.cs" />
-    <Compile Include="Weakness\_internal\EquatableWeakReference.cs" />
-    <Compile Include="Weakness\_internal\ProjectedDictionary.cs" />
-    <Compile Include="Weakness\_internal\ReadOnlyCollection.cs" />
-    <Compile Include="Weakness\_internal\SafeGCHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
