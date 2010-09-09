@@ -50,7 +50,15 @@ namespace Nito.KitchenSink.CharacterStreams.DelimitedText
         /// <returns>An observable sequence of tokens.</returns>
         public static IObservable<Token> LexDelimitedText(this IObservable<char> source, char fieldSeparator = ',')
         {
-            return Observable.Iterate<Token>(observer => new ObservableLexer(observer, source, fieldSeparator));
+            var publishedSource = source.Publish();
+            var ret = Observable.Iterate<Token>(observer => new ObservableLexer(observer, publishedSource, fieldSeparator));
+            publishedSource.Connect();
+            return ret;
+        }
+
+        private sealed class ObservableWrapper<T>
+        {
+            //private readonly IObservable<T> source;
         }
     }
 }
