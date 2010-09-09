@@ -38,6 +38,7 @@ namespace Nito.KitchenSink.CharacterStreams.DelimitedText
         /// </summary>
         /// <param name="observer">The observer of this sequence.</param>
         /// <param name="source">The source of characters to lex.</param>
+        /// <param name="fieldSeparator">The field separator to use to lex the characters.</param>
         public ObservableLexer(IObserver<Token> observer, IObservable<char> source, char fieldSeparator = ',')
         {
             this.observer = observer;
