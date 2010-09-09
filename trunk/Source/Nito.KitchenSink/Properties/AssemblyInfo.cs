@@ -4,4 +4,4 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("Nito.KitchenSink for .NET 4.0 Client with Rx")]
+[assembly: AssemblyTitle("Nito.KitchenSink for .NET 4.0 Client (includes Rx)")]
