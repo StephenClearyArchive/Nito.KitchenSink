@@ -22,11 +22,31 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void ObservableCSV_OverEmptyStream_ProducesNoTokens()
+        {
+            var result = Observable.Empty<char>().LexDelimitedText();
+            Assert.AreEqual(0, result.Count().Single());
+        }
+
+        [TestMethod]
         public void CSV_WithSingleField_ReadsData()
         {
             var result = "data".LexDelimitedText();
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("data", result.Cast<Tokens.FieldData>().Single().Data);
+        }
+
+        [TestMethod]
+        public void ObservableCSV_WithSingleField_ReadsData()
+        {
+            var source = Observable.Return("data", Scheduler.ThreadPool);//.Publish();
+            source.SelectMany(x => x).LexDelimitedText().Run();//.ToEnumerable();//.Start();
+            //using (source.Connect())
+            {
+                //source.Run();
+                //Assert.AreEqual(1, result.Count());
+                //Assert.AreEqual("data", ((Tokens.FieldData)result.ElementAt(0)).Data);
+            }
         }
 
 #if NO

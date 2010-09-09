@@ -134,9 +134,7 @@
     <Compile Include="BackgroundWorkerExtensions.cs" />
     <Compile Include="BooleanExtensions.cs" />
     <Compile Include="CharacterStreams\DelimitedText\Extensions.cs" />
-    <Compile Include="CharacterStreams\DelimitedText\ObservableLexer.cs" />
     <Compile Include="CharacterStreams\DelimitedText\Tokens.cs" />
-    <Compile Include="CharacterStreams\EncodingObservables.cs" />
     <Compile Include="CharacterStreams\StringToken.cs" />
     <Compile Include="CharacterStreams\Token.cs" />
     <Compile Include="CommaSeparatedValueFormatter.cs" />
@@ -184,7 +182,6 @@
     <Compile Include="Weakness\ObjectTracking\ObjectTracker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ObservablePipeline.cs" />
     <Compile Include="ProgressReporter.cs" />
     <Compile Include="ReferenceEqualityComparer.cs" />
     <Compile Include="Reflection\TypeExtensions.cs">
