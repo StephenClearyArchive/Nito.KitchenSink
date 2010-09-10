@@ -86,7 +86,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetHandle.SafeInternetHandle">
       <summary>
@@ -362,7 +361,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.FtpDirectoryEntry.Attributes">
       <summary>
@@ -568,7 +566,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CRC32.HashCore(System.Byte[],System.Int32,System.Int32)">
       <summary>
@@ -758,10 +755,6 @@
       <returns>
             true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
             </returns>
-      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.Model == Contract.OldValue(this.Model)</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &lt; this.Model.Length</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &gt;= 0</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex == Contract.OldValue(this.CurrentIndex) + 1</ensures>
     </member>
     <member name="M:Nito.KitchenSink.EnumeratorWrapper`1.Dispose">
       <summary>
@@ -1296,7 +1289,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.SimplePropertyPath.SubscriptionStep.Object">
       <summary>
@@ -1361,7 +1353,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.SimplePropertyPath.UpdateValue(System.Object)">
       <summary>
@@ -1423,7 +1414,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Reference.Value">
       <summary>
@@ -1452,7 +1442,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.ReferenceCountedDisposable`1.Value">
       <summary>
@@ -1496,7 +1485,6 @@
             </summary>
       <param name="obj">The object to hash.</param>
       <returns>The hash code for the object.</returns>
-      <requires inheritedFrom="M:System.Collections.IEqualityComparer.GetHashCode(System.Object)" inheritedFromTypeName="IEqualityComparer">obj != null</requires>
     </member>
     <member name="F:Nito.KitchenSink.EqualityComparer.valueDefault">
       <summary>
@@ -1584,7 +1572,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.FileSystemPath.RandomFileName">
       <summary>
@@ -2007,7 +1994,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.WinInet.SafeInternetHandle.ReleaseHandle">
       <summary>
@@ -2041,7 +2027,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Socket.EndPoint">
       <summary>
@@ -2057,25 +2042,29 @@
       <summary>
             Gets or sets a value indicating whether cookies were accepted.
             </summary>
-      <value />
+      <value>
+      </value>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.CookieHistory.Leashed">
       <summary>
             Gets or sets a value indicating whether cookies were leashed.
             </summary>
-      <value />
+      <value>
+      </value>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.CookieHistory.Downgraded">
       <summary>
             Gets or sets a value indicating whether cookies were downgraded.
             </summary>
-      <value />
+      <value>
+      </value>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.CookieHistory.Rejected">
       <summary>
             Gets or sets a value indicating whether cookies were rejected.
             </summary>
-      <value />
+      <value>
+      </value>
     </member>
     <member name="T:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Number">
       <summary>
@@ -2087,7 +2076,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Number.Value">
       <summary>
@@ -2119,7 +2107,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.String.Value">
       <summary>
@@ -2131,7 +2118,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.WinInet.InternetCallbackEventArgs.Code">
       <summary>
@@ -2400,8 +2386,6 @@
       <returns>The principal portion of the specific payment.</returns>
       <exception cref="T:System.ArgumentOutOfRangeException">Period must be in the range [1, numberOfPeriods].</exception>
       <exception cref="T:System.InvalidOperationException">The principal portion of the payment could not be calculated.</exception>
-      <requires description="Period must be in the range [1, numberOfPeriods]." exception="T:System.ArgumentOutOfRangeException">period &gt;= 1 &amp;&amp; period &lt;= numberOfPeriods</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">period &lt; 1 || period &gt; numberOfPeriods</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.Exact.InterestPayment(System.Decimal,System.Decimal,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
       <summary>
@@ -2416,8 +2400,6 @@
       <returns>The interest portion of the specific payment.</returns>
       <exception cref="T:System.ArgumentOutOfRangeException">Period must be in the range [1, numberOfPeriods].</exception>
       <exception cref="T:System.InvalidOperationException">The interest portion of the payment could not be calculated.</exception>
-      <requires description="Period must be in the range [1, numberOfPeriods]." exception="T:System.ArgumentOutOfRangeException">period &gt;= 1 &amp;&amp; period &lt;= numberOfPeriods</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">period &lt; 1 || period &gt; numberOfPeriods</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.VerifyMoneyArgument(System.Decimal,System.String)">
       <summary>
@@ -2437,8 +2419,6 @@
       <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
       <returns>The number of periods remaining on the loan.</returns>
       <exception cref="T:System.InvalidOperationException">The number of periods could not be calculated.</exception>
-      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.Payment(System.Decimal,System.UInt32,System.Decimal,System.Decimal,System.Boolean)">
       <summary>
@@ -2451,8 +2431,6 @@
       <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
       <returns>The minimum payment made each period.</returns>
       <exception cref="T:System.InvalidOperationException">The payment could not be calculated.</exception>
-      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.FutureBalance(System.Decimal,System.UInt32,System.Decimal,System.Decimal,System.Boolean)">
       <summary>
@@ -2465,8 +2443,6 @@
       <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
       <returns>The future balance of the loan.</returns>
       <exception cref="T:System.InvalidOperationException">The future balance could not be calculated.</exception>
-      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.PrincipalPayment(System.Decimal,System.UInt32,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
       <summary>
@@ -2480,8 +2456,6 @@
       <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
       <returns>The principal portion of the specific payment.</returns>
       <exception cref="T:System.InvalidOperationException">The principal portion of the payment could not be calculated.</exception>
-      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
     </member>
     <member name="M:Nito.KitchenSink.Mathematics.Financial.InterestPayment(System.Decimal,System.UInt32,System.Decimal,System.Int32,System.Decimal,System.Boolean)">
       <summary>
@@ -2495,8 +2469,6 @@
       <param name="payAtBeginningOfPeriod">Set to <c>true</c> to indicate payments are made at the beginning of the period; by default, payments are made at the end of the period.</param>
       <returns>The interest portion of the specific payment.</returns>
       <exception cref="T:System.InvalidOperationException">The interest portion of the payment could not be calculated.</exception>
-      <requires description="Rate may not be less than zero." exception="T:System.ArgumentOutOfRangeException">rate &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">rate &lt; 0</exception>
     </member>
     <member name="T:Nito.KitchenSink.Dynamic.RefOutArg">
       <summary>
@@ -2527,7 +2499,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.Dynamic.RefOutArg.ValueAsObject">
       <summary>
@@ -2574,8 +2545,6 @@
       <returns>
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CharacterStreams.DelimitedText.EnumerableParser.Information(System.String)">
       <summary>
@@ -2971,8 +2940,6 @@
             </summary>
       <param name="type">The underlying type to wrap. May not be <c>null</c>.</param>
       <returns>An instance of <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" />, as a dynamic type.</returns>
-      <requires exception="T:System.ArgumentNullException">type != null</requires>
-      <exception cref="T:System.ArgumentNullException">type == null</exception>
     </member>
     <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.Create``1">
       <summary>
@@ -2986,7 +2953,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="T:Nito.KitchenSink.ReferenceEqualityComparer`1">
       <summary>
@@ -3306,7 +3272,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CRC16.HashCore(System.Byte[],System.Int32,System.Int32)">
       <summary>
@@ -3920,7 +3885,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
       <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
     <member name="P:Nito.KitchenSink.SafeDisposable`1.Value">
       <summary>
@@ -4404,8 +4368,6 @@
       <param name="function">The fitness function. Given a guess, this function must return a negative number ("move lower") if the guess is too large; a positive number ("move higher") if the guess is too small; and zero if the guess is just right. It is acceptable to </param>
       <returns>Returns <c>true</c> if the root of the function was found; in this case, <paramref name="low" /> and <paramref name="high" /> are both equal to the root. Returns <c>false</c> if the root was not found; in this case, <paramref name="low" /> and <paramref name="high" /> bracket the root, and the difference between them is less than <c>2*<paramref name="accuracy" /></c></returns>
       <exception cref="T:System.InvalidOperationException">The fitness function <paramref name="function" /> does not converge within the range [<paramref name="low" />, <paramref name="high" />].</exception>
-      <requires description="Accuracy cannot be negative." exception="T:System.ArgumentOutOfRangeException">accuracy &gt;= 0</requires>
-      <exception cref="T:System.ArgumentOutOfRangeException">accuracy &lt; 0</exception>
     </member>
     <member name="T:Nito.KitchenSink.PropertyChangedEventHandlerExtensions">
       <summary>
@@ -4470,8 +4432,6 @@
       <returns>
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:Nito.KitchenSink.CharacterStreams.DelimitedText.EnumerableLexer.Information(System.String)">
       <summary>
