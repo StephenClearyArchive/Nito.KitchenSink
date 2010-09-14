@@ -162,6 +162,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="ProducerConsumerStream.cs" />
     <Compile Include="Text\Strings.cs">
       <SubType>Code</SubType>
     </Compile>
