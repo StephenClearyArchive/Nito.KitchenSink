@@ -5,4 +5,4 @@ To create a new release of Nito.KitchenSink:
 4) Checkin sources.
 5) Run "Source-index PDBs.cmd" to source-index the PDBs.
 6) Run "Create release.cmd" to merge all libraries and place output under Binaries.
-7) Checkin entire project and create new CodePlex release.
+7) Create new CodePlex release.
