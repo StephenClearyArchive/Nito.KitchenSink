@@ -103,6 +103,7 @@
     <Compile Include="Unit Tests\MultiByteMultiDelimiterFramerUnitTests.cs" />
     <Compile Include="Unit Tests\NotifyPropertyChangedBaseUnitTests.cs" />
     <Compile Include="Unit Tests\NotifyPropertyChangedUnitTests.cs" />
+    <Compile Include="Unit Tests\OptionParsingUnitTests.cs" />
     <Compile Include="Unit Tests\ReflectionUnitTests.cs">
       <SubType>Code</SubType>
     </Compile>
