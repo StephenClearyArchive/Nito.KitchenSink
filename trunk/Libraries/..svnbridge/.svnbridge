@@ -16,4 +16,8 @@
 </Value></Property><Property><Name>svn:externals</Name><Value>-r 60785 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
 </Value></Property><Property><Name>svn:ignore</Name><Value>DotNetZip
 Nito.Async
+</Value></Property><Property><Name>svn:externals</Name><Value>-r 60785 https://nitolinq.svn.codeplex.com/svn/trunk/Binaries/40.Rx Nito.Linq/40.Rx
+</Value></Property><Property><Name>svn:ignore</Name><Value>DotNetZip
+Nito.Async
+SiftStringSimilarity
 </Value></Property></Properties></ItemProperties>
