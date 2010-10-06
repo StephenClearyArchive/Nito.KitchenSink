@@ -162,6 +162,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Options\OptionDefinition.cs" />
+    <Compile Include="Options\OptionParser.cs" />
+    <Compile Include="Options\OptionParsingException.cs" />
     <Compile Include="ProducerConsumerStream.cs" />
     <Compile Include="Text\Strings.cs">
       <SubType>Code</SubType>
