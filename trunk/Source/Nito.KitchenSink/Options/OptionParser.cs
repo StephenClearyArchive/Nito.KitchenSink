@@ -8,6 +8,8 @@ namespace Nito.KitchenSink.Options
     using System.Collections;
     using System.Diagnostics.Contracts;
 
+    using Text;
+
     /// <summary>
     /// A command-line option parser. Takes option definitions and a sequence of strings, and emits a sequence of <see cref="Option"/> instances.
     /// </summary>
@@ -49,6 +51,160 @@ namespace Nito.KitchenSink.Options
             Contract.Requires(this.Definitions != null, "OptionParser.Definitions must be set before calling Parse.");
 
             return new Parser(this.Definitions, this.StringComparer, commandLine);
+        }
+
+        /// <summary>
+        /// Parses the command line into a parameter object. The <see cref="Definitions"/> property is ignored; option definitions are determined by the attributes on the properties of <paramref name="parameterObject"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of parameter object to initialize.</typeparam>
+        /// <param name="commandLine">The command line to parse.</param>
+        /// <param name="parameterObject">The parameter object that is initialized.</param>
+        /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
+        public void Parse<T>(IEnumerable<string> commandLine, T parameterObject, SimpleParserCollection parserCollection = null) where T : class
+        {
+            if (parserCollection == null)
+            {
+                parserCollection = new SimpleParserCollection();
+            }
+
+            // Generate option definitions from OptionAttributes on the parameter object.
+            var options = new Dictionary<OptionDefinition, Action<string>>();
+            var positionalArguments = new List<Action<string>>();
+            Action<string> remainingPositionalArguments = null;
+            var parameterObjectType = parameterObject.GetType();
+            foreach (var property in parameterObjectType.GetProperties())
+            {
+                var localProperty = property;
+                foreach (var attribute in property.GetCustomAttributes(true))
+                {
+                    var optionAttribute = attribute as OptionAttribute;
+                    if (optionAttribute != null)
+                    {
+                        var optionDefinition = new OptionDefinition { LongName = optionAttribute.LongName, ShortName = optionAttribute.ShortName, Argument = optionAttribute.Argument };
+                        if (optionDefinition.Argument == OptionArgument.None)
+                        {
+                            if (localProperty.PropertyType != typeof(bool))
+                            {
+                                throw new InvalidOperationException("An OptionAttribute with no Argument may only be applied to a boolean property.");
+                            }
+
+                            options.Add(optionDefinition, _ => localProperty.SetValue(parameterObject, true, null));
+                        }
+                        else
+                        {
+                            // TODO: allow conversion overrides
+                            options.Add(optionDefinition, parameter =>
+                            {
+                                var value = parserCollection.TryParse(parameter, localProperty.PropertyType);
+                                if (value == null)
+                                {
+                                    throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
+                                }
+
+                                localProperty.SetValue(parameterObject, value, null);
+                            });
+                        }
+                    }
+
+                    var positionalArgumentAttribute = attribute as PositionalArgumentAttribute;
+                    if (positionalArgumentAttribute != null)
+                    {
+                        if (positionalArguments.Count <= positionalArgumentAttribute.Index)
+                        {
+                            positionalArguments.AddRange(EnumerableEx.Repeat((Action<string>)null, positionalArgumentAttribute.Index - positionalArguments.Count + 1));
+                        }
+
+                        if (positionalArguments[positionalArgumentAttribute.Index] != null)
+                        {
+                            throw new InvalidOperationException("More than one property has a PositionalArgumentAttribute.Index of " + positionalArgumentAttribute.Index + ".");
+                        }
+
+                        // TODO: allow conversion overrides
+                        positionalArguments[positionalArgumentAttribute.Index] = parameter =>
+                        {
+                            var value = parserCollection.TryParse(parameter, localProperty.PropertyType);
+                            if (value == null)
+                            {
+                                throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
+                            }
+
+                            localProperty.SetValue(parameterObject, value, null);
+                        };
+                    }
+
+                    var positionalArgumentsAttribute = attribute as PositionalArgumentsAttribute;
+                    if (positionalArgumentsAttribute != null)
+                    {
+                        if (remainingPositionalArguments != null)
+                        {
+                            throw new InvalidOperationException("More than one property has a PositionalArgumentsAttribute.");
+                        }
+
+                        var addMethods = localProperty.PropertyType.GetMethods().Where(x => x.Name == "Add" && x.GetParameters().Length == 1);
+                        if (!addMethods.Any())
+                        {
+                            throw new InvalidOperationException("Property with PositionalArgumentsAttribute does not implement an Add method taking exactly one parameter.");
+                        }
+
+                        if (addMethods.Count() != 1)
+                        {
+                            throw new InvalidOperationException("Property with PositionalArgumentsAttribute has more than one Add method taking exactly one parameter.");
+                        }
+
+                        var addMethod = addMethods.First();
+
+                        // TODO: allow conversion overrides
+                        remainingPositionalArguments = parameter =>
+                        {
+                            var value = parserCollection.TryParse(parameter, addMethod.GetParameters()[0].ParameterType);
+                            if (value == null)
+                            {
+                                throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + addMethod.GetParameters()[0].ParameterType.Name);
+                            }
+
+                            addMethod.Invoke(localProperty.GetValue(parameterObject, null), new[] { value });
+                        };
+                    }
+                }
+            }
+
+            // Verify options.
+            for (int i = 0; i != positionalArguments.Count; ++i)
+            {
+                if (positionalArguments[i] == null)
+                {
+                    throw new InvalidOperationException("No property has a PositionalArgumentAttribute with Index of " + i + ".");
+                }
+            }
+
+            if (remainingPositionalArguments == null)
+            {
+                throw new InvalidOperationException("No property has a PositionalArgumentsAttribute.");
+            }
+
+            // Parse the command line, filling in the property values.
+            var parser = new Parser(options.Keys, this.StringComparer, commandLine);
+            int positionalArgumentIndex = 0;
+            foreach (var option in parser)
+            {
+                if (option.Definition == null)
+                {
+                    if (positionalArgumentIndex < positionalArguments.Count)
+                    {
+                        positionalArguments[positionalArgumentIndex](option.Argument);
+                    }
+                    else
+                    {
+                        remainingPositionalArguments(option.Argument);
+                    }
+
+                    ++positionalArgumentIndex;
+                }
+                else
+                {
+                    options[option.Definition](option.Argument);
+                }
+            }
         }
 
         private static readonly char[] ArgumentDelimiters = new[] { ':', '=' };

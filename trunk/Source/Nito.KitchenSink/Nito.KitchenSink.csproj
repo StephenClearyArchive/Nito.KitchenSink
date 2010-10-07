@@ -162,10 +162,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Options\OptionAttribute.cs" />
     <Compile Include="Options\OptionDefinition.cs" />
     <Compile Include="Options\OptionParser.cs" />
     <Compile Include="Options\OptionParsingException.cs" />
+    <Compile Include="Options\PositionalArgumentAttribute.cs" />
+    <Compile Include="Options\PositionalArgumentsAttribute.cs" />
     <Compile Include="ProducerConsumerStream.cs" />
+    <Compile Include="Text\SimpleParserAttribute.cs" />
+    <Compile Include="Text\SimpleParserCollection.cs" />
     <Compile Include="Text\Strings.cs">
       <SubType>Code</SubType>
     </Compile>
