@@ -116,6 +116,7 @@
     <Reference Include="System.Interactive, Version=1.0.2698.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -162,6 +163,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Options\OptionArgumentsBase.cs" />
     <Compile Include="Options\OptionAttribute.cs" />
     <Compile Include="Options\OptionDefinition.cs" />
     <Compile Include="Options\OptionParser.cs" />

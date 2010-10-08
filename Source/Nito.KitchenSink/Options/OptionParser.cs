@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Nito.KitchenSink.Options
 {
@@ -37,7 +36,7 @@ namespace Nito.KitchenSink.Options
         public IEnumerable<OptionDefinition> Definitions { get; set; }
 
         /// <summary>
-        /// The string comparison to use when searching option definitions.
+        /// Gets or sets the string comparison to use when searching option definitions.
         /// </summary>
         public StringComparer StringComparer { get; set; }
 
@@ -54,25 +53,38 @@ namespace Nito.KitchenSink.Options
         }
 
         /// <summary>
-        /// Parses the command line into a parameter object. The <see cref="Definitions"/> property is ignored; option definitions are determined by the attributes on the properties of <paramref name="parameterObject"/>.
+        /// Parses the command line into an arguments object. Option definitions are determined by the attributes on the properties of <paramref name="argumentsObject"/>.
         /// </summary>
-        /// <typeparam name="T">The type of parameter object to initialize.</typeparam>
+        /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
         /// <param name="commandLine">The command line to parse.</param>
-        /// <param name="parameterObject">The parameter object that is initialized.</param>
+        /// <param name="argumentsObject">The arguments object that is initialized.</param>
         /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
-        public void Parse<T>(IEnumerable<string> commandLine, T parameterObject, SimpleParserCollection parserCollection = null) where T : class
+        /// <param name="stringComparer">The string comparison to use when searching option definitions.</param>
+        public static void Parse<T>(IEnumerable<string> commandLine, T argumentsObject, SimpleParserCollection parserCollection = null, StringComparer stringComparer = null) where T : class, IOptionArguments
+        {
+            new OptionParser { StringComparer = stringComparer }.Parse(commandLine, argumentsObject, parserCollection);
+        }
+
+        /// <summary>
+        /// Parses the command line into an arguments object. The <see cref="Definitions"/> property is ignored; option definitions are determined by the attributes on the properties of <paramref name="argumentsObject"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
+        /// <param name="commandLine">The command line to parse.</param>
+        /// <param name="argumentsObject">The arguments object that is initialized.</param>
+        /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
+        private void Parse<T>(IEnumerable<string> commandLine, T argumentsObject, SimpleParserCollection parserCollection = null) where T : class, IOptionArguments
         {
             if (parserCollection == null)
             {
                 parserCollection = new SimpleParserCollection();
             }
 
-            // Generate option definitions from OptionAttributes on the parameter object.
+            // Generate option definitions from OptionAttributes on the arguments object.
             var options = new Dictionary<OptionDefinition, Action<string>>();
             var positionalArguments = new List<Action<string>>();
             Action<string> remainingPositionalArguments = null;
-            var parameterObjectType = parameterObject.GetType();
-            foreach (var property in parameterObjectType.GetProperties())
+            var argumentsObjectType = argumentsObject.GetType();
+            foreach (var property in argumentsObjectType.GetProperties())
             {
                 var localProperty = property;
                 foreach (var attribute in property.GetCustomAttributes(true))
@@ -88,7 +100,7 @@ namespace Nito.KitchenSink.Options
                                 throw new InvalidOperationException("An OptionAttribute with no Argument may only be applied to a boolean property.");
                             }
 
-                            options.Add(optionDefinition, _ => localProperty.SetValue(parameterObject, true, null));
+                            options.Add(optionDefinition, _ => localProperty.SetValue(argumentsObject, true, null));
                         }
                         else
                         {
@@ -101,7 +113,7 @@ namespace Nito.KitchenSink.Options
                                     throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
                                 }
 
-                                localProperty.SetValue(parameterObject, value, null);
+                                localProperty.SetValue(argumentsObject, value, null);
                             });
                         }
                     }
@@ -128,7 +140,7 @@ namespace Nito.KitchenSink.Options
                                 throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
                             }
 
-                            localProperty.SetValue(parameterObject, value, null);
+                            localProperty.SetValue(argumentsObject, value, null);
                         };
                     }
 
@@ -162,7 +174,7 @@ namespace Nito.KitchenSink.Options
                                 throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + addMethod.GetParameters()[0].ParameterType.Name);
                             }
 
-                            addMethod.Invoke(localProperty.GetValue(parameterObject, null), new[] { value });
+                            addMethod.Invoke(localProperty.GetValue(argumentsObject, null), new[] { value });
                         };
                     }
                 }
@@ -205,6 +217,8 @@ namespace Nito.KitchenSink.Options
                     options[option.Definition](option.Argument);
                 }
             }
+
+            argumentsObject.Validate();
         }
 
         private static readonly char[] ArgumentDelimiters = new[] { ':', '=' };
