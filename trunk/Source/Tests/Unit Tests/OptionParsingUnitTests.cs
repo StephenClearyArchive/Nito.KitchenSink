@@ -1,12 +1,12 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nito.KitchenSink.Options;
 
 namespace Tests.Unit_Tests
 {
+    using System;
+
     [TestClass]
     public class OptionParsingUnitTests
     {
@@ -933,6 +933,68 @@ namespace Tests.Unit_Tests
             {
                 return (obj.Definition.GetHashCode() ^ obj.Argument.GetHashCode());
             }
+        }
+
+        private sealed class SimpleParameters : OptionArgumentsBase
+        {
+            [Option("Animal", 'a')]
+            public string Animal { get; set; }
+
+            [Option("Flag", 'f', OptionArgument.None)]
+            public bool Flag { get; set; }
+
+            [PositionalArgument(0)]
+            public int FirstPositionalArgument { get; set; }
+
+            [PositionalArgument(1)]
+            public double? SecondPositionalArgument { get; set; }
+
+            [PositionalArgument(2)]
+            public Guid? ThirdPositionalArgument { get; set; }
+
+            public override void Validate()
+            {
+            }
+        }
+
+        [TestMethod]
+        public void SimpleParameters_WithSingleParameter_IsParsed()
+        {
+            var parameters = new SimpleParameters();
+            OptionParser.Parse(new[] { "--Animal", "horse" }, parameters);
+            Assert.AreEqual("horse", parameters.Animal);
+        }
+
+        [TestMethod]
+        public void SimpleParameters_WithParsedParameter_IsParsed()
+        {
+            var parameters = new SimpleParameters();
+            OptionParser.Parse(new[] { "13" }, parameters);
+            Assert.AreEqual(13, parameters.FirstPositionalArgument);
+        }
+
+        [TestMethod]
+        public void SimpleParameters_WithoutParameter_IsParsed()
+        {
+            var parameters = new SimpleParameters();
+            OptionParser.Parse(new[] { "/f" }, parameters);
+            Assert.IsTrue(parameters.Flag);
+        }
+
+        [TestMethod]
+        public void SimpleParameters_WithFullParameters_IsParsed()
+        {
+            var parameters = new SimpleParameters();
+            Guid test = Guid.NewGuid();
+            OptionParser.Parse(new[] { "/f", "--Animal=horse", "--", "13", "14.5e09", test.ToString(), "overflow 1", "overflow 2" }, parameters);
+            Assert.IsTrue(parameters.Flag);
+            Assert.AreEqual("horse", parameters.Animal);
+            Assert.AreEqual(13, parameters.FirstPositionalArgument);
+            Assert.AreEqual(14.5e09, parameters.SecondPositionalArgument);
+            Assert.AreEqual(test, parameters.ThirdPositionalArgument);
+            Assert.AreEqual(2, parameters.AdditionalArguments.Count);
+            Assert.AreEqual("overflow 1", parameters.AdditionalArguments[0]);
+            Assert.AreEqual("overflow 2", parameters.AdditionalArguments[1]);
         }
     }
 }

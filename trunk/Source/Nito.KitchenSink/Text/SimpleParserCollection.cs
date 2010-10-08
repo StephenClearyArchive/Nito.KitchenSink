@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Nito.KitchenSink.Text
 {
     using System.Collections.Concurrent;
     using System.Diagnostics.Contracts;
+    using System.Numerics;
 
     /// <summary>
     /// A simple parser for a specific type.
@@ -54,6 +52,9 @@ namespace Nito.KitchenSink.Text
                 this.Add(DefaultTimeSpanParser.Instance);
                 this.Add(DefaultDateTimeParser.Instance);
                 this.Add(DefaultDateTimeOffsetParser.Instance);
+                this.Add(DefaultSingleParser.Instance);
+                this.Add(DefaultDoubleParser.Instance);
+                this.Add(DefaultDecimalParser.Instance);
             }
         }
 
@@ -64,6 +65,7 @@ namespace Nito.KitchenSink.Text
         public void Add(ISimpleParser parser)
         {
             Contract.Requires(parser.ResultType != typeof(string));
+            Contract.Requires(Nullable.GetUnderlyingType(parser.ResultType) == null);
 
             this.parsers.AddOrUpdate(parser.ResultType, parser, (_, __) => parser);
         }
@@ -107,7 +109,7 @@ namespace Nito.KitchenSink.Text
         /// Attempts to parse the specified string with an expected result type.
         /// </summary>
         /// <param name="value">The string to parse.</param>
-        /// <param name="resultType">The type of the result.</param>
+        /// <param name="resultType">The type of the result. This may be a nullable type.</param>
         /// <param name="useDefaultEnumParsing">Whether to attempt to parse enums if <paramref name="resultType"/> is an enumeration and no parser was found.</param>
         /// <returns>The parsed value, or <c>null</c> if the string could not be parsed.</returns>
         public object TryParse(string value, Type resultType, bool useDefaultEnumParsing = true)
@@ -117,7 +119,8 @@ namespace Nito.KitchenSink.Text
                 return value;
             }
 
-            var parser = this.Find(resultType);
+            var type = Nullable.GetUnderlyingType(resultType) ?? resultType;
+            var parser = this.Find(type);
             if (parser != null)
             {
                 return parser.TryParse(value);
@@ -405,6 +408,90 @@ namespace Nito.KitchenSink.Text
             {
                 DateTimeOffset ret;
                 if (DateTimeOffset.TryParse(value, out ret))
+                {
+                    return ret;
+                }
+
+                return null;
+            }
+        }
+
+        private sealed class DefaultSingleParser : ISimpleParser
+        {
+            public static readonly DefaultSingleParser Instance = new DefaultSingleParser();
+
+            public Type ResultType
+            {
+                get { return typeof(float); }
+            }
+
+            public object TryParse(string value)
+            {
+                float ret;
+                if (float.TryParse(value, out ret))
+                {
+                    return ret;
+                }
+
+                return null;
+            }
+        }
+
+        private sealed class DefaultDoubleParser : ISimpleParser
+        {
+            public static readonly DefaultDoubleParser Instance = new DefaultDoubleParser();
+
+            public Type ResultType
+            {
+                get { return typeof(double); }
+            }
+
+            public object TryParse(string value)
+            {
+                double ret;
+                if (double.TryParse(value, out ret))
+                {
+                    return ret;
+                }
+
+                return null;
+            }
+        }
+
+        private sealed class DefaultDecimalParser : ISimpleParser
+        {
+            public static readonly DefaultDecimalParser Instance = new DefaultDecimalParser();
+
+            public Type ResultType
+            {
+                get { return typeof(decimal); }
+            }
+
+            public object TryParse(string value)
+            {
+                decimal ret;
+                if (decimal.TryParse(value, out ret))
+                {
+                    return ret;
+                }
+
+                return null;
+            }
+        }
+
+        private sealed class DefaultBigIntParser : ISimpleParser
+        {
+            public static readonly DefaultBigIntParser Instance = new DefaultBigIntParser();
+
+            public Type ResultType
+            {
+                get { return typeof(BigInteger); }
+            }
+
+            public object TryParse(string value)
+            {
+                BigInteger ret;
+                if (BigInteger.TryParse(value, out ret))
                 {
                     return ret;
                 }
