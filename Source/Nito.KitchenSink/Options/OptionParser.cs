@@ -87,6 +87,8 @@ namespace Nito.KitchenSink.Options
             foreach (var property in argumentsObjectType.GetProperties())
             {
                 var localProperty = property;
+                var parserOverrideAttribute = property.GetCustomAttributes(typeof(SimpleParserAttribute), true).OfType<SimpleParserAttribute>().FirstOrDefault();
+                var parserOverride = (parserOverrideAttribute == null) ? null : Activator.CreateInstance(parserOverrideAttribute.ParserType) as ISimpleParser;
                 foreach (var attribute in property.GetCustomAttributes(true))
                 {
                     var optionAttribute = attribute as OptionAttribute;
@@ -104,10 +106,9 @@ namespace Nito.KitchenSink.Options
                         }
                         else
                         {
-                            // TODO: allow conversion overrides
                             options.Add(optionDefinition, parameter =>
                             {
-                                var value = parserCollection.TryParse(parameter, localProperty.PropertyType);
+                                var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, localProperty.PropertyType);
                                 if (value == null)
                                 {
                                     throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
@@ -131,10 +132,9 @@ namespace Nito.KitchenSink.Options
                             throw new InvalidOperationException("More than one property has a PositionalArgumentAttribute.Index of " + positionalArgumentAttribute.Index + ".");
                         }
 
-                        // TODO: allow conversion overrides
                         positionalArguments[positionalArgumentAttribute.Index] = parameter =>
                         {
-                            var value = parserCollection.TryParse(parameter, localProperty.PropertyType);
+                            var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, localProperty.PropertyType);
                             if (value == null)
                             {
                                 throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + localProperty.PropertyType.Name);
@@ -165,10 +165,9 @@ namespace Nito.KitchenSink.Options
 
                         var addMethod = addMethods.First();
 
-                        // TODO: allow conversion overrides
                         remainingPositionalArguments = parameter =>
                         {
-                            var value = parserCollection.TryParse(parameter, addMethod.GetParameters()[0].ParameterType);
+                            var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, addMethod.GetParameters()[0].ParameterType);
                             if (value == null)
                             {
                                 throw new OptionParsingException.OptionArgumentException("Could not parse " + parameter + " as " + addMethod.GetParameters()[0].ParameterType.Name);
