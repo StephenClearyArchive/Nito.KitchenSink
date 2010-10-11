@@ -7,6 +7,8 @@ namespace Tests.Unit_Tests
 {
     using System;
 
+    using Nito.KitchenSink.Text;
+
     [TestClass]
     public class OptionParsingUnitTests
     {
@@ -935,6 +937,28 @@ namespace Tests.Unit_Tests
             }
         }
 
+        private sealed class SimpleIntParser : ISimpleParser
+        {
+            public Type ResultType
+            {
+                get
+                {
+                    return typeof(int);
+                }
+            }
+
+            public object TryParse(string value)
+            {
+                int ret;
+                if (int.TryParse(value, out ret))
+                {
+                    return ret + 1;
+                }
+
+                return null;
+            }
+        }
+
         private sealed class SimpleParameters : OptionArgumentsBase
         {
             [Option("Animal", 'a')]
@@ -944,6 +968,7 @@ namespace Tests.Unit_Tests
             public bool Flag { get; set; }
 
             [PositionalArgument(0)]
+            [SimpleParser(typeof(SimpleIntParser))]
             public int FirstPositionalArgument { get; set; }
 
             [PositionalArgument(1)]
@@ -970,7 +995,7 @@ namespace Tests.Unit_Tests
         {
             var parameters = new SimpleParameters();
             OptionParser.Parse(new[] { "13" }, parameters);
-            Assert.AreEqual(13, parameters.FirstPositionalArgument);
+            Assert.AreEqual(14, parameters.FirstPositionalArgument);
         }
 
         [TestMethod]
@@ -989,7 +1014,7 @@ namespace Tests.Unit_Tests
             OptionParser.Parse(new[] { "/f", "--Animal=horse", "--", "13", "14.5e09", test.ToString(), "overflow 1", "overflow 2" }, parameters);
             Assert.IsTrue(parameters.Flag);
             Assert.AreEqual("horse", parameters.Animal);
-            Assert.AreEqual(13, parameters.FirstPositionalArgument);
+            Assert.AreEqual(14, parameters.FirstPositionalArgument);
             Assert.AreEqual(14.5e09, parameters.SecondPositionalArgument);
             Assert.AreEqual(test, parameters.ThirdPositionalArgument);
             Assert.AreEqual(2, parameters.AdditionalArguments.Count);
