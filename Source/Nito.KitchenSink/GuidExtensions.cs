@@ -42,27 +42,48 @@ namespace Nito.KitchenSink
         /// <summary>
         /// Time-based (sequential) GUID.
         /// </summary>
-        TimeBasedRFC4122 = 1,
+        TimeBased = 1,
 
         /// <summary>
-        /// DCE Security GUID with embedded POSIX UIDs.
+        /// DCE Security GUID with embedded POSIX UID/GID. See "DCE 1.1: Authentication and Security Services", Chapter 5 and "DCE 1.1: RPC", Appendix A.
         /// </summary>
-        DCESecurityWithEmbeddedPOSIXUIDs = 2,
+        DCESecurity = 2,
 
         /// <summary>
         /// Name-based GUID using the MD5 hashing algorithm.
         /// </summary>
-        NameBasedRFC4122UsingMD5 = 3,
+        NameBasedUsingMD5 = 3,
 
         /// <summary>
         /// Random GUID.
         /// </summary>
-        RandomRFC4122 = 4,
+        Random = 4,
 
         /// <summary>
         /// Name-based GUID using the SHA-1 hashing algorithm.
         /// </summary>
-        NameBasedRFC4122UsingSHA1 = 5,
+        NameBasedUsingSHA1 = 5,
+    }
+
+    /// <summary>
+    /// Known values of DCE domains.
+    /// </summary>
+    public enum DCEDomain
+    {
+        /// <summary>
+        /// The principal domain. On POSIX machines, this is the POSIX UID domain.
+        /// </summary>
+        Person = 0,
+
+        /// <summary>
+        /// The group domain. On POSIX machines, this is the POSIX GID domain.
+        /// </summary>
+        Group = 1,
+
+        /// <summary>
+        /// The organization domain.
+        /// </summary>
+        Organization = 2,
     }
 
     /// <summary>
@@ -103,7 +124,35 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets the 60-bit Timestamp field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBasedRFC4122"/>.
+        /// Gets the Domain field of the security GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.DCESecurity"/>
+        /// </summary>
+        /// <param name="guid">The security GUID from which to extract the field.</param>
+        /// <returns>The Domain field of the security GUID.</returns>
+        public static DCEDomain GetDomain(this Guid guid)
+        {
+            return (DCEDomain)(guid.ToByteArray()[9]);
+        }
+
+        /// <summary>
+        /// Gets the Local Identifier field of the security GUID. The return value should be interpreted as an unsigned integer. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.DCESecurity"/>
+        /// </summary>
+        /// <param name="guid">The security GUID from which to extract the field.</param>
+        /// <returns>The Domain field of the security GUID.</returns>
+        public static int GetLocalIdentifier(this Guid guid)
+        {
+            byte[] value = guid.ToByteArray();
+            uint ret = value[3];
+            ret <<= 8;
+            ret |= value[2];
+            ret <<= 8;
+            ret |= value[1];
+            ret <<= 8;
+            ret |= value[0];
+            return (int)ret;
+        }
+
+        /// <summary>
+        /// Gets the 60-bit Timestamp field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBased"/>.
         /// </summary>
         /// <param name="guid">The GUID from which to extract the field.</param>
         /// <returns>The Timestamp field of the GUID.</returns>
@@ -129,7 +178,26 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets the date and time that this GUID was created, in UTC. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBasedRFC4122"/>.
+        /// Gets the 28-bit Timestamp field of the GUID; the lowest 32 bits of the returned value are always zero. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.DCESecurity"/>.
+        /// </summary>
+        /// <param name="guid">The GUID from which to extract the field.</param>
+        /// <returns>The Timestamp field of the GUID.</returns>
+        public static long GetPartialTimestamp(this Guid guid)
+        {
+            byte[] value = guid.ToByteArray();
+            long ret = value[7] & 0x0F;
+            ret <<= 8;
+            ret |= value[6];
+            ret <<= 8;
+            ret |= value[5];
+            ret <<= 8;
+            ret |= value[4];
+            ret <<= 32;
+            return ret;
+        }
+
+        /// <summary>
+        /// Gets the date and time that this GUID was created, in UTC. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBased"/>.
         /// </summary>
         /// <param name="guid">The GUID from which to extract the field.</param>
         /// <returns>The date and time that this GUID was created, in UTC.</returns>
@@ -139,7 +207,17 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets the 14-bit Clock Sequence field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBasedRFC4122"/>.
+        /// Gets the approximate date and time that this GUID was created, in UTC. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.DCESecurity"/>.
+        /// </summary>
+        /// <param name="guid">The GUID from which to extract the field.</param>
+        /// <returns>The date and time that this GUID was created, in UTC.</returns>
+        public static DateTime GetPartialCreateTime(this Guid guid)
+        {
+            return new DateTime(1582, 10, 15, 0, 0, 0, DateTimeKind.Utc).AddTicks(guid.GetPartialTimestamp());
+        }
+
+        /// <summary>
+        /// Gets the 14-bit Clock Sequence field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBased"/>.
         /// </summary>
         /// <param name="guid">The GUID from which to extract the field.</param>
         /// <returns>The Clock Sequence field of the GUID.</returns>
@@ -153,7 +231,20 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets the 6-byte (48-bit) Node field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBasedRFC4122"/>.
+        /// Gets the 6-bit Clock Sequence field of the GUID. The lowest 8 bits of the returned value are always 0. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.DCESecurity"/>.
+        /// </summary>
+        /// <param name="guid">The GUID from which to extract the field.</param>
+        /// <returns>The Clock Sequence field of the GUID.</returns>
+        public static int GetPartialClockSequence(this Guid guid)
+        {
+            byte[] value = guid.ToByteArray();
+            int ret = value[8] & 0x3F;
+            ret <<= 8;
+            return ret;
+        }
+
+        /// <summary>
+        /// Gets the 6-byte (48-bit) Node field of the GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBased"/> or <see cref="GuidVersion.DCESecurity"/>.
         /// </summary>
         /// <param name="guid">The GUID from which to extract the field.</param>
         /// <returns>The Node field of the GUID.</returns>
@@ -163,7 +254,7 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Returns <c>true</c> if the Node field is a MAC address; returns <c>false</c> if the Node field is a random value. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBasedRFC4122"/>.
+        /// Returns <c>true</c> if the Node field is a MAC address; returns <c>false</c> if the Node field is a random value. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.TimeBased"/> or <see cref="GuidVersion.DCESecurity"/>.
         /// </summary>
         /// <param name="guid">The GUID to inspect.</param>
         /// <returns>Returns <c>true</c> if the Node field is a MAC address; returns <c>false</c> if the Node field is a random value.</returns>
@@ -173,7 +264,7 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets what remains of the 128-bit MD5 or SHA-1 hash of the name used to create this GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.NameBasedRFC4122UsingMD5"/> or <see cref="GuidVersion.NameBasedRFC4122UsingSHA1"/>. Note that bits 60-63 and bits 70-71 will always be zero (their original values are permanently lost).
+        /// Gets what remains of the 128-bit MD5 or SHA-1 hash of the name used to create this GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.NameBasedUsingMD5"/> or <see cref="GuidVersion.NameBasedUsingSHA1"/>. Note that bits 60-63 and bits 70-71 will always be zero (their original values are permanently lost).
         /// </summary>
         /// <param name="guid">The GUID from which to extract the hash value.</param>
         /// <returns>The hash value from the GUID.</returns>
@@ -186,7 +277,7 @@ namespace Nito.KitchenSink
         }
 
         /// <summary>
-        /// Gets the 122-bit random value used to create this GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.RandomRFC4122"/>. The most-significant 6 bits of the first octet in the returned array are always 0.
+        /// Gets the 122-bit random value used to create this GUID. This is only valid if <see cref="GetVersion"/> returns <see cref="GuidVersion.Random"/>. The most-significant 6 bits of the first octet in the returned array are always 0.
         /// </summary>
         /// <param name="guid">The GUID from which to extract the random value.</param>
         /// <returns>The random value of the GUID.</returns>
