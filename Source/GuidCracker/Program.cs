@@ -34,7 +34,7 @@ namespace GuidCracker
                         }
                         else if (version == GuidVersion.NameBasedUsingMD5 || version == GuidVersion.NameBasedUsingSHA1)
                         {
-                            Console.WriteLine("Hash bits: " + guid.GetHash());
+                            Console.WriteLine("Hash bits: " + guid.GetHash().PrettyDump());
                         }
                         else if (version == GuidVersion.TimeBased)
                         {
