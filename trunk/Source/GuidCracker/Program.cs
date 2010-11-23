@@ -21,7 +21,13 @@ namespace GuidCracker
                         return;
                     }
 
-                    var guid = Guid.Parse(guidString);
+                    Guid guid;
+                    if (!Guid.TryParse(guidString, out guid))
+                    {
+                        Console.WriteLine("Could not parse GUID.");
+                        continue;
+                    }
+
                     var variant = guid.GetVariant();
                     Console.WriteLine("Variant: " + variant);
                     if (variant == GuidVariant.RFC4122)
