@@ -9,6 +9,7 @@ namespace Nito.KitchenSink
     using System.Globalization;
     using System.Linq;
     using System.Text;
+using System.Text.RegularExpressions;
 
     /// <summary>
     /// Provides useful extension methods for string operations.
@@ -205,6 +206,18 @@ namespace Nito.KitchenSink
         public static string Join(this IEnumerable<string> source)
         {
             return source.Join(string.Empty);
+        }
+
+        private static Regex whitespaceRegex = new Regex(@"\s+");
+
+        /// <summary>
+        /// Collapses whitespace sequences in a string to a single space. The string is flattened as a side effect.
+        /// </summary>
+        /// <param name="source">The source string.</param>
+        /// <returns>The string with whitespace collapsed.</returns>
+        public static string CollapseWhitespace(this string source)
+        {
+            return whitespaceRegex.Replace(source, " ");
         }
     }
 }
