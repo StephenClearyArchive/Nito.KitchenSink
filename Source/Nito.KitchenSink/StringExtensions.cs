@@ -208,7 +208,7 @@ using System.Text.RegularExpressions;
             return source.Join(string.Empty);
         }
 
-        private static Regex whitespaceRegex = new Regex(@"\s+");
+        private static readonly Regex WhitespaceRegex = new Regex(@"\s+");
 
         /// <summary>
         /// Collapses whitespace sequences in a string to a single space. The string is flattened as a side effect.
@@ -217,7 +217,7 @@ using System.Text.RegularExpressions;
         /// <returns>The string with whitespace collapsed.</returns>
         public static string CollapseWhitespace(this string source)
         {
-            return whitespaceRegex.Replace(source, " ");
+            return WhitespaceRegex.Replace(source, " ");
         }
     }
 }
