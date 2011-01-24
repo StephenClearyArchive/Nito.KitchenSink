@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nito.KitchenSink.PInvokeInterop</name>
+    </assembly>
+    <members>
+        <member name="T:Nito.KitchenSink.PInvokeInterop.Interop">
+            <summary>
+            Useful methods for p/Invoke interop.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.Interop.GetDelegateForFunctionPointer``1(System.IntPtr)">
+            <summary>
+            Converts an unmanaged function pointer to a delegate.
+            </summary>
+            <typeparam name="T">The type of delegate to convert to.</typeparam>
+            <param name="pointer">The pointer to convert. May not be <c>null</c>.</param>
+            <returns>The function pointer, as a delegate.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.Interop.GetLastWin32Exception">
+            <summary>
+            Returns a <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.
+            </summary>
+            <returns>A <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.Interop.GetLastWin32Exception(System.String)">
+            <summary>
+            Returns a <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.
+            </summary>
+            <param name="function">The name of the last function that was called. This is included in the error message.</param>
+            <returns>A <see cref="T:System.ComponentModel.Win32Exception"/> with the error code of <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.Interop.FormatMessageFromDll(System.String,System.Int32)">
+            <summary>
+            Returns an error message from a message table in a specific DLL; throws an exception if the error code is not defined in the dll. This method will affect <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.
+            </summary>
+            <param name="dll">The DLL to search for the message.</param>
+            <param name="code">The code of the message to find.</param>
+            <returns>The error message, if found in the DLL; otherwise, an exception is thrown.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.Interop.TryFormatMessageFromDll(System.String,System.Int32)">
+            <summary>
+            Returns an error message from a message table in a specific DLL; returns null if there was some error retrieving the error message. This method will affect <see cref="M:System.Runtime.InteropServices.Marshal.GetLastWin32Error"/>.
+            </summary>
+            <param name="dll">The DLL to search for the message.</param>
+            <param name="code">The code of the message to find.</param>
+            <returns>The error message, if found in the DLL; otherwise, <c>null</c>.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods">
+            <summary>
+            Native methods that are safe for any caller.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_ALLOCATE_BUFFER">
+            <summary>
+            Instructs <c>FormatMessage</c> to allocate the message buffer.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_FROM_HMODULE">
+            <summary>
+            Informs <c>FormatMessage</c> to search the given <c>HMODULE</c> for the message definition.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS">
+            <summary>
+            Instructs <c>FormatMessage</c> to ignore insertion parameters.
+            </summary>
+        </member>
+        <member name="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.LOAD_LIBRARY_AS_DATAFILE">
+            <summary>
+            Instructs <c>LoadLibraryEx</c> to load the DLL but not execute it.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FormatMessageFromModule(System.String,System.UInt32)">
+            <summary>
+            Formats the message from the given DLL.
+            </summary>
+            <param name="dllName">The name of the DLL to search for the message definition.</param>
+            <param name="code">The code identifying the message to look up.</param>
+            <returns>The message definition.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.TryFormatMessageFromModule(System.String,System.UInt32)">
+            <summary>
+            Tries to format the message from the given DLL. Returns <c>null</c> if the DLL could not be loaded or does not contain a definition for the message.
+            </summary>
+            <param name="dllName">The name of the DLL to search for the message definition.</param>
+            <param name="code">The code identifying the message to look up.</param>
+            <returns>The message definition.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.LoadLibraryEx(System.String,System.UInt32)">
+            <summary>
+            Loads the specified DLL library.
+            </summary>
+            <param name="fileName">Name of the DLL to load.</param>
+            <param name="flags">Flags that affect the loading of the library.</param>
+            <returns>A handle to the loaded DLL.</returns>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FormatMessageFromModuleAllocatingBuffer(System.UInt32,Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle,System.UInt32,Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle@,System.UInt32)">
+            <summary>
+            Formats the message from the given DLL, having the system allocate the message buffer.
+            </summary>
+            <param name="flags">The formatting message flags. This must include <see cref="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_ALLOCATE_BUFFER"/>, <see cref="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_FROM_HMODULE"/>, and <see cref="F:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.FORMAT_MESSAGE_IGNORE_INSERTS"/>.</param>
+            <param name="dll">The DLL to search for the message definition. May not be <c>null</c>.</param>
+            <param name="code">The code identifying the message to look up.</param>
+            <param name="localMemory">On return, contains a handle to a local memory buffer allocated by the system.</param>
+            <param name="minimumBufferSize">Minimum size of the buffer local memory buffer to allocate.</param>
+            <returns>The number of valid characters in the local memory buffer.</returns>
+        </member>
+        <member name="T:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle">
+            <summary>
+            A handle to a DLL (HMODULE).
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle"/> class.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle.ReleaseHandle">
+            <summary>
+            Frees the handle.
+            </summary>
+            <returns>true if the handle is released successfully; otherwise, in the event of a catastrophic failure, false. In this case, it generates a releaseHandleFailed MDA Managed Debugging Assistant.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeModuleHandle.IsInvalid">
+            <summary>
+            Gets a value indicating whether the handle value is invalid.
+            </summary>
+        </member>
+        <member name="T:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle">
+            <summary>
+            A handle to local memory (PVOID) that must be freed by <c>LocalFree</c>.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle"/> class.
+            </summary>
+        </member>
+        <member name="M:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle.ReleaseHandle">
+            <summary>
+            Frees the handle.
+            </summary>
+            <returns>true if the handle is released successfully; otherwise, in the event of a catastrophic failure, false. In this case, it generates a releaseHandleFailed MDA Managed Debugging Assistant.</returns>
+        </member>
+        <member name="P:Nito.KitchenSink.PInvokeInterop.SafeNativeMethods.SafeLocalMemoryHandle.IsInvalid">
+            <summary>
+            Gets a value indicating whether the handle value is invalid.
+            </summary>
+        </member>
+    </members>
+</doc>

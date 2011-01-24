@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.FileSystemPaths</id>
+  <version>1.0.0</version>
+  <title>Nito.KitchenSink File System Paths Helper Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>A helper library for working with strings that are file system paths.</summary>
+  <description>A helper library for working with strings that are file system paths.</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito path file directory folder filesystem .net35 .net40</tags>
+ </metadata>
+ <files>
+  <file src="NET35\bin\Release\Nito.KitchenSink.FileSystemPaths.dll" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.FileSystemPaths.pdb" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.FileSystemPaths.xml" target="lib\35" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.FileSystemPaths.Contracts.dll" target="lib\35\CodeContracts" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.FileSystemPaths.Contracts.pdb" target="lib\35\CodeContracts" />
+
+  <file src="NET40\bin\Release\Nito.KitchenSink.FileSystemPaths.dll" target="lib\4" />
+  <file src="NET40\bin\Release\Nito.KitchenSink.FileSystemPaths.pdb" target="lib\4" />
+  <file src="NET40\bin\Release\Nito.KitchenSink.FileSystemPaths.xml" target="lib\4" />
+  <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.FileSystemPaths.Contracts.dll" target="lib\4\CodeContracts" />
+  <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.FileSystemPaths.Contracts.pdb" target="lib\4\CodeContracts" />
+ </files>
+</package>
