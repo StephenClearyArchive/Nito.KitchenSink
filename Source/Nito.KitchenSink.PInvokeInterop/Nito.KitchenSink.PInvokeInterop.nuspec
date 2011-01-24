@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.PInvokeInterop</id>
+  <version>1.0.0</version>
+  <title>Nito.KitchenSink P/Invoke Interop Helper Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>A helper library for P/Invoke Interop.</summary>
+  <description>A helper library for P/Invoke Interop.</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito pinvoke interop .net20 .net30 .net35 .net40</tags>
+ </metadata>
+ <files>
+  <file src="NET20\bin\Release\Nito.KitchenSink.PInvokeInterop.dll" target="lib\2" />
+  <file src="NET20\bin\Release\Nito.KitchenSink.PInvokeInterop.pdb" target="lib\2" />
+  <file src="NET20\bin\Release\Nito.KitchenSink.PInvokeInterop.xml" target="lib\2" />
+  <file src="NET20\bin\Release\CodeContracts\Nito.KitchenSink.PInvokeInterop.Contracts.dll" target="lib\2\CodeContracts" />
+  <file src="NET20\bin\Release\CodeContracts\Nito.KitchenSink.PInvokeInterop.Contracts.pdb" target="lib\2\CodeContracts" />
+ </files>
+</package>
