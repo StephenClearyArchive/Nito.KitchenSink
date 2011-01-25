@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.GetPropertyName</id>
+  <version>1.0.0</version>
+  <title>Nito.KitchenSink GetPropertyName Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>A library containing an extension method GetPropertyName which allows retrieving the property name from a lambda expression.</summary>
+  <description>A library containing an extension method GetPropertyName which allows retrieving the property name from a lambda expression.</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito property name openssl .net35 .net40</tags>
+ </metadata>
+ <files>
+  <file src="NET35\bin\Release\Nito.KitchenSink.GetPropertyName.dll" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.GetPropertyName.pdb" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.GetPropertyName.xml" target="lib\35" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.GetPropertyName.Contracts.dll" target="lib\35\CodeContracts" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.GetPropertyName.Contracts.pdb" target="lib\35\CodeContracts" />
+ </files>
+</package>
