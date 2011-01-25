@@ -12,6 +12,9 @@
   <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
   <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
   <tags>nito path file directory folder filesystem .net35 .net40</tags>
+  <dependencies>
+   <dependency id="Nito.KitchenSink.PInvokeInterop" />
+  </dependencies>
  </metadata>
  <files>
   <file src="NET35\bin\Release\Nito.KitchenSink.FileSystemPaths.dll" target="lib\35" />
