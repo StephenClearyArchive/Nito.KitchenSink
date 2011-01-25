@@ -4,4 +4,4 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("Nito.KitchenSink.FileSystemPath for .NET 3.5 SP1 Client")]
+[assembly: AssemblyTitle("Nito.KitchenSink.FileSystemPath for .NET 3.5 SP1 Client Profile")]
