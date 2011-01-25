@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("FileSystem Path abstraction, which makes path manipulation code cleaner")]
+[assembly: AssemblyDescription("Hash Algorithms Helper Library")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito.KitchenSink Library")]
 [assembly: AssemblyCopyright("Copyright © 2009-2011 Nito Programs")]
