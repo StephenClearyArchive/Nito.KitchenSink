@@ -1,0 +1,130 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Nito.KitchenSink.Dynamic</name>
+  </assembly>
+  <members>
+    <member name="T:Nito.KitchenSink.Dynamic.RefOutArg">
+      <summary>
+            A wrapper around a "ref" or "out" argument invoked dynamically.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.RefOutArg.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.RefOutArg.Create``1">
+      <summary>
+            Creates a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class wrapping the default value of <typeparamref name="T" />.
+            </summary>
+      <typeparam name="T">The type of value to wrap.</typeparam>
+      <returns>A new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class wrapping the default value of <typeparamref name="T" />.</returns>
+      <ensures>Contract.Result&lt;RefOutArg&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.RefOutArg.Create(System.Object)">
+      <summary>
+            Creates a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class wrapping the specified value.
+            </summary>
+      <param name="value">The value to wrap.</param>
+      <returns>A new instance of the <see cref="T:Nito.KitchenSink.Dynamic.RefOutArg" /> class wrapping the specified value.</returns>
+      <ensures>Contract.Result&lt;RefOutArg&gt;() != null</ensures>
+      <ensures>Contract.Result&lt;RefOutArg&gt;().ValueAsObject == value</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.RefOutArg.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.Dynamic.RefOutArg.ValueAsObject">
+      <summary>
+            Gets or sets the wrapped value as an object.
+            </summary>
+    </member>
+    <member name="P:Nito.KitchenSink.Dynamic.RefOutArg.Value">
+      <summary>
+            Gets or sets the wrapped value.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers">
+      <summary>
+            A dynamic object that allows access to a type's static members, resolved dynamically at runtime.
+            </summary>
+      <invariant>this.type != null</invariant>
+    </member>
+    <member name="F:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.Trace">
+      <summary>
+            The trace source for failed binding messages.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.type">
+      <summary>
+            The underlying type.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.#ctor(System.Type)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" /> class wrapping the specified type.
+            </summary>
+      <param name="type">The underlying type to wrap.</param>
+      <requires>type != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+      <summary>
+            Gets a value for a static property defined by the wrapped type.
+            </summary>
+      <param name="binder">Provides information about the object that called the dynamic operation. The binder.Name property provides the name of the member on which the dynamic operation is performed. For example, for the Console.WriteLine(sampleObject.SampleProperty) statement, where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleProperty". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+      <param name="result">The result of the get operation. For example, if the method is called for a property, you can assign the property value to <paramref name="result" />.</param>
+      <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a run-time exception is thrown.)
+            </returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+      <summary>
+            Sets a value for a static property defined by the wrapped type.
+            </summary>
+      <param name="binder">Provides information about the object that called the dynamic operation. The binder.Name property provides the name of the member to which the value is being assigned. For example, for the statement sampleObject.SampleProperty = "Test", where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleProperty". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+      <param name="value">The value to set to the member. For example, for sampleObject.SampleProperty = "Test", where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, the <paramref name="value" /> is "Test".</param>
+      <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a language-specific run-time exception is thrown.)
+            </returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
+      <summary>
+            Calls a static method defined by the wrapped type.
+            </summary>
+      <param name="binder">Provides information about the dynamic operation. The binder.Name property provides the name of the member on which the dynamic operation is performed. For example, for the statement sampleObject.SampleMethod(100), where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleMethod". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+      <param name="args">The arguments that are passed to the object member during the invoke operation. For example, for the statement sampleObject.SampleMethod(100), where sampleObject is derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, <c>args[0]</c> is equal to 100.</param>
+      <param name="result">The result of the member invocation.</param>
+      <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a language-specific run-time exception is thrown.)
+            </returns>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.Create(System.Type)">
+      <summary>
+            Creates a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" /> class wrapping the specified type.
+            </summary>
+      <param name="type">The underlying type to wrap. May not be <c>null</c>.</param>
+      <returns>An instance of <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" />, as a dynamic type.</returns>
+      <requires>type != null</requires>
+      <ensures>Contract.Result&lt;object&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.Create``1">
+      <summary>
+            Creates a new instance of the <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" /> class wrapping the specified type.
+            </summary>
+      <typeparam name="T">The underlying type to wrap.</typeparam>
+      <returns>An instance of <see cref="T:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers" />, as a dynamic type.</returns>
+      <ensures>Contract.Result&lt;object&gt;() != null</ensures>
+    </member>
+    <member name="M:Nito.KitchenSink.Dynamic.DynamicStaticTypeMembers.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+  </members>
+</doc>
