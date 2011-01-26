@@ -1,0 +1,145 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Nito.KitchenSink.SimpleParsers</name>
+  </assembly>
+  <members>
+    <member name="T:Nito.KitchenSink.SimpleParsers.SimpleParserAttribute">
+      <summary>
+            Specifies that a given parser should be used for this type or member.
+            </summary>
+      <invariant>this.parserType != null</invariant>
+      <invariant>this.parserType.GetInterface("Nito.KitchenSink.SimpleParsers.ISimpleParser") != null</invariant>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserAttribute.#ctor(System.Type)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SimpleParsers.SimpleParserAttribute" /> class.
+            </summary>
+      <param name="parserType">Type of the parser.</param>
+      <requires>parserType != null</requires>
+      <requires description="The type passed to SimpleParserAttribute must implement ISimpleParser.">parserType.GetInterface("Nito.KitchenSink.SimpleParsers.ISimpleParser") != null</requires>
+    </member>
+    <member name="P:Nito.KitchenSink.SimpleParsers.SimpleParserAttribute.ParserType">
+      <summary>
+            Gets or sets the type of the parser.
+            </summary>
+      <value>The type of the parser.</value>
+      <getter>
+        <ensures>Contract.Result&lt;Type&gt;() != null</ensures>
+        <ensures>Contract.Result&lt;Type&gt;().GetInterface("Nito.KitchenSink.SimpleParsers.ISimpleParser") != null</ensures>
+      </getter>
+      <setter>
+        <requires>value != null</requires>
+        <requires description="The type passed to SimpleParserAttribute must implement ISimpleParser.">value.GetInterface("Nito.KitchenSink.SimpleParsers.ISimpleParser") != null</requires>
+      </setter>
+    </member>
+    <member name="T:Nito.KitchenSink.SimpleParsers.ISimpleParser">
+      <summary>
+            A simple parser for a specific type.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.TryParse(System.String)">
+      <summary>
+            Attempts to parse a string value into a value of type <see cref="P:Nito.KitchenSink.SimpleParsers.ISimpleParser.ResultType" />.
+            </summary>
+      <param name="value">The string value to parse.</param>
+      <returns>The resulting parsed value, or <c>null</c> if parsing was not possible.</returns>
+      <requires>value != null</requires>
+      <ensures>Contract.Result&lt;object&gt;() == null || Contract.Result&lt;object&gt;().GetType() == this.ResultType</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.SimpleParsers.ISimpleParser.ResultType">
+      <summary>
+            The type of the result of the <see cref="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.TryParse(System.String)" /> method. This cannot be the <see cref="T:System.String" /> type or a nullable value type.
+            </summary>
+      <getter>
+        <ensures>Contract.Result&lt;Type&gt;() != null</ensures>
+        <ensures>Contract.Result&lt;Type&gt;() != typeof(string)</ensures>
+        <ensures>Nullable.GetUnderlyingType(Contract.Result&lt;Type&gt;()) == null</ensures>
+      </getter>
+    </member>
+    <member name="T:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1">
+      <summary>
+            Implements <see cref="T:Nito.KitchenSink.SimpleParsers.ISimpleParser" /> for any type that defines a <c>TryParse</c> method with the standard signature.
+            </summary>
+      <typeparam name="T">The type of object that this simple parser can parse.</typeparam>
+    </member>
+    <member name="F:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1.TType">
+      <summary>
+            Provides dynamic access to the <typeparamref name="T" /> static type members.
+            </summary>
+    </member>
+    <member name="F:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1.Instance">
+      <summary>
+            A single, shared instance of this parser type.
+            </summary>
+    </member>
+    <member name="T:Nito.KitchenSink.SimpleParsers.SimpleParserCollection">
+      <summary>
+            A collection of simple parsers. Each result type only has one parser defined for it in a given collection. This class is threadsafe.
+            </summary>
+      <invariant>this.parsers != null</invariant>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.#ctor(System.Boolean)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Nito.KitchenSink.SimpleParsers.SimpleParserCollection" /> class.
+            </summary>
+      <param name="includeDefaultParsers">Whether to include the default parsers in the parser collection.</param>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.Add(Nito.KitchenSink.SimpleParsers.ISimpleParser)">
+      <summary>
+            Adds the specified parser to the parser collection. If there is another parser matching the new parser's result type, the existing parser is removed.
+            </summary>
+      <param name="parser">The parser to add. May not be <c>null</c>.</param>
+      <requires>parser != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.Remove(System.Type)">
+      <summary>
+            Removes the parser for the specified result type from the parser collection. If there is no parser defined for that type, then this method is a noop.
+            </summary>
+      <param name="type">The type whose parser is to be removed. May not be <c>null</c>.</param>
+      <requires>type != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.Remove(Nito.KitchenSink.SimpleParsers.ISimpleParser)">
+      <summary>
+            Removes any parsers matching the specified parser's result type from the parser collection. If there is no parser defined for that type, then this method is a noop.
+            </summary>
+      <param name="parser">The parser specifying the result type of the parser to remove. May not be <c>null</c>.</param>
+      <requires>parser != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.Find(System.Type)">
+      <summary>
+            Finds the parser for a specified result type; returns <c>null</c> if no parser is found.
+            </summary>
+      <param name="type">The result type. May not be <c>null</c>.</param>
+      <returns>The parser for the specified result type, or <c>null</c> if no parser is found.</returns>
+      <requires>type != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.SimpleParserCollection.TryParse(System.String,System.Type,System.Boolean)">
+      <summary>
+            Attempts to parse the specified string with an expected result type.
+            </summary>
+      <param name="value">The string to parse. May not be <c>null</c>.</param>
+      <param name="resultType">The type of the result. This may be a nullable type. May not be <c>null</c>.</param>
+      <param name="useDefaultEnumParsing">Whether to attempt to parse enums if <paramref name="resultType" /> is an enumeration and no parser was found.</param>
+      <returns>The parsed value, or <c>null</c> if the string could not be parsed.</returns>
+      <requires>value != null</requires>
+      <requires>resultType != null</requires>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1.Nito#KitchenSink#SimpleParsers#ISimpleParser#get_ResultType">
+      <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Contract.Result&lt;Type&gt;() != null</ensures>
+      <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Contract.Result&lt;Type&gt;() != typeof(string)</ensures>
+      <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Nullable.GetUnderlyingType(Contract.Result&lt;Type&gt;()) == null</ensures>
+    </member>
+    <member name="P:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1.Nito#KitchenSink#SimpleParsers#ISimpleParser#ResultType">
+      <getter>
+        <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Contract.Result&lt;Type&gt;() != null</ensures>
+        <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Contract.Result&lt;Type&gt;() != typeof(string)</ensures>
+        <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.get_ResultType" inheritedFromTypeName="ISimpleParser">Nullable.GetUnderlyingType(Contract.Result&lt;Type&gt;()) == null</ensures>
+      </getter>
+    </member>
+    <member name="M:Nito.KitchenSink.SimpleParsers.DefaultSimpleParser`1.Nito#KitchenSink#SimpleParsers#ISimpleParser#TryParse(System.String)">
+      <requires inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.TryParse(System.String)" inheritedFromTypeName="ISimpleParser">value != null</requires>
+      <ensures inheritedFrom="M:Nito.KitchenSink.SimpleParsers.ISimpleParser.TryParse(System.String)" inheritedFromTypeName="ISimpleParser">Contract.Result&lt;object&gt;() == null || Contract.Result&lt;object&gt;().GetType() == this.ResultType</ensures>
+    </member>
+  </members>
+</doc>
