@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.NotifyPropertyChanged</id>
+  <version>1.0.0</version>
+  <title>Nito.KitchenSink NotifyPropertyChanged Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>Helper methods for implementing and consuming INotifyPropertyChanged.</summary>
+  <description>Helper methods for implementing and consuming INotifyPropertyChanged.</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito inotifypropertychanged notifypropertychanged propertychanged .net40</tags>
+  <dependencies>
+   <dependency id="Nito.KitchenSink.GetPropertyName" />
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="NET35\bin\Release\Nito.KitchenSink.NotifyPropertyChanged.dll" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.NotifyPropertyChanged.pdb" target="lib\35" />
+  <file src="NET35\bin\Release\Nito.KitchenSink.NotifyPropertyChanged.xml" target="lib\35" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.NotifyPropertyChanged.Contracts.dll" target="lib\35\CodeContracts" />
+  <file src="NET35\bin\Release\CodeContracts\Nito.KitchenSink.NotifyPropertyChanged.Contracts.pdb" target="lib\35\CodeContracts" />
+ </files>
+</package>

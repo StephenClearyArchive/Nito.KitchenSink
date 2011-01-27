@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET35", "NET35\NET35.csproj", "{56356842-14D9-46F5-8C8D-4255FE77063E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.CodeAnalysis|Any CPU.ActiveCfg = CodeAnalysis|Any CPU
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.CodeAnalysis|Any CPU.Build.0 = CodeAnalysis|Any CPU
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56356842-14D9-46F5-8C8D-4255FE77063E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
