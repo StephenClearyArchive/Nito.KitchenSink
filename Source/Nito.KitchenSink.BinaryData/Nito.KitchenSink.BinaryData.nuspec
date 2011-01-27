@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.BinaryData</id>
+  <version>1.0.0</version>
+  <title>Nito.KitchenSink Binary Data Helper Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>A helper library for working with byte sequences and arrays.</summary>
+  <description>A helper library for working with byte sequences and arrays.</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito binary byte .net40</tags>
+ </metadata>
+ <files>
+  <file src="NET40\bin\Release\Nito.KitchenSink.BinaryData.dll" target="lib\4" />
+  <file src="NET40\bin\Release\Nito.KitchenSink.BinaryData.pdb" target="lib\4" />
+  <file src="NET40\bin\Release\Nito.KitchenSink.BinaryData.xml" target="lib\4" />
+  <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.BinaryData.Contracts.dll" target="lib\4\CodeContracts" />
+  <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.BinaryData.Contracts.pdb" target="lib\4\CodeContracts" />
+ </files>
+</package>
