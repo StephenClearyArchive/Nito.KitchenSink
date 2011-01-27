@@ -9,4 +9,5 @@ if not exist ..\Binaries\NuGet mkdir ..\Binaries\NuGet
 ..\Util\nuget.exe p Nito.KitchenSink.Dynamic\Nito.KitchenSink.Dynamic.nuspec -o ..\Binaries\NuGet
 ..\Util\nuget.exe p Nito.KitchenSink.SimpleParsers\Nito.KitchenSink.SimpleParsers.nuspec -o ..\Binaries\NuGet
 ..\Util\nuget.exe p Nito.KitchenSink.OptionParsing\Nito.KitchenSink.OptionParsing.nuspec -o ..\Binaries\NuGet
+..\Util\nuget.exe p Nito.KitchenSink.CRC\Nito.KitchenSink.CRC.nuspec -o ..\Binaries\NuGet
 pause
