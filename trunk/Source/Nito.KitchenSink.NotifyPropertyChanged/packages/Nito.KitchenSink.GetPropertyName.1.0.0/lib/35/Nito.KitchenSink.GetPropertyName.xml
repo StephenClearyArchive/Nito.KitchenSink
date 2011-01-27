@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Nito.KitchenSink.GetPropertyName</name>
+  </assembly>
+  <members>
+    <member name="T:Nito.KitchenSink.GetPropertyName.ObjectExtensions">
+      <summary>
+            Provides extension methods applicable to all objects.
+            </summary>
+    </member>
+    <member name="M:Nito.KitchenSink.GetPropertyName.ObjectExtensions.GetPropertyName``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+      <summary>
+            Retrieves the name of a property referenced by a lambda expression.
+            </summary>
+      <typeparam name="TObject">The type of object containing the property.</typeparam>
+      <typeparam name="TProperty">The type of the property.</typeparam>
+      <param name="this">The object containing the property.</param>
+      <param name="expression">A lambda expression selecting the property from the containing object. May not be <c>null</c>.</param>
+      <returns>The name of the property referenced by <paramref name="expression" />.</returns>
+      <requires>expression != null</requires>
+    </member>
+  </members>
+</doc>
