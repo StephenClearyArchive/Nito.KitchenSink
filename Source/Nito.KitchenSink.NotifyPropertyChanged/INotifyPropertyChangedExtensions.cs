@@ -39,7 +39,7 @@ namespace Nito.KitchenSink.NotifyPropertyChanged
             string propertyName = source.GetPropertyName(expression);
             PropertyChangedEventHandler ret = (s, e) =>
             {
-                if (e.PropertyName == propertyName)
+                if (e.PropertyName == propertyName || e.PropertyName == string.Empty)
                 {
                     handler(source);
                 }
