@@ -11,7 +11,7 @@
   <language>en-US</language>
   <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
   <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
-  <tags>nito property name openssl .net35 .net40</tags>
+  <tags>nito property name .net35 .net40</tags>
  </metadata>
  <files>
   <file src="NET35\bin\Release\Nito.KitchenSink.GetPropertyName.dll" target="lib\35" />
