@@ -2,7 +2,7 @@
 <package>
  <metadata>
   <id>Nito.KitchenSink.FileSystemPaths</id>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <title>Nito.KitchenSink File System Paths Helper Library</title>
   <authors>Stephen Cleary</authors>
   <owners>Stephen Cleary</owners>
