@@ -9,6 +9,7 @@ namespace Nito.KitchenSink.FileSystemPaths
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// A string that is a file system path. All members of this type (with the exception of <see cref="Absolute"/>) do not interact with the actual file system; they are only string manipulation members. To interact with the file system, call <see cref="ToFileInfo"/> or <see cref="ToDirectoryInfo"/>.
@@ -35,6 +36,31 @@ namespace Nito.KitchenSink.FileSystemPaths
             {
                 Contract.Ensures(Contract.Result<FileSystemPath>() != null);
                 return new FileSystemPath(System.IO.Directory.GetCurrentDirectory());
+            }
+        }
+
+        /// <summary>
+        /// Gets the file system path referring to the location of the currently-executing assembly. This may be an empty path, e.g., if the assembly was dynamically loaded.
+        /// </summary>
+        public static FileSystemPath CurrentAssemblyLocation
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+                return new FileSystemPath(Assembly.GetCallingAssembly().Location);
+            }
+        }
+
+        /// <summary>
+        /// Gets the file system path referring to the location of the entry assembly. This may be an empty path, e.g., if the assembly was dynamically loaded, or if the current app domain was loaded from unmanaged code such as a COM host.
+        /// </summary>
+        public static FileSystemPath EntryAssemblyLocation
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+                var assembly = Assembly.GetEntryAssembly();
+                return new FileSystemPath(assembly == null ? string.Empty : assembly.Location);
             }
         }
 
