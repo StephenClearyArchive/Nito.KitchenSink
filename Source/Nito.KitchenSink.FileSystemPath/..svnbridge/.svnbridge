@@ -2,4 +2,8 @@
 </Value></Property><Property><Name>svn:ignore</Name><Value>*.suo
 _ReSharper.Nito.KitchenSink.FileSystemPaths
 *.user
+</Value></Property><Property><Name>svn:ignore</Name><Value>*.suo
+_ReSharper.Nito.KitchenSink.FileSystemPaths
+*.user
+TestResults
 </Value></Property></Properties></ItemProperties>

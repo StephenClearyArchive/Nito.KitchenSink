@@ -135,7 +135,9 @@ namespace Nito.KitchenSink.FileSystemPaths
             get
             {
                 Contract.Ensures(Contract.Result<FileSystemPath>() != null);
-                return new FileSystemPath(System.IO.Path.GetPathRoot(this));
+
+                // Path.GetPathRoot throws if passed an empty string.
+                return new FileSystemPath((this.Path == string.Empty) ? string.Empty : System.IO.Path.GetPathRoot(this));
             }
         }
 
@@ -148,8 +150,8 @@ namespace Nito.KitchenSink.FileSystemPaths
             {
                 Contract.Ensures(Contract.Result<FileSystemPath>() != null);
 
-                // Path.GetDirectoryName will return null if this path is a root directory
-                return new FileSystemPath(System.IO.Path.GetDirectoryName(this) ?? string.Empty);
+                // Path.GetDirectoryName throws if passed an empty string, and will return null if this path is a root directory
+                return new FileSystemPath((this.Path == string.Empty) ? string.Empty : (System.IO.Path.GetDirectoryName(this) ?? string.Empty));
             }
         }
 
