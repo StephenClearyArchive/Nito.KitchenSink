@@ -246,6 +246,90 @@ namespace Nito.KitchenSink.FileSystemPaths
         }
 
         /// <summary>
+        /// Applies a string operation to <see cref="Path"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath Apply(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.Path);
+            Contract.Assume(ret != null);
+            return ret.AsFileSystemPath();
+        }
+
+        /// <summary>
+        /// Applies a string operation to <see cref="Extension"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath ApplyToExtension(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.Extension);
+            Contract.Assume(ret != null);
+            return this.ChangeExtension(ret);
+        }
+
+        /// <summary>
+        /// Applies a string operation to <see cref="FileNameWithoutExtension"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath ApplyToFileNameWithoutExtension(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.FileNameWithoutExtension);
+            Contract.Assume(ret != null);
+            return this.Root.Combine(this.DirectoryName).Combine(ret + this.Extension);
+        }
+
+        /// <summary>
+        /// Applies a string operation to <see cref="FileName"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath ApplyToFileName(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.FileName);
+            Contract.Assume(ret != null);
+            return this.Root.Combine(this.DirectoryName).Combine(ret);
+        }
+
+        /// <summary>
+        /// Applies a string operation to <see cref="DirectoryName"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath ApplyToDirectoryName(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.DirectoryName);
+            Contract.Assume(ret != null);
+            return this.Root.Combine(ret).Combine(this.FileName);
+        }
+
+        /// <summary>
+        /// Applies a string operation to <see cref="Root"/>, wrapping the result in a new <see cref="FileSystemPath"/>.
+        /// </summary>
+        /// <param name="operation">The operation to perform. May not return <c>null</c>.</param>
+        /// <returns>The result of <paramref name="operation"/>.</returns>
+        public FileSystemPath ApplyToRoot(Func<string, string> operation)
+        {
+            Contract.Requires(operation != null);
+            Contract.Ensures(Contract.Result<FileSystemPath>() != null);
+            var ret = operation(this.Root);
+            Contract.Assume(ret != null);
+            return ret.AsFileSystemPath().Combine(this.DirectoryName).Combine(this.FileName);
+        }
+
+        /// <summary>
         /// Changes the extension of the file name portion of this path. Returns an empty string if this path does not contain a file name portion.
         /// </summary>
         /// <param name="extension">The new extension, with or without the ".". May be <c>null</c> to remove an existing extension.</param>
