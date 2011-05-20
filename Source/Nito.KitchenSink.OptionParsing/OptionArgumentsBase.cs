@@ -39,7 +39,7 @@ namespace Nito.KitchenSink.OptionParsing
         {
             if (this.AdditionalArguments.Count != 0)
             {
-                throw new OptionParsingException.UnknownOptionException("Unknown parameter " + this.AdditionalArguments[0]);
+                throw new OptionParsingException.UnknownOptionException("Unknown parameter  " + this.AdditionalArguments[0]);
             }
         }
     }
