@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("P/Invoke Interop Helper Library")]
+[assembly: AssemblyDescription("A helper library for P/Invoke Interop.")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito.KitchenSink Library")]
 [assembly: AssemblyCopyright("Copyright © 2009-2011 Nito Programs")]
