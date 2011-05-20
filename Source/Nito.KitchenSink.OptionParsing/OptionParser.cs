@@ -19,13 +19,12 @@ namespace Nito.KitchenSink.OptionParsing
         /// <summary>
         /// Parses the command line into a series of options.
         /// </summary>
-        /// <param name="commandLine">The command line to parse. May not be <c>null</c>.</param>
+        /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed according to standard .NET rules.</param>
         /// <param name="definitions">The sequence of option definitions to use when parsing the command line. May not be <c>null</c>.</param>
         /// <param name="stringComparer">The string comparison to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
         /// <returns>The sequence of options represented by the command line.</returns>
         public static IEnumerable<Option> Parse(IEnumerable<string> commandLine, IEnumerable<OptionDefinition> definitions, StringComparer stringComparer = null)
         {
-            Contract.Requires(commandLine != null);
             Contract.Requires(definitions != null);
             Contract.Ensures(Contract.Result<IEnumerable<Option>>() != null);
 
@@ -36,14 +35,12 @@ namespace Nito.KitchenSink.OptionParsing
         /// Parses the command line into a default-constructed arguments object. Option definitions are determined by the attributes on the properties of the arguments object. This method will call <see cref="IOptionArguments.Validate"/> on the returned value before returning.
         /// </summary>
         /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
-        /// <param name="commandLine">The command line to parse. May not be <c>null</c>.</param>
+        /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed according to standard .NET rules.</param>
         /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
         /// <param name="stringComparer">The string comparison to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
         /// <returns>The arguments object.</returns>
-        public static T Parse<T>(IEnumerable<string> commandLine, SimpleParserCollection parserCollection = null, StringComparer stringComparer = null) where T : class, IOptionArguments, new()
+        public static T Parse<T>(IEnumerable<string> commandLine = null, SimpleParserCollection parserCollection = null, StringComparer stringComparer = null) where T : class, IOptionArguments, new()
         {
-            Contract.Requires(commandLine != null);
-
             T ret = new T();
             ret.Parse(commandLine, parserCollection, stringComparer);
             return ret;
@@ -81,17 +78,16 @@ namespace Nito.KitchenSink.OptionParsing
             /// <summary>
             /// Initializes a new instance of the <see cref="Parser"/> class.
             /// </summary>
-            /// <param name="commandLine">The command line to parse. May not be <c>null</c>.</param>
+            /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed according to standard .NET rules.</param>
             /// <param name="definitions">The option definitions. May not be <c>null</c>.</param>
             /// <param name="stringComparer">The string comparer to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
             public Parser(IEnumerable<string> commandLine, IEnumerable<OptionDefinition> definitions, StringComparer stringComparer)
             {
                 Contract.Requires(definitions != null);
-                Contract.Requires(commandLine != null);
 
                 this.definitions = definitions.ToArray();
                 this.stringComparer = stringComparer ?? StringComparer.CurrentCulture;
-                this.commandLine = commandLine;
+                this.commandLine = commandLine ?? Environment.GetCommandLineArgs().Skip(1);
             }
 
             [ContractInvariantMethod]
