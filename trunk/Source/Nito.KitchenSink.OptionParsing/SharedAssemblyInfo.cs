@@ -6,11 +6,11 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("Option parsing library, inspired by getopt")]
+[assembly: AssemblyDescription("Option parsing, inspired by getopt but also allowing for Windows conventions.")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito.KitchenSink Library")]
 [assembly: AssemblyCopyright("Copyright © 2009-2011 Nito Programs")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyVersion("1.1.0.0")]

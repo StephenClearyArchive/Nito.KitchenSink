@@ -2,12 +2,12 @@
 <package>
  <metadata>
   <id>Nito.KitchenSink.OptionParsing</id>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <title>Nito.KitchenSink Option Parsing Library</title>
   <authors>Stephen Cleary</authors>
   <owners>Stephen Cleary</owners>
-  <summary>Option parsing, inspired by getopt but also allowing for Windows conventions.</summary>
-  <description>Option parsing, inspired by getopt but also allowing for Windows conventions.</description>
+  <summary>$description$</summary>
+  <description>$description$</description>
   <language>en-US</language>
   <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
   <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
@@ -16,11 +16,13 @@
    <dependency id="Nito.KitchenSink.SimpleParsers" />
   </dependencies>
  </metadata>
+<!--
  <files>
-  <file src="NET40\bin\Release\Nito.KitchenSink.OptionParsing.dll" target="lib\4" />
+  <file src="bin\Release\Nito.KitchenSink.OptionParsing.dll" target="lib\4" />
+  <file src="bin\Release\Nito.KitchenSink.OptionParsing.xml" target="lib\4" />
   <file src="NET40\bin\Release\Nito.KitchenSink.OptionParsing.pdb" target="lib\4" />
-  <file src="NET40\bin\Release\Nito.KitchenSink.OptionParsing.xml" target="lib\4" />
   <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.OptionParsing.Contracts.dll" target="lib\4\CodeContracts" />
   <file src="NET40\bin\Release\CodeContracts\Nito.KitchenSink.OptionParsing.Contracts.pdb" target="lib\4\CodeContracts" />
  </files>
+-->
 </package>
