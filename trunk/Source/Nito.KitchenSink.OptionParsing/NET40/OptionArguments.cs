@@ -27,6 +27,32 @@ namespace Nito.KitchenSink.OptionParsing
     public static class OptionArgumentsExtensions
     {
         /// <summary>
+        /// Gets a friendly name for a type (using angle brackets with generic parameters instead of backticks, and replacing <c>Nullable&lt;T&gt;</c> with <c>T?</c>).
+        /// </summary>
+        /// <param name="type">The type whose name is returned.</param>
+        /// <returns>The friendly name for the type.</returns>
+        private static string FriendlyTypeName(Type type)
+        {
+            Contract.Requires(type != null);
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            var underlyingType = Nullable.GetUnderlyingType(type);
+            if (underlyingType != null)
+            {
+                return FriendlyTypeName(underlyingType) + "?";
+            }
+            
+            if (type.IsGenericType)
+            {
+                var backtickIndex = type.Name.IndexOf('`');
+                Contract.Assume(backtickIndex > 0);
+                return type.Name.Substring(0, backtickIndex) + "<" + string.Join(", ", type.GetGenericArguments().Select(FriendlyTypeName)) + ">";
+            }
+
+            return type.Name;
+        }
+        
+        /// <summary>
         /// Parses the command line into an arguments object. Option definitions are determined by the attributes on the properties of <paramref name="argumentsObject"/>. This method will call <see cref="IOptionArguments.Validate"/>.
         /// </summary>
         /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
@@ -87,7 +113,7 @@ namespace Nito.KitchenSink.OptionParsing
                                 var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, localProperty.PropertyType);
                                 if (value == null)
                                 {
-                                    throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + localProperty.PropertyType.Name);
+                                    throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + FriendlyTypeName(Nullable.GetUnderlyingType(localProperty.PropertyType) ?? localProperty.PropertyType));
                                 }
 
                                 localProperty.SetValue(argumentsObject, value, null);
@@ -117,7 +143,7 @@ namespace Nito.KitchenSink.OptionParsing
                             var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, localProperty.PropertyType);
                             if (value == null)
                             {
-                                throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + localProperty.PropertyType.Name);
+                                throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + FriendlyTypeName(Nullable.GetUnderlyingType(localProperty.PropertyType) ?? localProperty.PropertyType));
                             }
 
                             localProperty.SetValue(argumentsObject, value, null);
@@ -153,7 +179,7 @@ namespace Nito.KitchenSink.OptionParsing
                             var value = parserOverride != null ? parserOverride.TryParse(parameter) : parserCollection.TryParse(parameter, addMethod.GetParameters()[0].ParameterType);
                             if (value == null)
                             {
-                                throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + addMethod.GetParameters()[0].ParameterType.Name);
+                                throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + FriendlyTypeName(Nullable.GetUnderlyingType(addMethod.GetParameters()[0].ParameterType) ?? addMethod.GetParameters()[0].ParameterType));
                             }
 
                             addMethod.Invoke(localProperty.GetValue(argumentsObject, null), new[] { value });
