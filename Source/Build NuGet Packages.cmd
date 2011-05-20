@@ -1,7 +1,7 @@
 @echo off
 if not exist ..\Binaries mkdir ..\Binaries
 if not exist ..\Binaries\NuGet mkdir ..\Binaries\NuGet
-..\Util\nuget.exe pack Nito.KitchenSink.PInvokeInterop\Nito.KitchenSink.PInvokeInterop.nuspec -o ..\Binaries\NuGet
+..\Util\nuget.exe pack -sym Nito.KitchenSink.PInvokeInterop\NET20\NET20.csproj -o ..\Binaries\NuGet
 ..\Util\nuget.exe pack Nito.KitchenSink.FileSystemPath\Nito.KitchenSink.FileSystemPaths.nuspec -o ..\Binaries\NuGet
 ..\Util\nuget.exe pack Nito.KitchenSink.GuidDecoding\Nito.KitchenSink.GuidDecoding.nuspec -o ..\Binaries\NuGet
 ..\Util\nuget.exe pack Nito.KitchenSink.HashAlgorithms\Nito.KitchenSink.HashAlgorithms.nuspec -o ..\Binaries\NuGet

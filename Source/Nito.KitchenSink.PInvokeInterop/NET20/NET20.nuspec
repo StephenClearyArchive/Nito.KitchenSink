@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
  <metadata>
-  <id>Nito.KitchenSink.OptionParsing</id>
+  <id>Nito.KitchenSink.PInvokeInterop</id>
   <version>1.1.0</version>
-  <title>Nito.KitchenSink Option Parsing Library</title>
+  <title>Nito.KitchenSink P/Invoke Interop Helper Library</title>
   <authors>Stephen Cleary</authors>
   <owners>Stephen Cleary</owners>
   <summary>$description$</summary>
@@ -11,9 +11,6 @@
   <language>en-US</language>
   <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
   <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
-  <tags>nito option options parse parsing getopt .net40</tags>
-  <dependencies>
-   <dependency id="Nito.KitchenSink.SimpleParsers" />
-  </dependencies>
+  <tags>nito pinvoke interop .net20 .net30 .net35 .net40</tags>
  </metadata>
 </package>
