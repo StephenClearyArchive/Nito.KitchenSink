@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+ <metadata>
+  <id>Nito.KitchenSink.CRC</id>
+  <version>1.1.0</version>
+  <title>Nito.KitchenSink CRC Library</title>
+  <authors>Stephen Cleary</authors>
+  <owners>Stephen Cleary</owners>
+  <summary>$description$</summary>
+  <description>$description$</description>
+  <language>en-US</language>
+  <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
+  <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <tags>nito crc crc16 crc32 crc-16 crc-32 .net40</tags>
+ </metadata>
+</package>
