@@ -11,6 +11,7 @@
   <language>en-US</language>
   <licenseUrl>http://nitokitchensink.codeplex.com/license</licenseUrl>
   <projectUrl>http://nitokitchensink.codeplex.com/</projectUrl>
+  <iconUrl>https://lh3.googleusercontent.com/-JnePz9du5w0/Td3cjrRLbVI/AAAAAAAAFDo/6ps9Cd-jI8s/s800/Nito.KitchenSink.png</iconUrl>
   <tags>nito crc crc16 crc32 crc-16 crc-32 .net40</tags>
  </metadata>
 </package>
