@@ -6,11 +6,11 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("Dynamic Helper Library")]
+[assembly: AssemblyDescription("A helper library for dynamically accessing static type members.")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito.KitchenSink Library")]
 [assembly: AssemblyCopyright("Copyright © 2009-2011 Nito Programs")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]

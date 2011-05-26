@@ -6,11 +6,11 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("Exception helpers library")]
+[assembly: AssemblyDescription("Exception helpers, including ReThrow (with the stack trace preserved), AggregateException unwrapping, and dumping to xml.")]
 [assembly: AssemblyCompany("Nito Programs")]
 [assembly: AssemblyProduct("Nito.KitchenSink Library")]
 [assembly: AssemblyCopyright("Copyright © 2009-2011 Nito Programs")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
