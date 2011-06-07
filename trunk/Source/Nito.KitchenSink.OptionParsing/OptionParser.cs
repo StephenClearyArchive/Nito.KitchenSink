@@ -218,7 +218,7 @@ namespace Nito.KitchenSink.OptionParsing
                         }
 
                         string option = value[1].ToString();
-                        this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.ShortName.ToString(), option));
+                        this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.ShortNameAsString, option));
                         if (this.lastOption == null)
                         {
                             throw new OptionParsingException.UnknownOptionException("Unknown option  " + option + "  in parameter  " + value);
@@ -257,7 +257,7 @@ namespace Nito.KitchenSink.OptionParsing
                             for (int i = 1; i != value.Length; ++i)
                             {
                                 option = value[i].ToString();
-                                this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.ShortName.ToString(), option));
+                                this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.ShortNameAsString, option));
                                 if (this.lastOption == null)
                                 {
                                     throw new OptionParsingException.UnknownOptionException("Unknown option  " + option + "  in parameter  " + value);
@@ -304,7 +304,7 @@ namespace Nito.KitchenSink.OptionParsing
                             argument = value.Substring(argumentIndex + 1);
                         }
 
-                        this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.LongName, option) || this.stringComparer.Equals(x.ShortName.ToString(), option));
+                        this.lastOption = this.definitions.FirstOrDefault(x => this.stringComparer.Equals(x.LongName, option) || this.stringComparer.Equals(x.ShortNameAsString, option));
                         if (this.lastOption == null)
                         {
                             throw new OptionParsingException.UnknownOptionException("Unknown option  " + option + "  in parameter  " + value);
