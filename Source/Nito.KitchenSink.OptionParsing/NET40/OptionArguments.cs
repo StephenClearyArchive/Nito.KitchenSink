@@ -69,6 +69,11 @@ namespace Nito.KitchenSink.OptionParsing
                 parserCollection = new SimpleParserCollection();
             }
 
+            if (stringComparer == null)
+            {
+                stringComparer = StringComparer.CurrentCulture;
+            }
+
             // Generate option definitions from OptionAttributes on the arguments object.
             var options = new Dictionary<OptionDefinition, Action<string>>();
             var positionalArguments = new List<Action<string>>();
@@ -211,7 +216,7 @@ namespace Nito.KitchenSink.OptionParsing
                 }
                 else
                 {
-                    optionDefinition = optionDefinitions.FirstOrDefault(x => stringComparer.Equals(x.ShortName.ToString(), optionPresentAttribute.ShortName.ToString()));
+                    optionDefinition = optionDefinitions.FirstOrDefault(x => stringComparer.Equals(x.ShortNameAsString, optionPresentAttribute.ShortName.ToString()));
                 }
 
                 if (optionDefinition == null)
