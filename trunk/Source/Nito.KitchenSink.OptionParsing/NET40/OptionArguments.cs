@@ -81,7 +81,6 @@ namespace Nito.KitchenSink.OptionParsing
             var argumentsObjectType = argumentsObject.GetType();
             foreach (var property in argumentsObjectType.GetProperties())
             {
-                Contract.Assume(property != null);
                 var localProperty = property;
 
                 // If the property specifies a [SimpleParser], then create a parser for that property.
@@ -196,7 +195,6 @@ namespace Nito.KitchenSink.OptionParsing
             var optionDefinitions = options.Keys;
             foreach (var property in argumentsObjectType.GetProperties())
             {
-                Contract.Assume(property != null);
                 var localProperty = property;
 
                 var optionPresentAttribute = property.GetCustomAttributes(typeof(OptionPresentAttribute), true).OfType<OptionPresentAttribute>().FirstOrDefault();
