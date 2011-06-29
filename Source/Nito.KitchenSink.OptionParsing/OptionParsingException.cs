@@ -21,7 +21,17 @@ namespace Nito.KitchenSink.OptionParsing
         }
 
         /// <summary>
-        /// An option argument error was encountered during command-line option parsing.
+        /// Initializes a new instance of the <see cref="OptionParsingException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The exception that is the root cause of the error.</param>
+        public OptionParsingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// An option argument error was encountered during command-line option parsing. This includes argument parsing errors.
         /// </summary>
         public class OptionArgumentException : OptionParsingException
         {
@@ -31,6 +41,16 @@ namespace Nito.KitchenSink.OptionParsing
             /// <param name="message">The message.</param>
             public OptionArgumentException(string message)
                 : base(message)
+            {
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="OptionArgumentException"/> class.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="innerException">The exception that is the root cause of the error.</param>
+            public OptionArgumentException(string message, Exception innerException)
+                : base(message, innerException)
             {
             }
         }
