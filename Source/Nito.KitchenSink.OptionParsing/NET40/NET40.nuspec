@@ -2,7 +2,7 @@
 <package>
  <metadata>
   <id>Nito.KitchenSink.OptionParsing</id>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <title>Nito.KitchenSink Option Parsing Library</title>
   <authors>Stephen Cleary</authors>
   <owners>Stephen Cleary</owners>
