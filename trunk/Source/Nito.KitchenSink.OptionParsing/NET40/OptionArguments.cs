@@ -9,6 +9,7 @@ namespace Nito.KitchenSink.OptionParsing
     using System.Diagnostics.Contracts;
     using System.Linq;
     using Nito.KitchenSink.SimpleParsers;
+using System.Reflection;
 
     /// <summary>
     /// An arguments class, which uses option attributes on its properties.
@@ -51,7 +52,28 @@ namespace Nito.KitchenSink.OptionParsing
 
             return type.Name;
         }
-        
+
+        /// <summary>
+        /// Sets a property on an arguments object, translating exceptions.
+        /// </summary>
+        /// <param name="property">The property to set.</param>
+        /// <param name="argumentsObject">The arguments object.</param>
+        /// <param name="value">The value for the property.</param>
+        private static void SetOptionProperty(this PropertyInfo property, object argumentsObject, object value)
+        {
+            Contract.Requires(property != null);
+            Contract.Requires(argumentsObject != null);
+
+            try
+            {
+                property.SetValue(argumentsObject, value, null);
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw new OptionParsingException.OptionArgumentException(ex.InnerException.Message, ex.InnerException);
+            }
+        }
+
         /// <summary>
         /// Parses the command line into an arguments object. Option definitions are determined by the attributes on the properties of <paramref name="argumentsObject"/>. This method will call <see cref="IOptionArguments.Validate"/>.
         /// </summary>
@@ -103,7 +125,7 @@ namespace Nito.KitchenSink.OptionParsing
                             }
 
                             // If the option is specified, set the property to true.
-                            options.Add(optionDefinition, _ => localProperty.SetValue(argumentsObject, true, null));
+                            options.Add(optionDefinition, _ => localProperty.SetOptionProperty(argumentsObject, true));
                         }
                         else
                         {
@@ -119,7 +141,7 @@ namespace Nito.KitchenSink.OptionParsing
                                     throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + FriendlyTypeName(Nullable.GetUnderlyingType(localProperty.PropertyType) ?? localProperty.PropertyType));
                                 }
 
-                                localProperty.SetValue(argumentsObject, value, null);
+                                localProperty.SetOptionProperty(argumentsObject, value);
                             });
                         }
                     }
@@ -149,7 +171,7 @@ namespace Nito.KitchenSink.OptionParsing
                                 throw new OptionParsingException.OptionArgumentException("Could not parse  " + parameter + "  as " + FriendlyTypeName(Nullable.GetUnderlyingType(localProperty.PropertyType) ?? localProperty.PropertyType));
                             }
 
-                            localProperty.SetValue(argumentsObject, value, null);
+                            localProperty.SetOptionProperty(argumentsObject, value);
                         };
                     }
 
@@ -223,7 +245,7 @@ namespace Nito.KitchenSink.OptionParsing
                 }
 
                 // If the option is specified, set the property to true.
-                options[optionDefinition] = (Action<string>)Delegate.Combine(options[optionDefinition], (Action<string>)(_ => localProperty.SetValue(argumentsObject, true, null)));
+                options[optionDefinition] = (Action<string>)Delegate.Combine(options[optionDefinition], (Action<string>)(_ => localProperty.SetOptionProperty(argumentsObject, true)));
             }
 
             // Verify options.
