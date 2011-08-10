@@ -57,6 +57,17 @@ namespace Nito.KitchenSink.OptionParsing
         }
 
         /// <summary>
+        /// Gets the long name, if any; otherwise, gets the short name, if any.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.LongName ?? this.ShortNameAsString;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this option takes an argument.
         /// </summary>
         public OptionArgument Argument { get; set; }

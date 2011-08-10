@@ -8,8 +8,8 @@ namespace Nito.KitchenSink.OptionParsing
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Reflection;
     using Nito.KitchenSink.SimpleParsers;
-using System.Reflection;
 
     /// <summary>
     /// An arguments class, which uses option attributes on its properties.
@@ -107,7 +107,7 @@ using System.Reflection;
 
                 // If the property specifies a [SimpleParser], then create a parser for that property.
                 var parserOverrideAttribute = property.GetCustomAttributes(typeof(SimpleParserAttribute), true).OfType<SimpleParserAttribute>().FirstOrDefault();
-                var parserOverride = (parserOverrideAttribute == null) ? null : Activator.CreateInstance(parserOverrideAttribute.ParserType) as ISimpleParser;
+                var parserOverride = ((parserOverrideAttribute == null) ? null : Activator.CreateInstance(parserOverrideAttribute.ParserType)) as ISimpleParser;
 
                 foreach (var attribute in property.GetCustomAttributes(true))
                 {
@@ -236,12 +236,12 @@ using System.Reflection;
                 }
                 else
                 {
-                    optionDefinition = optionDefinitions.FirstOrDefault(x => stringComparer.Equals(x.ShortNameAsString, optionPresentAttribute.ShortName.ToString()));
+                    optionDefinition = optionDefinitions.FirstOrDefault(x => stringComparer.Equals(x.ShortNameAsString, optionPresentAttribute.ShortNameAsString));
                 }
 
                 if (optionDefinition == null)
                 {
-                    throw new InvalidOperationException("OptionPresentAttribute does not refer to an existing OptionAttribute for option " + optionPresentAttribute.LongName == null ? optionPresentAttribute.ShortName.ToString() : optionPresentAttribute.LongName);
+                    throw new InvalidOperationException("OptionPresentAttribute does not refer to an existing OptionAttribute for option " + optionPresentAttribute.Name);
                 }
 
                 // If the option is specified, set the property to true.

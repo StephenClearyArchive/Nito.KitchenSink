@@ -353,7 +353,7 @@ namespace Nito.KitchenSink.OptionParsing
                 {
                     if (this.lastOption.Argument == OptionArgument.Required)
                     {
-                        throw new OptionParsingException.OptionArgumentException("Missing argument for option  " + this.lastOption.LongName);
+                        throw new OptionParsingException.OptionArgumentException("Missing argument for option  " + this.lastOption.Name);
                     }
 
                     yield return new Option { Definition = this.lastOption };
