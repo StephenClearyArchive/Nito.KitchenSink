@@ -40,5 +40,32 @@ namespace Nito.KitchenSink.OptionParsing
         /// Gets or sets the short name of the option, if any. The short name may not be ':' or '='.
         /// </summary>
         public char? ShortName { get; set; }
+
+        /// <summary>
+        /// Gets the short name of the option as a string.
+        /// </summary>
+        public string ShortNameAsString
+        {
+            get
+            {
+                if (this.ShortName == null)
+                {
+                    return null;
+                }
+
+                return this.ShortName.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the long name, if any; otherwise, gets the short name, if any.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.LongName ?? this.ShortNameAsString;
+            }
+        }
     }
 }
