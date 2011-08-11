@@ -8,7 +8,7 @@ namespace Nito.KitchenSink.OptionParsing
     using System.Diagnostics.Contracts;
 
     /// <summary>
-    /// A base class for arguments classes, which use option attributes on their properties. Note that arguments classes do not <i>need</i> to derive from <see cref="OptionArgumentsBase"/>, but it does need to implement <see cref="IOptionArguments"/>.
+    /// A base class for arguments classes, which use option attributes on their properties. Note that arguments classes do not <i>need</i> to derive from <see cref="OptionArgumentsBase"/>, but they do need to implement <see cref="IOptionArguments"/>.
     /// </summary>
     public abstract class OptionArgumentsBase : IOptionArguments
     {
