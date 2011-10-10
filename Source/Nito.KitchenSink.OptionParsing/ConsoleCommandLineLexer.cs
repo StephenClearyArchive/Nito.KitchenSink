@@ -98,6 +98,12 @@ namespace Nito.KitchenSink.OptionParsing
                             state = LexerState.Default;
                         }
                     }
+                    else
+                    {
+                        result += ch;
+                        if (state == LexerState.Default)
+                            state = LexerState.Argument;
+                    }
                 }
             }
 
