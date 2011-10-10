@@ -6,4 +6,9 @@ _ReSharper.Nito.KitchenSink.OptionParsing
 _ReSharper.Nito.KitchenSink.OptionParsing
 *.user
 ARMADILLO_CACHE
+</Value></Property><Property><Name>bugtraq:number</Name><Value>true</Value></Property><Property><Name>svn:ignore</Name><Value>*.suo
+_ReSharper.Nito.KitchenSink.OptionParsing
+*.user
+ARMADILLO_CACHE
+TestResults
 </Value></Property></Properties></ItemProperties>
