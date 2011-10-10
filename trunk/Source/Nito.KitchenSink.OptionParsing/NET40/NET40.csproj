@@ -143,6 +143,9 @@
     <Compile Include="..\OptionDefinition.cs">
       <Link>OptionDefinition.cs</Link>
     </Compile>
+    <Compile Include="..\OptionFiles.cs">
+      <Link>OptionFiles.cs</Link>
+    </Compile>
     <Compile Include="..\OptionParser.cs">
       <Link>OptionParser.cs</Link>
     </Compile>
