@@ -19,7 +19,7 @@ namespace Nito.KitchenSink.OptionParsing
         /// <summary>
         /// Parses the command line into a series of options.
         /// </summary>
-        /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
+        /// <param name="commandLine">The command line to parse, not including the process name. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
         /// <param name="definitions">The sequence of option definitions to use when parsing the command line. May not be <c>null</c>.</param>
         /// <param name="stringComparer">The string comparison to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
         /// <returns>The sequence of options represented by the command line.</returns>
@@ -35,7 +35,7 @@ namespace Nito.KitchenSink.OptionParsing
         /// Parses the command line into a default-constructed arguments object. Option definitions are determined by the attributes on the properties of the arguments object. This method will call <see cref="IOptionArguments.Validate"/> on the returned value before returning.
         /// </summary>
         /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
-        /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
+        /// <param name="commandLine">The command line to parse, not including the process name. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
         /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
         /// <param name="stringComparer">The string comparison to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
         /// <returns>The arguments object.</returns>
@@ -78,7 +78,7 @@ namespace Nito.KitchenSink.OptionParsing
             /// <summary>
             /// Initializes a new instance of the <see cref="Parser"/> class.
             /// </summary>
-            /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
+            /// <param name="commandLine">The command line to parse, not including the process name. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
             /// <param name="definitions">The option definitions. May not be <c>null</c>.</param>
             /// <param name="stringComparer">The string comparer to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
             public Parser(IEnumerable<string> commandLine, IEnumerable<OptionDefinition> definitions, StringComparer stringComparer)
@@ -87,7 +87,7 @@ namespace Nito.KitchenSink.OptionParsing
 
                 this.definitions = definitions.ToArray();
                 this.stringComparer = stringComparer ?? StringComparer.CurrentCulture;
-                this.commandLine = commandLine ?? NitoCommandLineLexer.Lex();
+                this.commandLine = commandLine ?? NitoCommandLineLexer.Lex().Skip(1);
             }
 
             [ContractInvariantMethod]

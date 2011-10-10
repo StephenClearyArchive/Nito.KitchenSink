@@ -150,12 +150,12 @@ namespace Nito.KitchenSink.OptionParsing
         }
 
         /// <summary>
-        /// Lexes the command line for this process, using double-quotes for quotation and consecutive double-quotes to embed double-quotes within a quotation. This lexer does not treat backslashes specially.
+        /// Lexes the command line for this process, using double-quotes for quotation and consecutive double-quotes to embed double-quotes within a quotation. This lexer does not treat backslashes specially. The returned command line includes the process name.
         /// </summary>
         /// <returns>The lexed command line.</returns>
         public static IEnumerable<string> Lex()
         {
-            return Lex(Environment.CommandLine).Skip(1);
+            return Lex(Environment.CommandLine);
         }
 
         /// <summary>
