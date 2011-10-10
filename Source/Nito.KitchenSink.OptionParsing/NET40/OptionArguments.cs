@@ -79,7 +79,7 @@ namespace Nito.KitchenSink.OptionParsing
         /// </summary>
         /// <typeparam name="T">The type of arguments object to initialize.</typeparam>
         /// <param name="argumentsObject">The arguments object that is initialized. May not be <c>null</c>.</param>
-        /// <param name="commandLine">The command line to parse. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
+        /// <param name="commandLine">The command line to parse, not including the process name. If <c>null</c>, the process' command line is lexed by <see cref="NitoCommandLineLexer"/>.</param>
         /// <param name="parserCollection">A parser collection to use for parsing, or <c>null</c> to use the default parsers.</param>
         /// <param name="stringComparer">The string comparison to use when parsing options. If <c>null</c>, then the string comparer for the current culture is used.</param>
         public static void Parse<T>(this T argumentsObject, IEnumerable<string> commandLine = null, SimpleParserCollection parserCollection = null, StringComparer stringComparer = null) where T : class, IOptionArguments

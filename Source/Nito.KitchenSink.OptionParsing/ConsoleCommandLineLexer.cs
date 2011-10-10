@@ -110,12 +110,12 @@ namespace Nito.KitchenSink.OptionParsing
         }
 
         /// <summary>
-        /// Lexes the command line for this process, using the same rules as CommandLineToArgvW.
+        /// Lexes the command line for this process, using the same rules as CommandLineToArgvW. The returned command line includes the process name.
         /// </summary>
         /// <returns>The lexed command line.</returns>
         public static IEnumerable<string> Lex()
         {
-            return Environment.GetCommandLineArgs().Skip(1);
+            return Environment.GetCommandLineArgs();
         }
 
         /// <summary>
