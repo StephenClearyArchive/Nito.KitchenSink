@@ -1,16 +1,19 @@
-﻿using System;
+﻿// <copyright file="NitoCommandLineLexer.cs" company="Nito Programs">
+//     Copyright (c) 2011 Nito Programs.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
-using System.Globalization;
-using System.Diagnostics.Contracts;
 
 namespace Nito.KitchenSink.OptionParsing
 {
     /// <summary>
     /// Provides an alternative lexer for command lines, based on Raymond Chen's analysis here: http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx
     /// </summary>
-    public static class CommandLineLexer
+    public static class NitoCommandLineLexer
     {
         private enum LexerState
         {
@@ -152,11 +155,11 @@ namespace Nito.KitchenSink.OptionParsing
         /// <returns>The lexed command line.</returns>
         public static IEnumerable<string> Lex()
         {
-            return Lex(Environment.CommandLine);
+            return Lex(Environment.CommandLine).Skip(1);
         }
 
         /// <summary>
-        /// Takes a list of arguments to pass to a program, and quotes them. This method assumes the receiving program does not treat backslashes specially. This method does not quote or escape special shell characters (see <see cref="EscapeCommandPrompt"/>).
+        /// Takes a list of arguments to pass to a program, and quotes them. This method assumes the receiving program does not treat backslashes specially. This method does not quote or escape special shell characters (see <see cref="CommandPromptCommandLine"/>).
         /// </summary>
         /// <param name="arguments">The arguments to quote (if necessary) and concatenate into a command line.</param>
         /// <returns>The command line.</returns>
@@ -194,47 +197,6 @@ namespace Nito.KitchenSink.OptionParsing
                 ret.Append('"');
                 return ret.ToString();
             }));
-        }
-
-        /// <summary>
-        /// Takes a command line to pass to a program, and escapes any unquoted characters that are special to the command prompt shell: <c>&amp; | ( ) &lt; &gt; ^</c>
-        /// </summary>
-        /// <param name="commandLine">The command line to pass to the program.</param>
-        /// <returns>The command line to send to the command prompt shell.</returns>
-        public static string EscapeCommandPrompt(string commandLine)
-        {
-            Contract.Requires(commandLine != null);
-            Contract.Ensures(Contract.Result<string>() != null);
-
-            var ret = new StringBuilder();
-            bool inQuote = false;
-            foreach (var ch in commandLine)
-            {
-                if (ch == '"')
-                {
-                    // Quote characters begin or end a quoted context, and are always passed through.
-                    inQuote = !inQuote;
-                    ret.Append(ch);
-                }
-                else if (inQuote)
-                {
-                    // If we're in a quoted context, no special characters need to be escaped.
-                    ret.Append(ch);
-                }
-                else if (ch == '&' || ch == '|' || ch == '(' || ch == ')' || ch == '<' || ch == '>' || ch == '^')
-                {
-                    // Special characters outside a quoted context need to be escaped.
-                    ret.Append('^');
-                    ret.Append(ch);
-                }
-                else
-                {
-                    // Regular characters outside a quoted context do not need to be escaped.
-                    ret.Append(ch);
-                }
-            }
-
-            return ret.ToString();
         }
     }
 }

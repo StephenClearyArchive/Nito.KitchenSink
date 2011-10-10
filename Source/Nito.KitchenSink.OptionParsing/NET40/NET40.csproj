@@ -125,8 +125,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommandLineLexer.cs">
-      <Link>CommandLineLexer.cs</Link>
+    <Compile Include="..\CommandPromptCommandLine.cs">
+      <Link>CommandPromptCommandLine.cs</Link>
+    </Compile>
+    <Compile Include="..\ConsoleCommandLineLexer.cs">
+      <Link>ConsoleCommandLineLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\NitoCommandLineLexer.cs">
+      <Link>NitoCommandLineLexer.cs</Link>
     </Compile>
     <Compile Include="..\OptionArgumentsBase.cs">
       <Link>OptionArgumentsBase.cs</Link>
