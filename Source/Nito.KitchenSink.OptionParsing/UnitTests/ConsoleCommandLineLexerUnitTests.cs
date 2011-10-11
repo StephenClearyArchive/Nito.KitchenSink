@@ -12,9 +12,9 @@ namespace UnitTests
     public class ConsoleCommandLineLexerUnitTests
     {
         [DebuggerStepThrough]
-        private void AssertSequenceEqual<T>(IEnumerable<T> actual, IEnumerable<T> expected)
+        private void AssertSequenceEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            Assert.IsTrue(actual.SequenceEqual(expected), "Expected: [" + string.Join(", ", expected) + "]; actual: [" + string.Join(", ", actual) + "]");
         }
 
         private const string Quote = "\"";
@@ -119,6 +119,49 @@ namespace UnitTests
         {
             // http://nitoprograms.blogspot.com/2011/06/option-parsing-lexing.html
             AssertSequenceEqual(new[] { "a", string.Empty, Quote }, ConsoleCommandLineLexer.Lex("a " + Quote + Quote + " " + Quote + Quote + Quote + Quote));
+        }
+
+        [TestMethod]
+        public void OldNewThingBlogExampleA()
+        {
+            // http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx (comments)
+            AssertSequenceEqual(new[] { "foobar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + "bar"));
+        }
+
+        [TestMethod]
+        public void OldNewThingBlogExampleB()
+        {
+            // http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx (comments)
+            AssertSequenceEqual(new[] { "foobar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + Quote + "bar"));
+        }
+
+        [TestMethod]
+        public void OldNewThingBlogExampleC()
+        {
+            // http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx (comments)
+            AssertSequenceEqual(new[] { "foo" + Quote + "bar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + Quote + Quote + "bar"));
+        }
+
+        [TestMethod]
+        public void OldNewThingBlogExampleD()
+        {
+            // http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx (comments)
+            AssertSequenceEqual(new[] { "foox" + Quote + "bar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + "x" + Quote + Quote + "bar"));
+        }
+
+        [TestMethod]
+        public void OldNewThingBlogExampleE()
+        {
+            // http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx (comments)
+            AssertSequenceEqual(new[] { "foo" + Quote + Quote + "bar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + Quote + Quote + Quote + Quote + Quote + "bar"));
+
+            // Note: the last blog example (which would be F) of 12 dquotes going to 4 is a historical anomaly; 12 go to 5 since 2005.
+        }
+
+        [TestMethod]
+        public void TwelveQuotes()
+        {
+            AssertSequenceEqual(new[] { "foo" + Quote + Quote + Quote + Quote + Quote + "bar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + "bar"));
         }
     }
 }

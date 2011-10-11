@@ -31,10 +31,78 @@ namespace Nito.KitchenSink.OptionParsing
             /// A quote character has been seen, and we are now parsing quoted data.
             /// </summary>
             Quoted,
+
+            /// <summary>
+            /// The quote has just been closed, but the argument is still being parsed.
+            /// </summary>
+            EndQuotedArgument,
+        }
+
+        private sealed class Buffer
+        {
+            private string result;
+            private int backslashes;
+
+            public Buffer()
+            {
+                this.result = string.Empty;
+                this.backslashes = 0;
+            }
+
+            private void Normalize()
+            {
+                this.result += new string('\\', this.backslashes);
+                this.backslashes = 0;
+            }
+
+            public void AppendNormalChar(char ch)
+            {
+                Contract.Requires(ch != '\\');
+
+                this.Normalize();
+                this.result += ch;
+            }
+
+            public void AppendBackslash()
+            {
+                ++this.backslashes;
+            }
+
+            public bool AppendQuote()
+            {
+                this.result += new string('\\', this.backslashes / 2);
+                var ret = ((this.backslashes % 2) == 0);
+                this.backslashes = 0;
+                if (!ret)
+                {
+                    // An odd number of backslashes means the double-quote is escaped.
+                    this.result += '"';
+                }
+
+                return ret;
+            }
+
+            public void AppendChar(char ch)
+            {
+                Contract.Requires(ch != '"');
+
+                if (ch == '\\')
+                    this.AppendBackslash();
+                else
+                    this.AppendNormalChar(ch);
+            }
+
+            public string Consume()
+            {
+                this.Normalize();
+                var ret = this.result;
+                this.result = string.Empty;
+                return ret;
+            }
         }
 
         /// <summary>
-        /// Lexes the command line, using the same rules as CommandLineToArgvW.
+        /// Lexes the command line, using the same rules as <see cref="Environment.GetCommandLineArgs"/>.
         /// </summary>
         /// <param name="commandLine">The command line to parse.</param>
         /// <returns>The lexed command line.</returns>
@@ -43,80 +111,115 @@ namespace Nito.KitchenSink.OptionParsing
             Contract.Requires(commandLine != null);
             Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
 
-            LexerState state = LexerState.Default;
-            int backslashes = 0;
+            // The MSDN information for <see cref="Environment.GetCommandLineArgs"/> is incomplete.
+            // This blog post fills in the gaps: http://www.hardtoc.com/archives/162 (webcite: http://www.webcitation.org/62LHTVelJ )
 
-            string result = string.Empty;
+            LexerState state = LexerState.Default;
+
+            Buffer buffer = new Buffer();
             foreach (var ch in commandLine)
             {
-                if (ch == '"')
+                switch (state)
                 {
-                    // Handle the special rules for any backslashes preceding a double-quote.
-                    result += new string('\\', backslashes / 2);
-                    if ((backslashes % 2) == 0)
-                    {
-                        // An even number of backslashes means that this is a normal double-quote.
-                        if (state == LexerState.Quoted)
-                            state = LexerState.Argument;
-                        else
+                    case LexerState.Default:
+                        if (ch == '"')
+                        {
+                            // Enter the quoted state, without placing anything in the buffer.
                             state = LexerState.Quoted;
-                    }
-                    else
-                    {
-                        // An odd number of backslashes means the double-quote is escaped.
-                        result += '"';
-                        Contract.Assume(state != LexerState.Default);
-                    }
-
-                    backslashes = 0;
-                }
-                else if (ch == '\\')
-                {
-                    ++backslashes;
-                    if (state == LexerState.Default)
-                        state = LexerState.Argument;
-                }
-                else
-                {
-                    // Consume any backslashes preceding the whitespace or normal character.
-                    result += new string('\\', backslashes);
-                    backslashes = 0;
-
-                    // CommandLineToArgvW only recognizes spaces and tabs as whitespace.
-                    if (ch == ' ' || ch == '\t')
-                    {
-                        if (state == LexerState.Quoted)
-                        {
-                            // Quoted whitespace characters are just added to the token.
-                            result += ch;
+                            break;
                         }
-                        else if (state == LexerState.Argument)
+
+                        // Whitespace is ignored.
+                        if (ch == ' ' || ch == '\t')
                         {
-                            // Unquoted whitespace characters separate tokens.
-                            yield return result;
-                            result = string.Empty;
+                            break;
+                        }
+
+                        buffer.AppendChar(ch);
+                        state = LexerState.Argument;
+                        break;
+
+                    case LexerState.Argument:
+                        // We have an argument started, though it may be just an empty string for now.
+
+                        if (ch == '"')
+                        {
+                            // Handle the special rules for any backslashes preceding a double-quote.
+                            if (buffer.AppendQuote())
+                            {
+                                // An even number of backslashes means that this is a normal double-quote.
+                                state = LexerState.Quoted;
+                            }
+
+                            break;
+                        }
+
+                        if (ch == ' ' || ch == '\t')
+                        {
+                            // Whitespace ends this argument, so publish it and restart in the default state.
+                            yield return buffer.Consume();
+                            state = LexerState.Default;
+                            break;
+                        }
+
+                        // Count backslashes; put other characters directly into the buffer.
+                        buffer.AppendChar(ch);
+                        break;
+
+                    case LexerState.Quoted:
+                        // We are within quotes, but may already have characters in the argument buffer.
+
+                        if (ch == '"')
+                        {
+                            // Handle the special rules for any backslashes preceding a double-quote.
+                            if (buffer.AppendQuote())
+                            {
+                                // An even number of backslashes means that this is a normal double-quote.
+                                state = LexerState.EndQuotedArgument;
+                            }
+
+                            break;
+                        }
+
+                        // Any non-quote character (including whitespace) is appended to the argument buffer.
+                        buffer.AppendChar(ch);
+                        break;
+
+                    case LexerState.EndQuotedArgument:
+                        // This is a special state that is treated like Argument or Quoted depending on whether the next character is a quote. It's not possible to stay in this state.
+
+                        if (ch == '"')
+                        {
+                            // We just read a double double-quote within a quoted context, so we add the quote to the buffer and re-enter the quoted state.
+                            buffer.AppendNormalChar(ch);
+                            state = LexerState.Quoted;
+                        }
+                        else if (ch == ' ' || ch == '\t')
+                        {
+                            // In this case, the double-quote we just read did in fact end the quotation, so we publish the argument and restart in the default state.
+                            yield return buffer.Consume();
                             state = LexerState.Default;
                         }
-                    }
-                    else
-                    {
-                        result += ch;
-                        if (state == LexerState.Default)
+                        else
+                        {
+                            // If the double-quote is followed by a non-quote, non-whitespace character, then it's considered a continuation of the argument (leaving the quoted state).
+                            buffer.AppendChar(ch);
                             state = LexerState.Argument;
-                    }
+                        }
+
+                        break;
                 }
             }
 
-            result += new string('\\', backslashes);
-
+            // If we end in the middle of an argument (or even a quotation), then we just publish what we have.
             if (state != LexerState.Default)
             {
-                yield return result;
+                yield return buffer.Consume();
             }
         }
 
         /// <summary>
-        /// Lexes the command line for this process, using the same rules as CommandLineToArgvW. The returned command line includes the process name.
+        /// Lexes the command line for this process, using the same rules as <see cref="Environment.GetCommandLineArgs"/>. The returned command line includes the process name.
         /// </summary>
         /// <returns>The lexed command line.</returns>
         public static IEnumerable<string> Lex()
