@@ -163,5 +163,47 @@ namespace UnitTests
         {
             AssertSequenceEqual(new[] { "foo" + Quote + Quote + Quote + Quote + Quote + "bar" }, ConsoleCommandLineLexer.Lex("foo" + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + "bar"));
         }
+
+        [TestMethod]
+        public void EscapedQuotesA()
+        {
+            AssertSequenceEqual(new[] { Quote + "a", "b" }, ConsoleCommandLineLexer.Lex(Backslash + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesB()
+        {
+            AssertSequenceEqual(new[] { Backslash + "a b" }, ConsoleCommandLineLexer.Lex(Backslash + Backslash + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesC()
+        {
+            AssertSequenceEqual(new[] { Quote + "a b" }, ConsoleCommandLineLexer.Lex(Backslash + Quote + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesD()
+        {
+            AssertSequenceEqual(new[] { Quote + Quote + Quote + Quote + Quote + Quote + "a b" }, ConsoleCommandLineLexer.Lex(Backslash + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesE()
+        {
+            AssertSequenceEqual(new[] { Backslash + Quote + Quote + Quote + Quote + Quote + "a", "b" }, ConsoleCommandLineLexer.Lex(Backslash + Backslash + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesF()
+        {
+            AssertSequenceEqual(new[] { Quote + Quote + Quote + Quote + Quote + "a b" }, ConsoleCommandLineLexer.Lex(Quote + Quote + Quote + Quote + Quote + Quote + Backslash + Quote + Quote + Quote + Quote + Quote + Quote + "a b" + Quote));
+        }
+
+        [TestMethod]
+        public void EscapedQuotesG()
+        {
+            AssertSequenceEqual(new[] { Quote + Quote + Quote + Quote + Quote + Quote + "a b" }, ConsoleCommandLineLexer.Lex(Quote + Quote + Quote + Quote + Quote + Backslash + Quote + Quote + Quote + Quote + Quote + Quote + Quote + "a b" + Quote));
+        }
     }
 }
