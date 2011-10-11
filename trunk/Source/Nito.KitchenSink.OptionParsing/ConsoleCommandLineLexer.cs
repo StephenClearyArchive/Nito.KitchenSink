@@ -38,6 +38,9 @@ namespace Nito.KitchenSink.OptionParsing
             EndQuotedArgument,
         }
 
+        /// <summary>
+        /// A string buffer combined with a backslash count.
+        /// </summary>
         private sealed class Buffer
         {
             private string result;
@@ -49,12 +52,19 @@ namespace Nito.KitchenSink.OptionParsing
                 this.backslashes = 0;
             }
 
+            /// <summary>
+            /// Adds any outstanding backslashes to the result, and resets the backslash count.
+            /// </summary>
             private void Normalize()
             {
                 this.result += new string('\\', this.backslashes);
                 this.backslashes = 0;
             }
 
+            /// <summary>
+            /// Appends a character to the buffer. If the character is a double-quote, it is treated like an ordinary character. The character may not be a backslash.
+            /// </summary>
+            /// <param name="ch">The character. May not be a backslash.</param>
             public void AppendNormalChar(char ch)
             {
                 Contract.Requires(ch != '\\');
@@ -63,11 +73,18 @@ namespace Nito.KitchenSink.OptionParsing
                 this.result += ch;
             }
 
+            /// <summary>
+            /// Appends a backslash to the buffer.
+            /// </summary>
             public void AppendBackslash()
             {
                 ++this.backslashes;
             }
 
+            /// <summary>
+            /// Processes a double-quote, which may add it to the buffer. Returns <c>true</c> if there were an even number of backslashes.
+            /// </summary>
+            /// <returns><c>true</c> if there were an even number of backslashes.</returns>
             public bool AppendQuote()
             {
                 this.result += new string('\\', this.backslashes / 2);
@@ -82,6 +99,10 @@ namespace Nito.KitchenSink.OptionParsing
                 return ret;
             }
 
+            /// <summary>
+            /// Appends a regular character or backslash to the buffer.
+            /// </summary>
+            /// <param name="ch">The character to append. May not be a double quote.</param>
             public void AppendChar(char ch)
             {
                 Contract.Requires(ch != '"');
@@ -92,6 +113,10 @@ namespace Nito.KitchenSink.OptionParsing
                     this.AppendNormalChar(ch);
             }
 
+            /// <summary>
+            /// Consumes the buffer so far, resetting the buffer and backslash count.
+            /// </summary>
+            /// <returns>The buffer.</returns>
             public string Consume()
             {
                 this.Normalize();
