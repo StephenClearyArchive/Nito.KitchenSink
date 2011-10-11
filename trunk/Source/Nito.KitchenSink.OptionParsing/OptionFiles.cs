@@ -19,12 +19,12 @@ namespace Nito.KitchenSink.OptionParsing
         /// </summary>
         /// <param name="commandLine">The command line to lex. If this is <c>null</c>, the command line for the current process is used.</param>
         /// <param name="optionFilesCharacter">The character used to designate an option file. Defaults to <c>@</c>. Two option file characters are treated as a single literal (non-option file) character.</param>
-        /// <param name="lexer">The lexer to use to lex the command line and option files. If this is <c>null</c>, <see cref="NitoCommandLineLexer"/> is used to lex the command line and option files.</param>
+        /// <param name="lexer">The lexer to use to lex the command line and option files. If this is <c>null</c>, <see cref="ConsoleCommandLineLexer"/> is used to lex the command line and option files.</param>
         /// <returns>The combined options and arguments, including those referenced in option files.</returns>
         public static IEnumerable<string> LexWithOptionFiles(string commandLine = null, char optionFilesCharacter = '@', Func<string, IEnumerable<string>> lexer = null)
         {
             commandLine = commandLine ?? Environment.CommandLine;
-            lexer = lexer ?? NitoCommandLineLexer.Lex;
+            lexer = lexer ?? ConsoleCommandLineLexer.Lex;
             var singleOptionFilesCharacter = new string(optionFilesCharacter, 1);
             var doubleOptionFilesCharacter = new string(optionFilesCharacter, 2);
 
