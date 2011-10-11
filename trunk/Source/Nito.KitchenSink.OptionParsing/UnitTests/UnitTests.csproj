@@ -45,6 +45,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandPromptCommandLineUnitTests.cs" />
+    <Compile Include="NitoCommandLineLexerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConsoleCommandLineLexerUnitTests.cs" />
   </ItemGroup>
