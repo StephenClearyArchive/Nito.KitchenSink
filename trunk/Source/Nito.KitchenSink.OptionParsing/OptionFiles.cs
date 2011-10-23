@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics.Contracts;
 
 namespace Nito.KitchenSink.OptionParsing
 {
@@ -23,12 +24,29 @@ namespace Nito.KitchenSink.OptionParsing
         /// <returns>The combined options and arguments, including those referenced in option files.</returns>
         public static IEnumerable<string> LexWithOptionFiles(string commandLine = null, char optionFilesCharacter = '@', Func<string, IEnumerable<string>> lexer = null)
         {
+            Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
+
             commandLine = commandLine ?? Environment.CommandLine;
+            lexer = lexer ?? ConsoleCommandLineLexer.Lex;
+            return AllowOptionFiles(lexer(commandLine).Skip(1), optionFilesCharacter, lexer);
+        }
+
+        /// <summary>
+        /// Interprets option files in the specified command line.
+        /// </summary>
+        /// <param name="source">The command line to interpret. May not be <c>null</c>.</param>
+        /// <param name="optionFilesCharacter">The character used to designate an option file. Defaults to <c>@</c>. Two option file characters are treated as a single literal (non-option file) character.</param>
+        /// <param name="lexer">The lexer to use to lex the option files. If this is <c>null</c>, <see cref="ConsoleCommandLineLexer"/> is used to lex the option files.</param>
+        /// <returns>The combined options and arguments, including those referenced in option files.</returns>
+        public static IEnumerable<string> AllowOptionFiles(IEnumerable<string> source, char optionFilesCharacter = '@', Func<string, IEnumerable<string>> lexer = null)
+        {
+            Contract.Requires(source != null);
+            Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
+
             lexer = lexer ?? ConsoleCommandLineLexer.Lex;
             var singleOptionFilesCharacter = new string(optionFilesCharacter, 1);
             var doubleOptionFilesCharacter = new string(optionFilesCharacter, 2);
 
-            var source = lexer(commandLine).Skip(1);
             foreach (var str in source)
             {
                 if (!str.StartsWith(singleOptionFilesCharacter))
